@@ -29,12 +29,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntitySkateboard extends Entity
 {
+	public static final int SPEED = 6;
+	public static final double MAX_SPEED = 0.3;
+
 	public EntitySkateboard(World worldIn)
 	{
 		super(worldIn);
 		this.preventEntitySpawning = true;
 		this.setSize(1.0F, 0.5F);
-		this.noClip = true;
 	}
 
 	public EntitySkateboard(World worldIn, double x, double y, double z)
@@ -80,12 +82,14 @@ public class EntitySkateboard extends Entity
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entityIn)
 	{
+		// return this.getBoundingBox();
 		return null;
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox()
 	{
+		// return this.getEntityBoundingBox();
 		return null;
 	}
 
@@ -106,28 +110,73 @@ public class EntitySkateboard extends Entity
 	@Override
 	public void onUpdate()
 	{
-		life++;
-		if (life >= 10000)
+		if (!this.worldObj.isRemote)
 		{
-			this.setDead();
-		}
-
-		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer) riddenByEntity;
-			if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
+			life++;
+			if (life >= 10000)
 			{
-				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
+				this.setDead();
+			}
+
+			if (this.riddenByEntity instanceof EntityLivingBase)
+			{
+				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+				float rotation = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, 0.1F);
+
+				if (entity.moveForward > 0)
 				{
-					this.motionX = 0;
-					this.motionZ = 0;
-					float rotation = this.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, 0.1F);
-					this.motionX += -Math.sin((double) (rotation * (float) Math.PI / 180.0F)) * 6 * (double) player.moveForward * 0.05000000074505806D;
-					this.motionZ += Math.cos((double) (rotation * (float) Math.PI / 180.0F)) * 6 * (double) player.moveForward * 0.05000000074505806D;
-					this.moveEntity(this.motionX, 0, this.motionZ);
+					double maxMotionX = -Math.sin((double) (rotation * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
+					double maxMotionZ = Math.cos((double) (rotation * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
+
+					this.motionX += maxMotionX / 16;
+					this.motionZ += maxMotionZ / 16;
+
+					if (Math.abs(this.motionX) >= Math.abs(maxMotionX))
+					{
+						this.motionX = maxMotionX;
+					}
+					if (Math.abs(this.motionZ) >= Math.abs(maxMotionZ))
+					{
+						this.motionZ = maxMotionZ;
+					}
+				}
+			}
+
+			if (this.isCollidedHorizontally)
+			{
+				System.out.println("Collided");
+				this.motionX = 0;
+				this.motionZ = 0;
+			}
+
+			if (!this.isCollidedVertically)
+			{
+				if (this.riddenByEntity instanceof EntityLivingBase)
+				{
+					EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+					if (entity.motionY > 0)
+					{
+						this.motionY += 1;
+					}
+				}
+			}
+			// this.motionY = 0.02;
+
+			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+
+			if (this.riddenByEntity instanceof EntityLivingBase)
+			{
+				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+				if (entity.moveForward == 0.0)
+				{
+					this.motionX *= 0.85;
+					this.motionZ *= 0.85;
 				}
 			}
 		}
+
+		// this.motionY *= 0.99;
+		// super.onUpdate();
 	}
 
 	@Override
@@ -173,21 +222,21 @@ public class EntitySkateboard extends Entity
 			return true;
 		}
 	}
-	
+
 	protected float interpolateRotation(float p_77034_1_, float p_77034_2_, float p_77034_3_)
-    {
-        float f3;
+	{
+		float f3;
 
-        for (f3 = p_77034_2_ - p_77034_1_; f3 < -180.0F; f3 += 360.0F)
-        {
-            ;
-        }
+		for (f3 = p_77034_2_ - p_77034_1_; f3 < -180.0F; f3 += 360.0F)
+		{
+			;
+		}
 
-        while (f3 >= 180.0F)
-        {
-            f3 -= 360.0F;
-        }
+		while (f3 >= 180.0F)
+		{
+			f3 -= 360.0F;
+		}
 
-        return p_77034_1_ + p_77034_3_ * f3;
-    }
+		return p_77034_1_ + p_77034_3_ * f3;
+	}
 }

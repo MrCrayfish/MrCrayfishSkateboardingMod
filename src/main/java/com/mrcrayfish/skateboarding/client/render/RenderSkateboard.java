@@ -14,13 +14,13 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 public class RenderSkateboard extends Render
 {
 
-	private static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
+	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/mlg.png");
 	private ModelBase modelSkateboard = new ModelSkateboard();
 
 	public RenderSkateboard(RenderManager renderManager)
 	{
 		super(renderManager);
-		this.shadowSize = 0.5F;
+		this.shadowSize = 0.0F;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class RenderSkateboard extends Render
 	public void doRender(EntitySkateboard entity, double x, double y, double z, float p_76986_8_, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
+		GlStateManager.translate(x, y + 1.5F, z);
 		this.bindEntityTexture(entity);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
@@ -46,8 +46,7 @@ public class RenderSkateboard extends Render
 			}
 		}
 		GlStateManager.rotate(rotation, 0F, 1F, 0F);
-		GlStateManager.rotate(90F, 0, 1, 0);
-		this.modelSkateboard.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		this.modelSkateboard.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, p_76986_8_, partialTicks);
 	}

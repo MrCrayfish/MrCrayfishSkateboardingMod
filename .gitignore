@@ -16,3 +16,8 @@ bin/
 README.txt
 Ideas
 src/main/java/api/
+*.tcn
+Skateboard_2.java
+skateboard_new.png
+skateboard.png
+ModelSkateboard.java

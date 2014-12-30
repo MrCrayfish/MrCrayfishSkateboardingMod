@@ -16,7 +16,7 @@ public class ItemSkateboard extends Item
 	{
 		if (!world.isRemote)
 		{
-			world.spawnEntityInWorld(new EntitySkateboard(world, pos.getX(), pos.getY() + 2.0D, pos.getZ()));
+			world.spawnEntityInWorld(new EntitySkateboard(world, pos.getX(), pos.getY() + 1.0D, pos.getZ()));
 		}
 		return true;
 	}
