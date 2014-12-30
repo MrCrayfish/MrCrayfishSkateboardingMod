@@ -1,10 +1,16 @@
 package com.mrcrayfish.skateboarding.entity;
 
 import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIControlledByPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,6 +23,7 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,13 +58,13 @@ public class EntitySkateboard extends Entity
 	{
 		return true;
 	}
-	
+
 	@Override
 	public boolean isRiding()
-    {
-        return this.ridingEntity != null;
-    }
-	
+	{
+		return this.ridingEntity != null;
+	}
+
 	@Override
 	protected boolean shouldSetPosAfterLoading()
 	{
@@ -73,22 +80,19 @@ public class EntitySkateboard extends Entity
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entityIn)
 	{
-		//return entityIn.getEntityBoundingBox();
 		return null;
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox()
 	{
-		//return this.getEntityBoundingBox();
-		
 		return null;
 	}
 
 	@Override
 	public double getMountedYOffset()
 	{
-		return 1.0F;
+		return 0.5F;
 	}
 
 	@Override
@@ -107,31 +111,31 @@ public class EntitySkateboard extends Entity
 		{
 			this.setDead();
 		}
+
+		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) riddenByEntity;
+			if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
+			{
+				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
+				{
+					this.motionX = 0;
+					this.motionZ = 0;
+					float rotation = this.interpolateRotation(player.prevRenderYawOffset, player.renderYawOffset, 0.1F);
+					this.motionX += -Math.sin((double) (rotation * (float) Math.PI / 180.0F)) * 6 * (double) player.moveForward * 0.05000000074505806D;
+					this.motionZ += Math.cos((double) (rotation * (float) Math.PI / 180.0F)) * 6 * (double) player.moveForward * 0.05000000074505806D;
+					this.moveEntity(this.motionX, 0, this.motionZ);
+				}
+			}
+		}
 	}
-	
-	@Override
-	public void moveEntity(double x, double y, double z)
-	{
-		
-	}
-	
-	@Override
-	public void applyEntityCollision(Entity entityIn)
-    {
-		
-    }
-	
+
 	@Override
 	public void updateRidden()
-    {
-		
-    }
-	
-	@Override
-	public void copyLocationAndAnglesFrom(Entity entityIn)
-    {
-      
-    }
+	{
+		super.updateRidden();
+
+	}
 
 	@Override
 	public void updateRiderPosition()
@@ -169,4 +173,21 @@ public class EntitySkateboard extends Entity
 			return true;
 		}
 	}
+	
+	protected float interpolateRotation(float p_77034_1_, float p_77034_2_, float p_77034_3_)
+    {
+        float f3;
+
+        for (f3 = p_77034_2_ - p_77034_1_; f3 < -180.0F; f3 += 360.0F)
+        {
+            ;
+        }
+
+        while (f3 >= 180.0F)
+        {
+            f3 -= 360.0F;
+        }
+
+        return p_77034_1_ + p_77034_3_ * f3;
+    }
 }
