@@ -9,12 +9,15 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class ItemSkateboard extends Item {
-
+public class ItemSkateboard extends Item
+{
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-		world.spawnEntityInWorld(new EntitySkateboard(world));
+	{
+		if (!world.isRemote)
+		{
+			world.spawnEntityInWorld(new EntitySkateboard(world, pos.getX(), pos.getY() + 2.0D, pos.getZ()));
+		}
 		return true;
-    }
+	}
 }
