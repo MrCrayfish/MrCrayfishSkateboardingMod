@@ -16,6 +16,7 @@ import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.event.SkateboardingEvents;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
+import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.proxy.CommonProxy;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
@@ -32,9 +33,11 @@ public class MrCrayfishSkateboardingMod {
 		SkateboardingItems.init();
 		SkateboardingItems.register();
 		
-		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 10, true);
 		
-		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
+		
+		
+		PacketHandler.init();
 	}
 	
 	@EventHandler

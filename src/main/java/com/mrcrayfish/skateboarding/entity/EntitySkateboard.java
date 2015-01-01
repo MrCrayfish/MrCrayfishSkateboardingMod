@@ -1,36 +1,26 @@
 package com.mrcrayfish.skateboarding.entity;
 
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIControlledByPlayer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.mrcrayfish.skateboarding.network.PacketHandler;
+import com.mrcrayfish.skateboarding.network.message.MessageUpdatePos;
 
 public class EntitySkateboard extends Entity
 {
 	public static final int SPEED = 6;
 	public static final double MAX_SPEED = 0.3;
+
+	public boolean jumping = false;
+	public int jumpTimer = 0;
 
 	public EntitySkateboard(World worldIn)
 	{
@@ -65,12 +55,6 @@ public class EntitySkateboard extends Entity
 	public boolean isRiding()
 	{
 		return this.ridingEntity != null;
-	}
-
-	@Override
-	protected boolean shouldSetPosAfterLoading()
-	{
-		return true;
 	}
 
 	@Override
@@ -110,79 +94,132 @@ public class EntitySkateboard extends Entity
 	@Override
 	public void onUpdate()
 	{
-		if (!this.worldObj.isRemote)
+		super.onUpdate();
+		if (worldObj.isRemote)
 		{
-			life++;
-			if (life >= 10000)
-			{
-				this.setDead();
-			}
+			onUpdateClient();
+		}
+		else
+		{
+			onUpdateServer();
+		}
+	}
 
-			if (this.riddenByEntity instanceof EntityLivingBase)
-			{
-				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-				float rotation = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, 0.1F);
+	public void onUpdateClient()
+	{
 
-				if (entity.moveForward > 0)
+		if (this.riddenByEntity instanceof EntityLivingBase)
+		{
+			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+			float rotation = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, 0.1F);
+
+			this.setRotation(rotation, this.rotationPitch);
+
+			if (entity.moveForward > 0 && motionY == 0.0)
+			{
+				double maxMotionX = -Math.sin((double) Math.toRadians(rotation)) * SPEED * (double) entity.moveForward * 0.05D;
+				double maxMotionZ = Math.cos((double) Math.toRadians(rotation)) * SPEED * (double) entity.moveForward * 0.05D;
+
+				this.motionX += maxMotionX / 16D;
+				this.motionZ += maxMotionZ / 16D;
+
+				if (Math.abs(this.motionX) >= Math.abs(maxMotionX))
 				{
-					double maxMotionX = -Math.sin((double) (rotation * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
-					double maxMotionZ = Math.cos((double) (rotation * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
-
-					this.motionX += maxMotionX / 16;
-					this.motionZ += maxMotionZ / 16;
-
-					if (Math.abs(this.motionX) >= Math.abs(maxMotionX))
-					{
-						this.motionX = maxMotionX;
-					}
-					if (Math.abs(this.motionZ) >= Math.abs(maxMotionZ))
-					{
-						this.motionZ = maxMotionZ;
-					}
+					this.motionX = maxMotionX;
 				}
-			}
-
-			if (this.isCollidedHorizontally)
-			{
-				System.out.println("Collided");
-				this.motionX = 0;
-				this.motionZ = 0;
-			}
-
-			if (!this.isCollidedVertically)
-			{
-				if (this.riddenByEntity instanceof EntityLivingBase)
+				if (Math.abs(this.motionZ) >= Math.abs(maxMotionZ))
 				{
-					EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-					if (entity.motionY > 0)
-					{
-						this.motionY += 1;
-					}
-				}
-			}
-			// this.motionY = 0.02;
-
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-
-			if (this.riddenByEntity instanceof EntityLivingBase)
-			{
-				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-				if (entity.moveForward == 0.0)
-				{
-					this.motionX *= 0.85;
-					this.motionZ *= 0.85;
+					this.motionZ = maxMotionZ;
 				}
 			}
 		}
 
-		// this.motionY *= 0.99;
-		// super.onUpdate();
+		if (this.isCollidedHorizontally)
+		{
+			System.out.println("Collided Horizontally");
+			this.motionX *= 0.5D;
+			this.motionZ *= 0.5D;
+		}
+		
+		if (this.isCollidedVertically)
+		{
+			System.out.println("Collided Vertically");
+			this.onGround = true;
+		}
+
+		if (this.ticksExisted % 40 == 0)
+		{
+			//System.out.println("MotionY: " + motionY);
+			//System.out.println(this.onGround);
+		}
+
+		if (this.riddenByEntity instanceof EntityPlayer)
+		{
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && jumping == false)
+			{
+				jumping = true;
+			}
+		}
+		
+		if (Math.abs(this.motionX) < 0.005D)
+        {
+            this.motionX = 0.0D;
+        }
+
+        if (Math.abs(this.motionY) < 0.005D)
+        {
+            this.motionY = 0.0D;
+        }
+
+        if (Math.abs(this.motionZ) < 0.005D)
+        {
+            this.motionZ = 0.0D;
+        }
+
+		// 9 Seaford Road, Seaford Meadow
+
+		if (jumping)
+		{
+			System.out.println(jumpTimer);
+			if (jumpTimer < 5)
+				motionY = 0.42D - (double)jumpTimer * 0.08D;
+			if (jumpTimer >= 5 && jumpTimer < 15)
+				motionY = -0.5D;
+			if (jumpTimer >= 20 | this.onGround)
+			{
+				jumping = false;
+				jumpTimer = 0;
+			}
+			jumpTimer++;
+		} else {
+			this.motionY -= 0.08D;
+		}
+
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+
+		if (this.riddenByEntity instanceof EntityLivingBase)
+		{
+			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+			if (entity.moveForward == 0.0)
+			{
+				this.motionX *= 0.85D;
+				this.motionZ *= 0.85D;
+			}
+		}
+		
+		this.motionY *= 0.9800000190734863D;
+
+		if (prevPosX != posX | prevPosY != posY | prevPosZ != posZ)
+			PacketHandler.INSTANCE.sendToServer(new MessageUpdatePos(this.getEntityId(), this.posX, this.posY, this.posZ));
 	}
 
-	@Override
-	public void updateRidden()
+	public void onUpdateServer()
 	{
-		super.updateRidden();
+		life++;
+		if (life >= 10000)
+		{
+			this.setDead();
+		}
 
 	}
 

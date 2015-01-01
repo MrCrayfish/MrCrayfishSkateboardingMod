@@ -15,21 +15,9 @@ public class ModelPlayerOverride extends ModelPlayerBase
 	}
 
 	@Override
-	public void beforeSetRotationAngles(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6, net.minecraft.entity.Entity paramEntity)
-	{
-		EntityPlayer player = (EntityPlayer) paramEntity;
-		if (player.ridingEntity != null && player.ridingEntity instanceof EntitySkateboard)
-		{
-			//player.rotationPitch = 0;
-			//player.rotationYaw = 0;
-		}
-	}
-
-	@Override
 	public void afterSetRotationAngles(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6, net.minecraft.entity.Entity paramEntity)
 	{
-		EntityPlayer player = (EntityPlayer) paramEntity;
-		if (player.ridingEntity != null && player.ridingEntity instanceof EntitySkateboard)
+		if (paramEntity.ridingEntity != null && paramEntity.ridingEntity instanceof EntitySkateboard)
 		{
 			this.modelPlayer.bipedLeftLeg.rotateAngleX = -1F;
 			this.modelPlayer.bipedLeftLeg.rotateAngleY = 1.3F;

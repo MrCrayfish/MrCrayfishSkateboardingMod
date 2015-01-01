@@ -30,83 +30,92 @@ public class ModelSkateboard extends ModelBase
 		boardBase.setTextureSize(64, 32);
 		boardBase.mirror = true;
 		setRotation(boardBase, 0F, 0F, 0F);
-		boardBack = new ModelRenderer(this, 18, 15);
+		boardBack = new ModelRenderer(this, 0, 15);
 		boardBack.addBox(-3F, 0F, 0F, 6, 1, 3);
-		boardBack.setRotationPoint(0F, 20.8F, 6.75F);
+		boardBack.setRotationPoint(0F, 0F, 6.75F);
 		boardBack.setTextureSize(64, 32);
 		boardBack.mirror = true;
 		setRotation(boardBack, 0.1745329F, 0F, 0F);
-		boardFront = new ModelRenderer(this, 0, 15);
+		boardFront = new ModelRenderer(this, 18, 15);
 		boardFront.addBox(-3F, 0F, -3F, 6, 1, 3);
-		boardFront.setRotationPoint(0F, 20.8F, -6.8F);
+		boardFront.setRotationPoint(0F, 0F, -6.8F);
 		boardFront.setTextureSize(64, 32);
 		boardFront.mirror = true;
 		setRotation(boardFront, -0.1745329F, 0F, 0F);
 		wheelFrontLeft = new ModelRenderer(this, 40, 0);
 		wheelFrontLeft.addBox(0F, -1F, -1F, 1, 2, 2);
-		wheelFrontLeft.setRotationPoint(2F, 23F, -5.5F);
+		wheelFrontLeft.setRotationPoint(2F, 2F, -5.5F);
 		wheelFrontLeft.setTextureSize(64, 32);
 		wheelFrontLeft.mirror = true;
 		setRotation(wheelFrontLeft, 0F, 0F, 0F);
 		wheelFrontRight = new ModelRenderer(this, 46, 0);
 		wheelFrontRight.addBox(-1F, -1F, -1F, 1, 2, 2);
-		wheelFrontRight.setRotationPoint(-2F, 23F, -5.5F);
+		wheelFrontRight.setRotationPoint(-2F, 2F, -5.5F);
 		wheelFrontRight.setTextureSize(64, 32);
 		wheelFrontRight.mirror = true;
 		setRotation(wheelFrontRight, 0F, 0F, 0F);
 		wheelBackLeft = new ModelRenderer(this, 40, 4);
 		wheelBackLeft.addBox(0F, -1F, -1F, 1, 2, 2);
-		wheelBackLeft.setRotationPoint(2F, 23F, 5.5F);
+		wheelBackLeft.setRotationPoint(2F, 2F, 5.5F);
 		wheelBackLeft.setTextureSize(64, 32);
 		wheelBackLeft.mirror = true;
 		setRotation(wheelBackLeft, 0F, 0F, 0F);
 		wheelBackRight = new ModelRenderer(this, 46, 4);
 		wheelBackRight.addBox(-1F, -1F, -1F, 1, 2, 2);
-		wheelBackRight.setRotationPoint(-2F, 23F, 5.5F);
+		wheelBackRight.setRotationPoint(-2F, 2F, 5.5F);
 		wheelBackRight.setTextureSize(64, 32);
 		wheelBackRight.mirror = true;
 		setRotation(wheelBackRight, 0F, 0F, 0F);
 		backTruckAxel = new ModelRenderer(this, 0, 19);
 		backTruckAxel.addBox(-2F, -0.5F, -0.5F, 4, 1, 1);
-		backTruckAxel.setRotationPoint(0F, 23F, 5.5F);
+		backTruckAxel.setRotationPoint(0F, 2F, 5.5F);
 		backTruckAxel.setTextureSize(64, 32);
 		backTruckAxel.mirror = true;
 		setRotation(backTruckAxel, 0F, 0F, 0F);
 		frontTruckAxel = new ModelRenderer(this, 10, 19);
 		frontTruckAxel.addBox(-2F, -0.5F, -0.5F, 4, 1, 1);
-		frontTruckAxel.setRotationPoint(0F, 23F, -5.5F);
+		frontTruckAxel.setRotationPoint(0F, 2F, -5.5F);
 		frontTruckAxel.setTextureSize(64, 32);
 		frontTruckAxel.mirror = true;
 		setRotation(frontTruckAxel, 0F, 0F, 0F);
 		backTruckBase = new ModelRenderer(this, 0, 21);
 		backTruckBase.addBox(-1F, 0F, -1F, 2, 1, 2);
-		backTruckBase.setRotationPoint(0F, 21.8F, 5.5F);
+		backTruckBase.setRotationPoint(0F, 1F, 5.5F);
 		backTruckBase.setTextureSize(64, 32);
 		backTruckBase.mirror = true;
 		setRotation(backTruckBase, 0F, 0F, 0F);
 		frontTruckBase = new ModelRenderer(this, 8, 21);
 		frontTruckBase.addBox(-1F, 0F, -1F, 2, 1, 2);
-		frontTruckBase.setRotationPoint(0F, 21.8F, -5.5F);
+		frontTruckBase.setRotationPoint(0F, 1F, -5.5F);
 		frontTruckBase.setTextureSize(64, 32);
 		frontTruckBase.mirror = true;
 		setRotation(frontTruckBase, 0F, 0F, 0F);
+
+		boardBase.addChild(boardFront);
+		boardBase.addChild(boardBack);
+		boardBase.addChild(frontTruckBase);
+		boardBase.addChild(backTruckBase);
+		boardBase.addChild(frontTruckAxel);
+		boardBase.addChild(backTruckAxel);
+		boardBase.addChild(wheelFrontLeft);
+		boardBase.addChild(wheelFrontRight);
+		boardBase.addChild(wheelBackLeft);
+		boardBase.addChild(wheelBackRight);
 	}
 
+	@Override
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
+	{
+		boardBase.rotateAngleZ = (float) Math.toRadians(0);
+		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+	}
+
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-	    super.render(entity, f, f1, f2, f3, f4, f5);
-	    super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-	    boardBase.render(f5);
-	    boardBack.render(f5);
-	    boardFront.render(f5);
-	    wheelFrontLeft.render(f5);
-	    wheelFrontRight.render(f5);
-	    wheelBackLeft.render(f5);
-	    wheelBackRight.render(f5);
-	    backTruckAxel.render(f5);
-	    frontTruckAxel.render(f5);
-	    backTruckBase.render(f5);
-	    frontTruckBase.render(f5);
+		super.render(entity, f, f1, f2, f3, f4, f5);
+		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		boardBase.render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)
