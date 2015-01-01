@@ -1,5 +1,9 @@
 package com.mrcrayfish.skateboarding.client.model;
 
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.tricks.Trick;
+import com.mrcrayfish.skateboarding.tricks.TrickHelper;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -106,7 +110,15 @@ public class ModelSkateboard extends ModelBase
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
-		boardBase.rotateAngleZ = (float) Math.toRadians(0);
+		EntitySkateboard skateboard = (EntitySkateboard) entity;
+		if (skateboard.inTrick && skateboard.currentTrick != null)
+		{
+			TrickHelper.getTrick(skateboard.currentTrick).updateMovement(boardBase, skateboard.jumpTimer);
+		}
+		else
+		{
+			boardBase.rotateAngleZ = 0;
+		}
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}
 
