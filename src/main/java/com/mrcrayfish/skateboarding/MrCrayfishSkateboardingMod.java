@@ -10,9 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import api.player.model.ModelPlayerAPI;
 
-import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.event.SkateboardingEvents;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
@@ -33,7 +31,7 @@ public class MrCrayfishSkateboardingMod {
 		SkateboardingItems.init();
 		SkateboardingItems.register();
 		
-		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 20, true);
+		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 10, true);
 		
 		
 		

@@ -1,11 +1,9 @@
 package com.mrcrayfish.skateboarding.client.model;
 
-import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;
+
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class ModelPlayerOverride extends ModelPlayerBase
 {

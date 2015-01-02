@@ -141,7 +141,7 @@ public class EntitySkateboard extends Entity
 
 			if (entity.moveForward > 0 && this.isCollidedVertically)
 			{
-				float f = this.riddenByEntity.rotationYaw + -entity.moveStrafing * 90.0F;
+				float f = this.riddenByEntity.rotationYaw;
 				double maxMotionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
 				double maxMotionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
 
@@ -291,6 +291,10 @@ public class EntitySkateboard extends Entity
 		if (this.riddenByEntity != null)
 		{
 			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick ? 0.25D : 0D), this.posZ);
+			if (this.riddenByEntity instanceof EntityLivingBase)
+            {
+                ((EntityLivingBase)this.riddenByEntity).renderYawOffset = this.rotationYaw + 90F;
+            }
 		}
 	}
 
