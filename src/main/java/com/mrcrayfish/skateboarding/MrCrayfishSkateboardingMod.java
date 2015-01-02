@@ -33,7 +33,7 @@ public class MrCrayfishSkateboardingMod {
 		SkateboardingItems.init();
 		SkateboardingItems.register();
 		
-		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 10, true);
+		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 20, true);
 		
 		
 		

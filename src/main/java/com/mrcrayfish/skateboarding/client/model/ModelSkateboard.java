@@ -114,10 +114,10 @@ public class ModelSkateboard extends ModelBase
 		if (skateboard.inTrick && skateboard.currentTrick != null)
 		{
 			TrickHelper.getTrick(skateboard.currentTrick).updateMovement(boardBase, skateboard.jumpTimer);
-		}
-		else
-		{
-			boardBase.rotateAngleZ = 0;
+		} else {
+			boardBase.rotateAngleX = 0.0F;
+			boardBase.rotateAngleY = 0.0F;
+			boardBase.rotateAngleZ = 0.0F;
 		}
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}

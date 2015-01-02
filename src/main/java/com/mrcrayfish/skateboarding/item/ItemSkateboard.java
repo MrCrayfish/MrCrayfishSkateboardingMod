@@ -14,10 +14,7 @@ public class ItemSkateboard extends Item
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if (!world.isRemote)
-		{
-			world.spawnEntityInWorld(new EntitySkateboard(world, pos.getX(), pos.getY() + 1.0D, pos.getZ()));
-		}
+		world.spawnEntityInWorld(new EntitySkateboard(world, pos.getX(), pos.getY() + 1.0D, pos.getZ()));
 		return true;
 	}
 }

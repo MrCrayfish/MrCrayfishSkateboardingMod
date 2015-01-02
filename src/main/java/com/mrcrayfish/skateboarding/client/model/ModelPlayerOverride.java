@@ -35,8 +35,21 @@ public class ModelPlayerOverride extends ModelPlayerBase
 
 			this.modelPlayer.bipedBody.rotateAngleY = 1.25F;
 
-			this.modelPlayer.bipedLeftArm.rotateAngleZ = 5.0F;
-			this.modelPlayer.bipedRightArm.rotateAngleZ = 2F;
+			this.modelPlayer.bipedLeftArm.rotateAngleX = -1F;
+			this.modelPlayer.bipedLeftArm.rotateAngleY = 1.3F;
+			this.modelPlayer.bipedLeftArm.rotateAngleZ = -1F;
+			
+			this.modelPlayer.bipedLeftArm.rotationPointZ = -5F;
+			this.modelPlayer.bipedLeftArm.rotationPointY = 2F;
+			this.modelPlayer.bipedLeftArm.rotationPointX = 1.3F;
+			
+			this.modelPlayer.bipedRightArm.rotateAngleX = 1F;
+			this.modelPlayer.bipedRightArm.rotateAngleY = 1.3F;
+			this.modelPlayer.bipedRightArm.rotateAngleZ = 1F;
+			
+			this.modelPlayer.bipedRightArm.rotationPointZ = 5F;
+			this.modelPlayer.bipedRightArm.rotationPointY = 2F;
+			this.modelPlayer.bipedRightArm.rotationPointX = -1.3F;
 			
 			//player.rotationYaw = this.modelBiped.bipedBody.rotateAngleY;
 		}

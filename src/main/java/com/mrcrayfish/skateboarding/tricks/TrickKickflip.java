@@ -9,8 +9,7 @@ public class TrickKickflip extends Trick
 	{
 		if (tick <= performTime())
 		{
-			System.out.println(tick);
-			skateboard.rotateAngleZ = -24F * tick;
+			skateboard.rotateAngleZ = (float) Math.toRadians(-(360 / performTime()) * tick);
 		}
 		else
 		{
@@ -27,6 +26,6 @@ public class TrickKickflip extends Trick
 	@Override
 	public int performTime()
 	{
-		return 10;
+		return 8;
 	}	
 }

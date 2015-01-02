@@ -8,6 +8,8 @@ public class TrickHelper
 		{
 		case KICKFLIP:
 			return Trick.kickflip;
+		case TREFLIP:
+			return Trick.treflip;
 		default:
 			break;
 		}
