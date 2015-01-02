@@ -8,11 +8,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
-import com.mrcrayfish.skateboarding.network.message.MessageUpdatePos;
+import com.mrcrayfish.skateboarding.network.message.MessageTrick;
 import com.mrcrayfish.skateboarding.tricks.TrickHelper;
 import com.mrcrayfish.skateboarding.tricks.TrickHelper.Tricks;
 
@@ -104,15 +107,22 @@ public class EntitySkateboard extends Entity
 	@SideOnly(Side.CLIENT)
 	public void func_180426_a(double p_180426_1_, double p_180426_3_, double p_180426_5_, float p_180426_7_, float p_180426_8_, int p_180426_9_, boolean p_180426_10_)
 	{
-		this.prevPosX = this.posX = p_180426_1_;
-		this.prevPosY = this.posY = p_180426_3_;
-		this.prevPosZ = this.posZ = p_180426_5_;
-		this.rotationYaw = p_180426_7_;
-		this.rotationPitch = p_180426_8_;
-		this.setPosition(p_180426_1_, p_180426_3_, p_180426_5_);
-		this.motionX = this.velocityX = 0.0D;
-		this.motionY = this.velocityY = 0.0D;
-		this.motionZ = this.velocityZ = 0.0D;
+		if (this.riddenByEntity != null)
+		{
+			this.prevPosX = this.posX = p_180426_1_;
+			this.prevPosY = this.posY = p_180426_3_;
+			this.prevPosZ = this.posZ = p_180426_5_;
+			this.rotationYaw = p_180426_7_;
+			this.rotationPitch = p_180426_8_;
+			this.setPosition(p_180426_1_, p_180426_3_, p_180426_5_);
+			this.motionX = this.velocityX = 0.0D;
+			this.motionY = this.velocityY = 0.0D;
+			this.motionZ = this.velocityZ = 0.0D;
+		} else {
+			this.motionX = this.velocityX;
+            this.motionY = this.velocityY;
+            this.motionZ = this.velocityZ;
+		}
 	}
 
 	@Override
@@ -167,7 +177,7 @@ public class EntitySkateboard extends Entity
 
 		if (this.riddenByEntity instanceof EntityPlayer)
 		{
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && jumping == false)
+			if (worldObj.isRemote && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && jumping == false)
 			{
 				jumping = true;
 				inTrick = true;
@@ -271,11 +281,6 @@ public class EntitySkateboard extends Entity
 		this.motionY *= 0.9800000190734863D;
 	}
 
-	public void onUpdateClient()
-	{
-
-	}
-
 	public void onUpdateServer()
 	{
 		life++;
@@ -292,9 +297,9 @@ public class EntitySkateboard extends Entity
 		{
 			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick ? 0.25D : 0D), this.posZ);
 			if (this.riddenByEntity instanceof EntityLivingBase)
-            {
-                ((EntityLivingBase)this.riddenByEntity).renderYawOffset = this.rotationYaw + 90F;
-            }
+			{
+				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.rotationYaw + 90F;
+			}
 		}
 	}
 
@@ -319,14 +324,28 @@ public class EntitySkateboard extends Entity
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tagCompund)
 	{
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tagCompound)
 	{
-		// TODO Auto-generated method stub
 
 	}
+	
+	public void startTrick()
+	{
+		
+	}
+	
+	public void jump()
+	{
+		this.jumping = true;
+	}
+	
+	@SubscribeEvent
+    public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if(Keybinds.ollie.isPressed())
+           PacketHandler.INSTANCE.sendToServer(new MessageTrick(this.getEntityId(), 0));
+    }
 }

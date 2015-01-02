@@ -6,6 +6,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import api.player.model.ModelPlayerAPI;
 
+import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
@@ -16,9 +17,14 @@ public class ClientProxy extends CommonProxy{
 	public void registerRenders()
 	{
 		SkateboardingItems.registerRenders();
+		
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
+		
 		EntityRegistry.registerGlobalEntityID(EntitySkateboard.class, "csmSkateboard", EntityRegistry.findGlobalUniqueEntityId());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderSkateboard(Minecraft.getMinecraft().getRenderManager()));
+		
+		Keybinds.init();
+		Keybinds.register();
 	}
 	
 	public World getWorld()
