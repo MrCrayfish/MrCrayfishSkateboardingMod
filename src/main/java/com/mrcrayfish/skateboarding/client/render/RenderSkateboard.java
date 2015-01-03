@@ -16,7 +16,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 public class RenderSkateboard extends Render
 {
 
-	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/cake.png");
+	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/crayfish.png");
 	private ModelBase modelSkateboard = new ModelSkateboard();
 
 	public RenderSkateboard(RenderManager renderManager)

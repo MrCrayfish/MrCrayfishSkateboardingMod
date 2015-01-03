@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.event.SkateboardingEvents;
@@ -43,6 +44,11 @@ public class MrCrayfishSkateboardingMod {
 		
 		MinecraftForge.EVENT_BUS.register(new SkateboardingEvents());
 		FMLCommonHandler.instance().bus().register(new SkateboardingEvents());
+		
+		if(event.getSide() == Side.CLIENT)
+		{
+			FMLCommonHandler.instance().bus().register(new EntitySkateboard(null));
+		}
 	}
 	
 	@EventHandler

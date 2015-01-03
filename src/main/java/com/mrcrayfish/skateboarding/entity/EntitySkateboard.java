@@ -118,10 +118,12 @@ public class EntitySkateboard extends Entity
 			this.motionX = this.velocityX = 0.0D;
 			this.motionY = this.velocityY = 0.0D;
 			this.motionZ = this.velocityZ = 0.0D;
-		} else {
+		}
+		else
+		{
 			this.motionX = this.velocityX;
-            this.motionY = this.velocityY;
-            this.motionZ = this.velocityZ;
+			this.motionY = this.velocityY;
+			this.motionZ = this.velocityZ;
 		}
 	}
 
@@ -179,9 +181,7 @@ public class EntitySkateboard extends Entity
 		{
 			if (worldObj.isRemote && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && jumping == false)
 			{
-				jumping = true;
-				inTrick = true;
-				currentTrick = Tricks.TREFLIP;
+
 			}
 		}
 
@@ -332,20 +332,37 @@ public class EntitySkateboard extends Entity
 	{
 
 	}
-	
+
 	public void startTrick()
 	{
-		
+		jumping = true;
+		inTrick = true;
+		currentTrick = Tricks.TREFLIP;
+		onGround = false;
 	}
-	
+
 	public void jump()
 	{
 		this.jumping = true;
 	}
-	
+
 	@SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
-        if(Keybinds.ollie.isPressed())
-           PacketHandler.INSTANCE.sendToServer(new MessageTrick(this.getEntityId(), 0));
-    }
+	public void onKeyInput(InputEvent.KeyInputEvent event)
+	{
+		Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
+		if (entity != null && entity instanceof EntitySkateboard)
+		{
+			EntitySkateboard skateboard = (EntitySkateboard) entity;
+			if (Keybinds.ollie.isPressed())
+			{
+				skateboard.startTrick();
+				PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), 0));
+			}
+			
+			if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+			{
+				System.out.println("Hey");
+			}
+		}
+	}
 }

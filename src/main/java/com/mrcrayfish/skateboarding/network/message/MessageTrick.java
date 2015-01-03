@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding.network.message;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -37,7 +38,10 @@ public class MessageTrick implements IMessage, IMessageHandler<MessageTrick, IMe
 	@Override
 	public IMessage onMessage(MessageTrick message, MessageContext ctx)
 	{
-		EntitySkateboard skatebaord = (EntitySkateboard) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityId);
+		System.out.println("Got packet");
+		World world = ctx.getServerHandler().playerEntity.worldObj;
+		EntitySkateboard skateboard = (EntitySkateboard) world.getEntityByID(message.entityId);
+		skateboard.startTrick();
 		return null;
 	}
 }
