@@ -24,7 +24,7 @@ public class TrickPopShove extends Trick
 	@Override
 	public int performTime()
 	{
-		return 10;
+		return 8;
 	}
 
 }

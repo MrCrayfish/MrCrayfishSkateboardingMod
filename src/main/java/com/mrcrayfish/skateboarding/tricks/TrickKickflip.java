@@ -28,6 +28,6 @@ public class TrickKickflip extends Trick
 	@Override
 	public int performTime()
 	{
-		return 10;
+		return 8;
 	}	
 }
