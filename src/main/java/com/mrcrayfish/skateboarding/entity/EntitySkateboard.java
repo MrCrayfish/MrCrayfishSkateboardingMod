@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding.entity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,8 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mrcrayfish.skateboarding.api.Trick;
+import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
@@ -177,14 +180,6 @@ public class EntitySkateboard extends Entity
 			this.motionZ *= 0.5D;
 		}
 
-		if (this.riddenByEntity instanceof EntityPlayer)
-		{
-			if (worldObj.isRemote && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && jumping == false)
-			{
-
-			}
-		}
-
 		if (Math.abs(this.motionX) < 0.005D)
 		{
 			this.motionX = 0.0D;
@@ -333,9 +328,8 @@ public class EntitySkateboard extends Entity
 
 	}
 
-	public void startTrick()
+	public void startTrick(Trick trick)
 	{
-		jumping = true;
 		inTrick = true;
 		currentTrick = Tricks.TREFLIP;
 		onGround = false;
@@ -344,6 +338,7 @@ public class EntitySkateboard extends Entity
 	public void jump()
 	{
 		this.jumping = true;
+		onGround = false;
 	}
 
 	@SubscribeEvent
@@ -353,15 +348,24 @@ public class EntitySkateboard extends Entity
 		if (entity != null && entity instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
-			if (Keybinds.ollie.isPressed())
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
 			{
-				skateboard.startTrick();
-				PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), 0));
+				skateboard.jump();
 			}
-			
-			if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+			else
 			{
-				System.out.println("Hey");
+				if (skateboard.jumping)
+				{
+					for (KeyBinding key : TrickRegistry.getRegisteredKeys())
+					{
+						if (key.isPressed())
+						{
+							int trickId = TrickRegistry.getTrickId(key);
+							skateboard.startTrick(TrickRegistry.getTrick(trickId));
+							PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), trickId));
+						}
+					}
+				}
 			}
 		}
 	}

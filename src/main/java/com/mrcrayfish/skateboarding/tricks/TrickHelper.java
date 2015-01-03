@@ -1,5 +1,8 @@
 package com.mrcrayfish.skateboarding.tricks;
 
+import com.mrcrayfish.skateboarding.api.Trick;
+import com.mrcrayfish.skateboarding.api.TrickRegistry;
+
 public class TrickHelper
 {
 	public static Trick getTrick(Tricks trick)
@@ -7,13 +10,13 @@ public class TrickHelper
 		switch (trick)
 		{
 		case KICKFLIP:
-			return Trick.kickflip;
+			return TrickRegistry.kickflip;
 		case TREFLIP:
-			return Trick.treflip;
+			return TrickRegistry.treflip;
 		default:
 			break;
 		}
-		return Trick.popshove;
+		return TrickRegistry.popshove;
 	}
 
 	public static enum Tricks

@@ -1,7 +1,7 @@
 package com.mrcrayfish.skateboarding.client.model;
 
+import com.mrcrayfish.skateboarding.api.Trick;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.tricks.Trick;
 import com.mrcrayfish.skateboarding.tricks.TrickHelper;
 
 import net.minecraft.client.model.ModelBase;

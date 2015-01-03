@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.event.SkateboardingEvents;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
@@ -35,6 +36,8 @@ public class MrCrayfishSkateboardingMod {
 		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 10, true);
 
 		PacketHandler.init();
+		
+		TrickRegistry.registerTricks();
 	}
 	
 	@EventHandler

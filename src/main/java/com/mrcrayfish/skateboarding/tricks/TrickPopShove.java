@@ -1,5 +1,7 @@
 package com.mrcrayfish.skateboarding.tricks;
 
+import com.mrcrayfish.skateboarding.api.Trick;
+
 import net.minecraft.client.model.ModelRenderer;
 
 public class TrickPopShove extends Trick

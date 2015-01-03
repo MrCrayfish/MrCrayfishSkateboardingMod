@@ -6,6 +6,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import api.player.model.ModelPlayerAPI;
 
+import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
@@ -25,6 +26,8 @@ public class ClientProxy extends CommonProxy{
 		
 		Keybinds.init();
 		Keybinds.register();
+		
+		TrickRegistry.registerKeyBinds();
 	}
 	
 	public World getWorld()
