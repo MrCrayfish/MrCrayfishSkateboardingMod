@@ -28,7 +28,7 @@ public class TrickHeelflip extends Trick
 	@Override
 	public int performTime()
 	{
-		return 20;
+		return 10;
 	}
 
 }

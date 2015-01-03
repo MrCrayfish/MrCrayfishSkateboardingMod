@@ -6,12 +6,13 @@ import net.minecraft.client.model.ModelRenderer;
 
 public class TrickPopShove extends Trick
 {
-
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)
 	{
-		// TODO Auto-generated method stub
-		
+		if(tick <= performTime())
+		{
+			skateboard.rotateAngleY = (float) Math.toRadians((180 / performTime()) * tick);
+		}
 	}
 
 	@Override
@@ -23,7 +24,7 @@ public class TrickPopShove extends Trick
 	@Override
 	public int performTime()
 	{
-		return 20;
+		return 10;
 	}
 
 }
