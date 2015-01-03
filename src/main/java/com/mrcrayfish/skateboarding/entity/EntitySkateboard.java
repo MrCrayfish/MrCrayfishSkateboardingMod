@@ -16,8 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mrcrayfish.skateboarding.api.Trick;
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
-import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
+import com.mrcrayfish.skateboarding.network.message.MessageJump;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
 import com.mrcrayfish.skateboarding.tricks.TrickHelper;
 import com.mrcrayfish.skateboarding.tricks.TrickHelper.Tricks;
@@ -27,10 +27,11 @@ public class EntitySkateboard extends Entity
 	public static final int SPEED = 8;
 	public static final double MAX_SPEED = 0.3;
 
-	public int jumpTimer = 0;
 	public boolean jumping = false;
+	public int jumpingTimer = 0;
 	public boolean inTrick = false;
-	public Tricks currentTrick = null;
+	public int inTrickTimer = 0;
+	public Trick currentTrick = null;
 
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
@@ -180,56 +181,47 @@ public class EntitySkateboard extends Entity
 			this.motionZ *= 0.5D;
 		}
 
-		if (Math.abs(this.motionX) < 0.005D)
-		{
-			this.motionX = 0.0D;
-		}
-
-		if (Math.abs(this.motionY) < 0.005D)
-		{
-			this.motionY = 0.0D;
-		}
-
-		if (Math.abs(this.motionZ) < 0.005D)
-		{
-			this.motionZ = 0.0D;
-		}
-
 		if (jumping)
 		{
-			jumpTimer++;
+			
+			inTrickTimer++;
 
-			if (jumpTimer <= 5)
-				motionY = 0.5D - (double) jumpTimer * 0.04D;
-			if (jumpTimer > 5 && jumpTimer <= 15)
+			if (jumpingTimer < 5)
+				motionY = 0.5D - (double) jumpingTimer * 0.04D;
+			if (jumpingTimer >= 5)
 				motionY = -0.5D;
 
 			if (inTrick && currentTrick != null)
 			{
-				if (jumpTimer >= TrickHelper.getTrick(currentTrick).performTime() - 1)
+				if (inTrickTimer > currentTrick.performTime())
 				{
 					System.out.println("Finished performing trick");
 					currentTrick = null;
 					inTrick = false;
+					inTrickTimer = 0;
 				}
-				else if (this.onGround && TrickHelper.getTrick(currentTrick).performTime() > jumpTimer)
+				else if (this.onGround && currentTrick.performTime() > inTrickTimer)
 				{
 					System.out.println("Failed to perform trick");
 					currentTrick = null;
 					inTrick = false;
 					jumping = false;
-					jumpTimer = 0;
+					inTrickTimer = 0;
+					jumpingTimer = 0;
 				}
 			}
 
-			if (jumpTimer >= 20 | this.onGround)
+			if (this.onGround)
 			{
-				System.out.println("Successfully performed the trick " + jumpTimer);
+				System.out.println("Successfully performed the trick " + inTrickTimer);
 				currentTrick = null;
 				inTrick = false;
 				jumping = false;
-				jumpTimer = 0;
+				inTrickTimer = 0;
+				jumpingTimer = 0;
 			}
+			
+			jumpingTimer++;
 		}
 		else
 		{
@@ -331,7 +323,7 @@ public class EntitySkateboard extends Entity
 	public void startTrick(Trick trick)
 	{
 		inTrick = true;
-		currentTrick = Tricks.TREFLIP;
+		currentTrick = trick;
 		onGround = false;
 	}
 
@@ -348,18 +340,23 @@ public class EntitySkateboard extends Entity
 		if (entity != null && entity instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
 			{
-				skateboard.jump();
+				if (!skateboard.jumping)
+				{
+					skateboard.jump();
+					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
+				}
 			}
 			else
 			{
-				if (skateboard.jumping)
+				for (KeyBinding key : TrickRegistry.getRegisteredKeys())
 				{
-					for (KeyBinding key : TrickRegistry.getRegisteredKeys())
+					if (key.isKeyDown())
 					{
-						if (key.isPressed())
+						if (skateboard.jumping)
 						{
+							System.out.println("Key Pressed");
 							int trickId = TrickRegistry.getTrickId(key);
 							skateboard.startTrick(TrickRegistry.getTrick(trickId));
 							PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), trickId));

@@ -45,9 +45,6 @@ public class MrCrayfishSkateboardingMod {
 	{
 		proxy.registerRenders();
 		
-		MinecraftForge.EVENT_BUS.register(new SkateboardingEvents());
-		FMLCommonHandler.instance().bus().register(new SkateboardingEvents());
-		
 		if(event.getSide() == Side.CLIENT)
 		{
 			FMLCommonHandler.instance().bus().register(new EntitySkateboard(null));

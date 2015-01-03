@@ -113,7 +113,7 @@ public class ModelSkateboard extends ModelBase
 		EntitySkateboard skateboard = (EntitySkateboard) entity;
 		if (skateboard.inTrick && skateboard.currentTrick != null)
 		{
-			TrickHelper.getTrick(skateboard.currentTrick).updateMovement(boardBase, skateboard.jumpTimer);
+			skateboard.currentTrick.updateMovement(boardBase, skateboard.inTrickTimer);
 		} else {
 			boardBase.rotateAngleX = 0.0F;
 			boardBase.rotateAngleY = 0.0F;

@@ -22,8 +22,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mrcrayfish.skateboarding.Reference;
+import com.mrcrayfish.skateboarding.network.message.MessageJump;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
-import com.mrcrayfish.skateboarding.network.message.MessageUpdatePos;
 
 public class PacketHandler
 {
@@ -31,7 +31,7 @@ public class PacketHandler
 
 	public static void init()
 	{
-		INSTANCE.registerMessage(MessageUpdatePos.class, MessageUpdatePos.class, 0, Side.SERVER);
+		INSTANCE.registerMessage(MessageJump.class, MessageJump.class, 0, Side.SERVER);
 		INSTANCE.registerMessage(MessageTrick.class, MessageTrick.class, 1, Side.SERVER);
 	}
 }

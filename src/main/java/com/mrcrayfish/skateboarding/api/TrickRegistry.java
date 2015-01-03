@@ -7,10 +7,10 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mrcrayfish.skateboarding.tricks.TrickHeelflip;
 import com.mrcrayfish.skateboarding.tricks.TrickKickflip;
 import com.mrcrayfish.skateboarding.tricks.TrickTreflip;
 
@@ -49,7 +49,7 @@ public class TrickRegistry
 	}
 
 	public static final Trick kickflip = new TrickKickflip();
-	public static final Trick heelflip = new TrickKickflip();
+	public static final Trick heelflip = new TrickHeelflip();
 	public static final Trick popshove = new TrickKickflip();
 	public static final Trick treflip = new TrickTreflip();
 
