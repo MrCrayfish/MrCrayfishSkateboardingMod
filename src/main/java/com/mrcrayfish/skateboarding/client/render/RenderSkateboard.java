@@ -42,7 +42,12 @@ public class RenderSkateboard extends Render
 				if (player.getUniqueID().toString().equals(Minecraft.getMinecraft().thePlayer.getUniqueID().toString()))
 				{
 					x = 0;
+					y = -0.15;
 					z = 0;
+				}
+				if(entity.inTrick)
+				{
+					y = -0.3;
 				}
 			}
 		}

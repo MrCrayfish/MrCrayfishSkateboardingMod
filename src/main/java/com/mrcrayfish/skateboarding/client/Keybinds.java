@@ -7,15 +7,15 @@ import org.lwjgl.input.Keyboard;
 
 public class Keybinds
 {
-	public static KeyBinding ollie;
+	//public static KeyBinding ollie;
 	
 	public static void init()
 	{
-		ollie = new KeyBinding("key.ollie", Keyboard.KEY_SPACE, "key.categories.csm");
+		//ollie = new KeyBinding("key.ollie", Keyboard.KEY_SPACE, "key.categories.csm");
 	}
 	
 	public static void register()
 	{
-		ClientRegistry.registerKeyBinding(ollie);
+		//ClientRegistry.registerKeyBinding(ollie);
 	}
 }
