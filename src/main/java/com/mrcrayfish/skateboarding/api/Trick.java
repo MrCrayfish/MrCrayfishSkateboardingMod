@@ -4,11 +4,11 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class Trick
+public interface Trick
 {	
-	public abstract String getName();
+	public String getName();
 
-	public abstract int performTime();
+	public int performTime();
 
-	public abstract void updateMovement(ModelRenderer skateboard, int tick);
+	public void updateMovement(ModelRenderer skateboard, int tick);
 }

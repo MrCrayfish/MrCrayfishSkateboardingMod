@@ -4,28 +4,11 @@ import com.mrcrayfish.skateboarding.api.Trick;
 
 import net.minecraft.client.model.ModelRenderer;
 
-public class TrickTreflip extends Trick
+public class TrickTreflip implements Trick
 {
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)
-	{
-		// performTime @ 0 = 0:0:0
-		// tick < 3 ? tick
-		// performTime @ 3 = 3:0:3
-		// tick < 9 ? 6 - tick
-		// performTime @ 6 = 6:0:0
-		// tick < 9 ? 6 - tick
-		// performTime @ 9 = 3:6:-3
-		// performTime @ 12 = 0:0:0
-		
-		//purple 126
-		//Orange 247
-		//Black 147
-		//Blue 356
-		
-		//tick = 11;
-		//boolean flag = true;
-		
+	{	
 		if (tick < performTime())
 		{
 			skateboard.rotateAngleX = (float) Math.toRadians(-(360 /performTime()) * (tick <= 6 ? tick : 12 - tick));

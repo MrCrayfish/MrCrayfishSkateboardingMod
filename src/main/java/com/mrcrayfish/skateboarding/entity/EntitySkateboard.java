@@ -1,7 +1,6 @@
 package com.mrcrayfish.skateboarding.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,11 +15,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mrcrayfish.skateboarding.api.Trick;
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
+import com.mrcrayfish.skateboarding.client.Combination;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageJump;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
-import com.mrcrayfish.skateboarding.tricks.TrickHelper;
-import com.mrcrayfish.skateboarding.tricks.TrickHelper.Tricks;
 
 public class EntitySkateboard extends Entity
 {
@@ -350,14 +348,14 @@ public class EntitySkateboard extends Entity
 			}
 			else
 			{
-				for (KeyBinding key : TrickRegistry.getRegisteredKeys())
+				for (Combination comb : TrickRegistry.getRegisteredCombinations()) 
 				{
-					if (key.isKeyDown())
+					if (comb.allPressed())
 					{
-						if (skateboard.jumping)
+						if (skateboard.jumping && !skateboard.inTrick)
 						{
 							System.out.println("Key Pressed");
-							int trickId = TrickRegistry.getTrickId(key);
+							int trickId = TrickRegistry.getTrickId(comb);
 							skateboard.startTrick(TrickRegistry.getTrick(trickId));
 							PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), trickId));
 						}

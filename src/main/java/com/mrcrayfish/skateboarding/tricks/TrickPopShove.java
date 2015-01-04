@@ -4,7 +4,7 @@ import com.mrcrayfish.skateboarding.api.Trick;
 
 import net.minecraft.client.model.ModelRenderer;
 
-public class TrickPopShove extends Trick
+public class TrickPopShove implements Trick
 {
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)

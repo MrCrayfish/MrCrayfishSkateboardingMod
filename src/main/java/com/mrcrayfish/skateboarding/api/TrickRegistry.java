@@ -10,6 +10,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mrcrayfish.skateboarding.client.Combination;
 import com.mrcrayfish.skateboarding.tricks.TrickHeelflip;
 import com.mrcrayfish.skateboarding.tricks.TrickKickflip;
 import com.mrcrayfish.skateboarding.tricks.TrickPopShove;
@@ -20,10 +21,10 @@ public class TrickRegistry
 	private int uniqueId;
 
 	@SideOnly(Side.CLIENT)
-	private static List<KeyBinding> keys = new ArrayList<KeyBinding>();
+	private static List<Combination> combinations = new ArrayList<Combination>();
 
 	@SideOnly(Side.CLIENT)
-	private static Map<KeyBinding, Integer> bindToId = new HashMap<KeyBinding, Integer>();
+	private static Map<Combination, Integer> combToId = new HashMap<Combination, Integer>();
 
 	private static Map<Integer, Trick> idToTrick = new HashMap<Integer, Trick>();
 
@@ -38,15 +39,15 @@ public class TrickRegistry
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static int getTrickId(KeyBinding key)
+	public static int getTrickId(Combination comb)
 	{
-		return bindToId.get(key);
+		return combToId.get(comb);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static ArrayList<KeyBinding> getRegisteredKeys()
+	public static ArrayList<Combination> getRegisteredCombinations()
 	{
-		return (ArrayList<KeyBinding>) keys;
+		return (ArrayList<Combination>) combinations;
 	}
 
 	public static final Trick kickflip = new TrickKickflip();
@@ -59,27 +60,30 @@ public class TrickRegistry
 		registerTrick(kickflip);
 		registerTrick(heelflip);
 		registerTrick(popshove);
+		registerTrick(treflip);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void registerKeyBinds()
 	{
-		registerKeyBind(Minecraft.getMinecraft().gameSettings.keyBindLeft, kickflip);
-		registerKeyBind(Minecraft.getMinecraft().gameSettings.keyBindRight, heelflip);
-		registerKeyBind(Minecraft.getMinecraft().gameSettings.keyBindBack, popshove);
+		registerCombination(new Combination(kickflip, Minecraft.getMinecraft().gameSettings.keyBindLeft));
+		registerCombination(new Combination(heelflip, Minecraft.getMinecraft().gameSettings.keyBindRight));
+		registerCombination(new Combination(popshove, Minecraft.getMinecraft().gameSettings.keyBindBack));
+		registerCombination(new Combination(treflip, Minecraft.getMinecraft().gameSettings.keyBindLeft, Minecraft.getMinecraft().gameSettings.keyBindBack));
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void registerKeyBind(KeyBinding key, Trick trick)
+	public static void registerCombination(Combination comb)
 	{
-		if (!keys.contains(key))
+		if (!combinations.contains(comb))
 		{
-			keys.add(key);
+			combinations.add(comb);
 			for (int i = 0; i < idToTrick.size(); i++)
 			{
-				if (idToTrick.get(i) == trick)
+				if (idToTrick.get(i) == comb.getTrick())
 				{
-					bindToId.put(key, i);
+					System.out.println("Registering combToId");
+					combToId.put(comb, i);
 				}
 			}
 		}
