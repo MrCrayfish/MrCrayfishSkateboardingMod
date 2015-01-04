@@ -10,6 +10,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -329,39 +330,5 @@ public class EntitySkateboard extends Entity
 	{
 		this.jumping = true;
 		onGround = false;
-	}
-
-	@SubscribeEvent
-	public void onKeyInput(InputEvent.KeyInputEvent event)
-	{
-		Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
-		if (entity != null && entity instanceof EntitySkateboard)
-		{
-			EntitySkateboard skateboard = (EntitySkateboard) entity;
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
-			{
-				if (!skateboard.jumping)
-				{
-					skateboard.jump();
-					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
-				}
-			}
-			else
-			{
-				for (Combination comb : TrickRegistry.getRegisteredCombinations()) 
-				{
-					if (comb.allPressed())
-					{
-						if (skateboard.jumping && !skateboard.inTrick)
-						{
-							System.out.println("Key Pressed");
-							int trickId = TrickRegistry.getTrickId(comb);
-							skateboard.startTrick(TrickRegistry.getTrick(trickId));
-							PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), trickId));
-						}
-					}
-				}
-			}
-		}
 	}
 }

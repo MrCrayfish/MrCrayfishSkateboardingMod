@@ -1,0 +1,2 @@
+Ideas:
+Skateboard moves when pressing w and will keep going until it slows down

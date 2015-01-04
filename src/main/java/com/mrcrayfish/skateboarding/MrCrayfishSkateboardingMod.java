@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.event.SkateboardingEvents;
+import com.mrcrayfish.skateboarding.event.SkateboardInput;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.proxy.CommonProxy;
@@ -47,7 +47,7 @@ public class MrCrayfishSkateboardingMod {
 		
 		if(event.getSide() == Side.CLIENT)
 		{
-			FMLCommonHandler.instance().bus().register(new EntitySkateboard(null));
+			FMLCommonHandler.instance().bus().register(new SkateboardInput());
 		}
 	}
 	
