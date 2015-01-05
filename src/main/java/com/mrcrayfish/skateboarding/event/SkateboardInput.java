@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -39,17 +40,19 @@ public class SkateboardInput {
 					if (keys.size() < 4) {
 						if (settings.keyBindForward.isKeyDown()) {
 							keys.add(Key.UP);
-							timeLeft += 3;
+							timeLeft += 5;
 						} else if (settings.keyBindBack.isKeyDown()) {
+							System.out.println("Addign Down");
 							keys.add(Key.DOWN);
-							timeLeft += 3;
+							timeLeft += 5;
 						} else if (settings.keyBindLeft.isKeyDown()) {
 							keys.add(Key.LEFT);
-							timeLeft += 3;
+							timeLeft += 5;
 						} else if (settings.keyBindRight.isKeyDown()) {
 							keys.add(Key.RIGHT);
-							timeLeft += 3;
+							timeLeft += 5;
 						}
+						KeyBinding.unPressAllKeys();
 					}
 				}
 			}
@@ -63,11 +66,13 @@ public class SkateboardInput {
 			if (entity != null && entity instanceof EntitySkateboard) {
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));
+				System.out.println(trick);
 				if (trick != null) {
-					skateboard.startTrick(trick);
 					PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
+					skateboard.startTrick(trick);
 				}
 				keys.clear();
+				TrickMap.printTrickMap(TrickMap.trickMap);
 			}
 		}
 

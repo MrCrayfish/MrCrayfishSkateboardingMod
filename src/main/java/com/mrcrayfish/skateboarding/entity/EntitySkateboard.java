@@ -72,24 +72,28 @@ public class EntitySkateboard extends Entity
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBox(Entity entityIn)
-	{
-		// return this.getBoundingBox();
-		return null;
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox()
-	{
-		// return this.getEntityBoundingBox();
-		return null;
-	}
-
-	@Override
 	public double getMountedYOffset()
 	{
 		return 0.5F;
 	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBox(Entity entityIn)
+    {
+        return entityIn.getEntityBoundingBox();
+    }
+
+	@Override
+    public AxisAlignedBB getBoundingBox()
+    {
+        return this.getEntityBoundingBox();
+    }
+
+	@Override
+    public boolean canBePushed()
+    {
+        return true;
+    }
 
 	@Override
 	public boolean canBeCollidedWith()
@@ -174,8 +178,6 @@ public class EntitySkateboard extends Entity
 		if (jumping)
 		{
 			
-			inTrickTimer++;
-
 			if (jumpingTimer < 10)
 				motionY = 0.5D - (double) jumpingTimer * 0.02D;
 			if (jumpingTimer >= 10)
@@ -183,6 +185,8 @@ public class EntitySkateboard extends Entity
 
 			if (inTrick && currentTrick != null)
 			{
+				inTrickTimer++;
+				
 				if (inTrickTimer > currentTrick.performTime())
 				{
 					System.out.println("Finished performing trick");

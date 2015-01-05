@@ -40,7 +40,6 @@ public class TrickMap {
 				if (i == combo.length - 1) {
 					return prevMap.get(combo[i]).getTrick();
 				} else {
-					System.out.println("Getting Trick Map for Key: " + combo[i].name());
 					prevMap = prevMap.get(combo[i]).getTrickMap();
 				}
 			}
