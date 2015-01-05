@@ -54,6 +54,6 @@ public class SkateboardInput
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event)
 	{
-		System.out.println("Hey");
+
 	}
 }
