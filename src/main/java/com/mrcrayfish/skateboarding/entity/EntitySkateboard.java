@@ -1,6 +1,5 @@
 package com.mrcrayfish.skateboarding.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,18 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mrcrayfish.skateboarding.api.Trick;
-import com.mrcrayfish.skateboarding.api.TrickRegistry;
-import com.mrcrayfish.skateboarding.client.Combination;
-import com.mrcrayfish.skateboarding.network.PacketHandler;
-import com.mrcrayfish.skateboarding.network.message.MessageJump;
-import com.mrcrayfish.skateboarding.network.message.MessageTrick;
 
 public class EntitySkateboard extends Entity
 {
@@ -185,9 +176,9 @@ public class EntitySkateboard extends Entity
 			
 			inTrickTimer++;
 
-			if (jumpingTimer < 5)
-				motionY = 0.5D - (double) jumpingTimer * 0.04D;
-			if (jumpingTimer >= 5)
+			if (jumpingTimer < 10)
+				motionY = 0.5D - (double) jumpingTimer * 0.02D;
+			if (jumpingTimer >= 10)
 				motionY = -0.5D;
 
 			if (inTrick && currentTrick != null)
