@@ -15,10 +15,10 @@ public class GrindHelper
 
 		EnumFacing face = EnumFacing.fromAngle(rotationYaw);
 		if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
-			return world.isSideSolid(new BlockPos(floor_x, posY, floor_z), EnumFacing.UP) | world.isSideSolid(new BlockPos(floor_x - 1, posY, floor_z), EnumFacing.UP);
+			return world.isSideSolid(new BlockPos(floor_x, posY - 1, floor_z), EnumFacing.UP) | world.isSideSolid(new BlockPos(floor_x - 1, posY - 1, floor_z), EnumFacing.UP);
 
 		if (face == EnumFacing.EAST | face == EnumFacing.WEST)
-			return world.isSideSolid(new BlockPos(floor_x, posY, floor_z), EnumFacing.UP) | world.isSideSolid(new BlockPos(floor_x, posY, floor_z + 1), EnumFacing.UP);
+			return world.isSideSolid(new BlockPos(floor_x, posY - 1, floor_z), EnumFacing.UP) | world.isSideSolid(new BlockPos(floor_x, posY - 1, floor_z + 1), EnumFacing.UP);
 
 		return false;
 	}

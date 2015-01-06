@@ -1,10 +1,10 @@
 package com.mrcrayfish.skateboarding.tricks;
 
-import com.mrcrayfish.skateboarding.api.Trick;
-
 import net.minecraft.client.model.ModelRenderer;
 
-public class TrickTreflip implements Trick
+import com.mrcrayfish.skateboarding.api.trick.Flip;
+
+public class TrickTreflip implements Flip
 {
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)

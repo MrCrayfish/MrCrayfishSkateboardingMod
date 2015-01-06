@@ -1,14 +1,16 @@
 package com.mrcrayfish.skateboarding.client.model;
 
-import com.mrcrayfish.skateboarding.api.Trick;
-import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.tricks.TrickHelper;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.mrcrayfish.skateboarding.api.trick.Flip;
+import com.mrcrayfish.skateboarding.api.trick.Grab;
+import com.mrcrayfish.skateboarding.api.trick.Grind;
+import com.mrcrayfish.skateboarding.api.trick.Trick;
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 @SideOnly(Side.CLIENT)
 public class ModelSkateboard extends ModelBase
@@ -113,7 +115,23 @@ public class ModelSkateboard extends ModelBase
 		EntitySkateboard skateboard = (EntitySkateboard) entity;
 		if (skateboard.inTrick && skateboard.currentTrick != null)
 		{
-			skateboard.currentTrick.updateMovement(boardBase, skateboard.inTrickTimer);
+			Trick trick = skateboard.currentTrick;
+			if (trick instanceof Flip)
+			{
+				Flip flip = (Flip) trick;
+				flip.updateMovement(boardBase, skateboard.inTrickTimer);
+			}
+			else if (trick instanceof Grind)
+			{
+				Grind grind = (Grind) trick;
+				boardBase.rotateAngleX = 0.0F;
+				boardBase.rotateAngleY = 0.0F;
+				boardBase.rotateAngleZ = 0.0F;
+			}
+			else if (trick instanceof Grab)
+			{
+				Grab grab = (Grab) trick;
+			}
 		}
 		else
 		{

@@ -5,12 +5,17 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mrcrayfish.skateboarding.api.Trick;
+import com.mrcrayfish.skateboarding.api.trick.Flip;
+import com.mrcrayfish.skateboarding.api.trick.Grind;
+import com.mrcrayfish.skateboarding.api.trick.Trick;
+import com.mrcrayfish.skateboarding.util.GrindHelper;
 
 public class EntitySkateboard extends Entity
 {
@@ -151,7 +156,7 @@ public class EntitySkateboard extends Entity
 		{
 			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
 
-			if (entity.moveForward > 0 && this.isCollidedVertically && !pushed)
+			if (entity.moveForward > 0 && this.isCollidedVertically && !pushed && !grinding)
 			{
 				currentSpeed += 1.0D;
 
@@ -169,8 +174,22 @@ public class EntitySkateboard extends Entity
 			if (!jumping)
 			{
 				float f = this.riddenByEntity.rotationYaw;
+				if (grinding)
+				{
+					int rot = (int) (this.rotationYaw / 90) & 3;
+					f = rot * 90F;
+				}
 				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
+			}
+
+			if (grinding)
+			{
+				EnumFacing face = EnumFacing.fromAngle(this.rotationYaw);
+				if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
+					this.posX = Math.floor(this.posX);
+				if (face == EnumFacing.EAST | face == EnumFacing.WEST)
+					this.posZ = Math.floor(this.posZ);
 			}
 		}
 
@@ -191,22 +210,27 @@ public class EntitySkateboard extends Entity
 			{
 				inTrickTimer++;
 
-				if (inTrickTimer > currentTrick.performTime())
+				if (currentTrick instanceof Flip)
 				{
-					System.out.println("Finished performing trick");
-					currentTrick = null;
-					inTrick = false;
-					inTrickTimer = 0;
+					Flip flip = (Flip) currentTrick;
+					if (inTrickTimer > flip.performTime())
+					{
+						System.out.println("Finished performing trick");
+						currentTrick = null;
+						inTrick = false;
+						inTrickTimer = 0;
+					}
+					else if (this.onGround && flip.performTime() > inTrickTimer)
+					{
+						System.out.println("Failed to perform trick");
+						currentTrick = null;
+						inTrick = false;
+						jumping = false;
+						inTrickTimer = 0;
+						jumpingTimer = 0;
+					}
 				}
-				else if (this.onGround && currentTrick.performTime() > inTrickTimer)
-				{
-					System.out.println("Failed to perform trick");
-					currentTrick = null;
-					inTrick = false;
-					jumping = false;
-					inTrickTimer = 0;
-					jumpingTimer = 0;
-				}
+
 			}
 
 			if (this.onGround)
@@ -223,51 +247,79 @@ public class EntitySkateboard extends Entity
 		}
 		else
 		{
+			if (inTrick && currentTrick != null)
+			{
+				inTrickTimer++;
+
+				if (currentTrick instanceof Grind)
+				{
+					Grind grind = (Grind) currentTrick;
+					if (Math.floor(this.prevPosX) != Math.floor(this.posX) | Math.floor(this.prevPosZ) != Math.floor(this.posZ))
+					{
+						if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ, this.rotationYaw))
+						{
+							grinding = false;
+							currentTrick = null;
+							inTrick = false;
+							inTrickTimer = 0;
+						}
+					}
+				}
+			}
 			this.motionY -= 0.08D;
 		}
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
-		if (!jumping)
+		/** Yaw Rotation Handling **/
+
+		if (!grinding)
 		{
-			this.rotationPitch = 0.0F;
-			double init = (double) this.rotationYaw;
-			double newX = this.prevPosX - this.posX;
-			double newZ = this.prevPosZ - this.posZ;
-
-			if (newX * newX + newZ * newZ > 0.001D)
+			if (!jumping)
 			{
-				init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
+				this.rotationPitch = 0.0F;
+				double init = (double) this.rotationYaw;
+				double newX = this.prevPosX - this.posX;
+				double newZ = this.prevPosZ - this.posZ;
+
+				if (newX * newX + newZ * newZ > 0.001D)
+				{
+					init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
+				}
+
+				double d12 = MathHelper.wrapAngleTo180_double(init - (double) this.rotationYaw);
+
+				if (d12 > 20.0D)
+				{
+					d12 = 20.0D;
+				}
+
+				if (d12 < -20.0D)
+				{
+					d12 = -20.0D;
+				}
+
+				this.rotationYaw = (float) ((double) this.rotationYaw + d12);
+				this.setRotation(this.rotationYaw, this.rotationPitch);
 			}
-
-			double d12 = MathHelper.wrapAngleTo180_double(init - (double) this.rotationYaw);
-
-			if (d12 > 20.0D)
+			else
 			{
-				d12 = 20.0D;
-			}
-
-			if (d12 < -20.0D)
-			{
-				d12 = -20.0D;
-			}
-
-			this.rotationYaw = (float) ((double) this.rotationYaw + d12);
-			this.setRotation(this.rotationYaw, this.rotationPitch);
-		}
-		else
-		{
-			if (this.riddenByEntity instanceof EntityLivingBase)
-			{
-				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-				System.out.println("B:" + this.rotationYaw);
-				this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
-				System.out.println("A:" + this.rotationYaw);
+				if (this.riddenByEntity instanceof EntityLivingBase)
+				{
+					EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+					System.out.println("B:" + this.rotationYaw);
+					this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
+					System.out.println("A:" + this.rotationYaw);
+				}
 			}
 		}
 
 		this.motionY *= 0.9800000190734863D;
-		this.currentSpeed *= 0.99D;
+
+		if (!grinding)
+		{
+			this.currentSpeed *= 0.99D;
+		}
 	}
 
 	public void onUpdateServer()
@@ -326,7 +378,14 @@ public class EntitySkateboard extends Entity
 	{
 		inTrick = true;
 		currentTrick = trick;
-		onGround = false;
+		if (trick instanceof Flip)
+		{
+			onGround = false;
+		}
+		if (trick instanceof Grind)
+		{
+			grinding = true;
+		}
 	}
 
 	public void jump()

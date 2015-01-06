@@ -8,10 +8,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
 import com.mrcrayfish.skateboarding.api.map.TrickMap.Key;
+import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.tricks.TrickHeelflip;
 import com.mrcrayfish.skateboarding.tricks.TrickKickflip;
 import com.mrcrayfish.skateboarding.tricks.TrickPopShove;
 import com.mrcrayfish.skateboarding.tricks.TrickTreflip;
+import com.mrcrayfish.skateboarding.tricks.grind.FiftyFifty;
 
 public class TrickRegistry
 {
@@ -38,6 +40,7 @@ public class TrickRegistry
 	public static final Trick heelflip = new TrickHeelflip();
 	public static final Trick popshove = new TrickPopShove();
 	public static final Trick treflip = new TrickTreflip();
+	public static final Trick fifty_fifty = new FiftyFifty(); 
 
 	public static void registerTricks()
 	{
@@ -45,6 +48,7 @@ public class TrickRegistry
 		registerTrick(heelflip);
 		registerTrick(popshove);
 		registerTrick(treflip);
+		registerTrick(fifty_fifty);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -54,5 +58,6 @@ public class TrickRegistry
 		TrickMap.addCombo(heelflip, Key.RIGHT);
 		TrickMap.addCombo(popshove, Key.DOWN);
 		TrickMap.addCombo(treflip, Key.LEFT, Key.DOWN);
+		TrickMap.addCombo(fifty_fifty, Key.UP);
 	}
 }

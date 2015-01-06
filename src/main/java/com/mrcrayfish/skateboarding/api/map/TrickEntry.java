@@ -3,8 +3,8 @@ package com.mrcrayfish.skateboarding.api.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mrcrayfish.skateboarding.api.Trick;
 import com.mrcrayfish.skateboarding.api.map.TrickMap.Key;
+import com.mrcrayfish.skateboarding.api.trick.Trick;
 
 public class TrickEntry
 {
