@@ -14,9 +14,10 @@ import com.mrcrayfish.skateboarding.api.Trick;
 
 public class EntitySkateboard extends Entity
 {
-	public static final int SPEED = 8;
-	public static final double MAX_SPEED = 0.3;
+	public double currentSpeed = 0.0;
+	public double maxSpeed = 8.0;
 
+	private boolean pushed = false;
 	public boolean jumping = false;
 	public int jumpingTimer = 0;
 	public boolean inTrick = false;
@@ -76,24 +77,24 @@ public class EntitySkateboard extends Entity
 	{
 		return 0.5F;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entityIn)
-    {
-        return entityIn.getEntityBoundingBox();
-    }
+	{
+		return entityIn.getEntityBoundingBox();
+	}
 
 	@Override
-    public AxisAlignedBB getBoundingBox()
-    {
-        return this.getEntityBoundingBox();
-    }
+	public AxisAlignedBB getBoundingBox()
+	{
+		return this.getEntityBoundingBox();
+	}
 
 	@Override
-    public boolean canBePushed()
-    {
-        return true;
-    }
+	public boolean canBePushed()
+	{
+		return true;
+	}
 
 	@Override
 	public boolean canBeCollidedWith()
@@ -149,35 +150,34 @@ public class EntitySkateboard extends Entity
 		{
 			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
 
-			if (entity.moveForward > 0 && this.isCollidedVertically)
+			if (entity.moveForward > 0 && this.isCollidedVertically && !pushed)
 			{
-				float f = this.riddenByEntity.rotationYaw;
-				double maxMotionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
-				double maxMotionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * SPEED * (double) entity.moveForward * 0.05000000074505806D;
+				currentSpeed += 1.0D;
 
-				this.motionX += maxMotionX / 16D;
-				this.motionZ += maxMotionZ / 16D;
-
-				if (Math.abs(this.motionX) >= Math.abs(maxMotionX))
+				if (currentSpeed > maxSpeed)
 				{
-					this.motionX = maxMotionX;
+					currentSpeed = maxSpeed;
 				}
-				if (Math.abs(this.motionZ) >= Math.abs(maxMotionZ))
-				{
-					this.motionZ = maxMotionZ;
-				}
+				pushed = true;
 			}
+			else if (entity.moveForward == 0.0)
+			{
+				pushed = false;
+			}
+
+			float f = this.riddenByEntity.rotationYaw;
+			this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16;
+			this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16;
 		}
 
 		if (this.isCollidedHorizontally)
 		{
-			this.motionX *= 0.5D;
-			this.motionZ *= 0.5D;
+			this.currentSpeed *= 0.5D;
 		}
 
 		if (jumping)
 		{
-			
+
 			if (jumpingTimer < 10)
 				motionY = 0.5D - (double) jumpingTimer * 0.02D;
 			if (jumpingTimer >= 10)
@@ -186,7 +186,7 @@ public class EntitySkateboard extends Entity
 			if (inTrick && currentTrick != null)
 			{
 				inTrickTimer++;
-				
+
 				if (inTrickTimer > currentTrick.performTime())
 				{
 					System.out.println("Finished performing trick");
@@ -214,7 +214,7 @@ public class EntitySkateboard extends Entity
 				inTrickTimer = 0;
 				jumpingTimer = 0;
 			}
-			
+
 			jumpingTimer++;
 		}
 		else
@@ -249,17 +249,8 @@ public class EntitySkateboard extends Entity
 		this.rotationYaw = (float) ((double) this.rotationYaw + d12);
 		this.setRotation(this.rotationYaw, this.rotationPitch);
 
-		if (this.riddenByEntity instanceof EntityLivingBase)
-		{
-			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-			if (entity.moveForward == 0.0)
-			{
-				this.motionX *= 0.85D;
-				this.motionZ *= 0.85D;
-			}
-		}
-
 		this.motionY *= 0.9800000190734863D;
+		this.currentSpeed *= 0.999D;
 	}
 
 	public void onUpdateServer()
