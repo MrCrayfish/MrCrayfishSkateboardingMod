@@ -10,5 +10,5 @@ public interface Trick
 
 	public int performTime();
 
-	public void updateMovement(ModelRenderer skateboard, int tick);
+	public void updateMovement(ModelRenderer skateboard, int inTrickTimer);
 }

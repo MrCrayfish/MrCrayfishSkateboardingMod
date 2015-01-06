@@ -11,7 +11,7 @@ public class TrickPopShove implements Trick
 	{
 		if(tick <= performTime())
 		{
-			skateboard.rotateAngleY = (float) Math.toRadians((180 / performTime()) * tick);
+			skateboard.rotateAngleY = (float) Math.toRadians((180F / performTime()) * tick);
 		}
 	}
 

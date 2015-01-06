@@ -165,14 +165,17 @@ public class EntitySkateboard extends Entity
 				pushed = false;
 			}
 
-			float f = this.riddenByEntity.rotationYaw;
-			this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16;
-			this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16;
+			if (!jumping)
+			{
+				float f = this.riddenByEntity.rotationYaw;
+				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
+				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
+			}
 		}
 
 		if (this.isCollidedHorizontally)
 		{
-			this.currentSpeed *= 0.5D;
+			this.currentSpeed *= 0.75D;
 		}
 
 		if (jumping)
@@ -224,33 +227,46 @@ public class EntitySkateboard extends Entity
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
-		this.rotationPitch = 0.0F;
-		double init = (double) this.rotationYaw;
-		double newX = this.prevPosX - this.posX;
-		double newZ = this.prevPosZ - this.posZ;
-
-		if (newX * newX + newZ * newZ > 0.001D)
+		if (!jumping)
 		{
-			init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
+			this.rotationPitch = 0.0F;
+			double init = (double) this.rotationYaw;
+			double newX = this.prevPosX - this.posX;
+			double newZ = this.prevPosZ - this.posZ;
+
+			if (newX * newX + newZ * newZ > 0.001D)
+			{
+				init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
+			}
+
+			double d12 = MathHelper.wrapAngleTo180_double(init - (double) this.rotationYaw);
+
+			if (d12 > 20.0D)
+			{
+				d12 = 20.0D;
+			}
+
+			if (d12 < -20.0D)
+			{
+				d12 = -20.0D;
+			}
+
+			this.rotationYaw = (float) ((double) this.rotationYaw + d12);
+			this.setRotation(this.rotationYaw, this.rotationPitch);
 		}
-
-		double d12 = MathHelper.wrapAngleTo180_double(init - (double) this.rotationYaw);
-
-		if (d12 > 20.0D)
+		else
 		{
-			d12 = 20.0D;
+			if (this.riddenByEntity instanceof EntityLivingBase)
+			{
+				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+				System.out.println("B:"+this.rotationYaw);
+				this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
+				System.out.println("A:"+this.rotationYaw);
+			}
 		}
-
-		if (d12 < -20.0D)
-		{
-			d12 = -20.0D;
-		}
-
-		this.rotationYaw = (float) ((double) this.rotationYaw + d12);
-		this.setRotation(this.rotationYaw, this.rotationPitch);
 
 		this.motionY *= 0.9800000190734863D;
-		this.currentSpeed *= 0.999D;
+		this.currentSpeed *= 0.99D;
 	}
 
 	public void onUpdateServer()
@@ -316,5 +332,22 @@ public class EntitySkateboard extends Entity
 	{
 		this.jumping = true;
 		onGround = false;
+	}
+
+	private float interpolateRotation(float start, float end)
+	{
+		float f3;
+
+		for (f3 = end - start; f3 < -180.0F; f3 += 360.0F)
+		{
+			;
+		}
+
+		while (f3 >= 180.0F)
+		{
+			f3 -= 360.0F;
+		}
+
+		return start + 0.1F * f3;
 	}
 }

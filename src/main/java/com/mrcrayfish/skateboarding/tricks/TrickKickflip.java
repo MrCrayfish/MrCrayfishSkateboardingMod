@@ -11,11 +11,7 @@ public class TrickKickflip implements Trick
 	{
 		if (tick <= performTime())
 		{
-			skateboard.rotateAngleZ = (float) Math.toRadians(-(360 / performTime()) * tick);
-		}
-		else
-		{
-			skateboard.rotateAngleZ = 0;
+			skateboard.rotateAngleZ = (float) Math.toRadians(-(360F / performTime()) * tick);
 		}
 	}
 
