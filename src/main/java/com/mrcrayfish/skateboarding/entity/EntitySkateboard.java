@@ -187,7 +187,7 @@ public class EntitySkateboard extends Entity
 				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 
-				System.out.println(motionX * motionX + motionZ * motionZ);
+				// System.out.println(motionX * motionX + motionZ * motionZ);
 			}
 		}
 
@@ -239,16 +239,16 @@ public class EntitySkateboard extends Entity
 					}
 				}
 
+				if (this.onGround && !grinding)
+				{
+					System.out.println("Stopping Jump");
+					currentTrick = null;
+					inTrick = false;
+					jumping = false;
+					inTrickTimer = 0;
+					jumpingTimer = 0;
+				}
 			}
-			else if (this.onGround && !grinding)
-			{
-				currentTrick = null;
-				inTrick = false;
-				jumping = false;
-				inTrickTimer = 0;
-				jumpingTimer = 0;
-			}
-
 			jumpingTimer++;
 		}
 
@@ -340,7 +340,7 @@ public class EntitySkateboard extends Entity
 	{
 		if (this.riddenByEntity != null)
 		{
-			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick ? 0.25D : 0D), this.posZ);
+			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick && !grinding ? 0.25D : 0D), this.posZ);
 			if (this.riddenByEntity instanceof EntityLivingBase)
 			{
 				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.rotationYaw + 90F;
@@ -405,9 +405,11 @@ public class EntitySkateboard extends Entity
 	{
 		if (grinding)
 		{
-			inTrick = false;
 			currentTrick = null;
-			grinding = false;
+			inTrick = false;
+			jumping = false;
+			inTrickTimer = 0;
+			jumpingTimer = 0;
 		}
 		jumping = true;
 		onGround = false;

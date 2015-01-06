@@ -45,7 +45,7 @@ public class RenderSkateboard extends Render
 					y = -0.15;
 					z = 0;
 				}
-				if (entity.inTrick)
+				if (entity.inTrick && !entity.grinding)
 				{
 					y = -0.3;
 				}
