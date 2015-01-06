@@ -88,21 +88,12 @@ public class SkateboardInput
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));
 
-				if (trick instanceof Grind)
-				{
-					if (!GrindHelper.canGrind(skateboard.worldObj, skateboard.posX, skateboard.posY, skateboard.posZ, skateboard.rotationYaw))
-					{	
-						return;
-					}
-				}
-
 				if (trick != null && !skateboard.inTrick)
 				{
 					PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
 					skateboard.startTrick(trick);
 				}
 				keys.clear();
-				TrickMap.printTrickMap(TrickMap.trickMap);
 			}
 		}
 
