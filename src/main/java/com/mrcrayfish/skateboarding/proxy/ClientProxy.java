@@ -14,24 +14,25 @@ import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
 
-public class ClientProxy extends CommonProxy{
+public class ClientProxy extends CommonProxy
+{
 	@Override
 	public void registerRenders()
 	{
 		SkateboardingItems.registerRenders();
-		
+
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
-		
+
 		EntityRegistry.registerGlobalEntityID(EntitySkateboard.class, "csmSkateboard", EntityRegistry.findGlobalUniqueEntityId());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderSkateboard(Minecraft.getMinecraft().getRenderManager()));
-		
+
 		Keybinds.init();
 		Keybinds.register();
-		
+
 		TrickRegistry.registerCombinations();
 		TrickMap.printTrickMap(TrickMap.trickMap);
 	}
-	
+
 	public World getWorld()
 	{
 		return Minecraft.getMinecraft().theWorld;

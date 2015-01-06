@@ -9,7 +9,7 @@ public class TrickPopShove implements Trick
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)
 	{
-		if(tick <= performTime())
+		if (tick <= performTime())
 		{
 			skateboard.rotateAngleY = (float) Math.toRadians((180F / performTime()) * tick);
 		}
@@ -20,7 +20,7 @@ public class TrickPopShove implements Trick
 	{
 		return "Pop Shove-it";
 	}
-	
+
 	@Override
 	public int performTime()
 	{

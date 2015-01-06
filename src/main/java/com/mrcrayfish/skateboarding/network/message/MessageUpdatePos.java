@@ -67,7 +67,7 @@ public class MessageUpdatePos implements IMessage, IMessageHandler<MessageUpdate
 	@Override
 	public IMessage onMessage(MessageUpdatePos message, MessageContext ctx)
 	{
-		//System.out.println("Got packet!");
+		// System.out.println("Got packet!");
 		World world = ctx.getServerHandler().playerEntity.worldObj;
 		Entity entity = world.getEntityByID(message.entityId);
 		if (entity instanceof EntitySkateboard)

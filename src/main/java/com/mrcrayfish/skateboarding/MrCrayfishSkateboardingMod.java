@@ -20,41 +20,42 @@ import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.proxy.CommonProxy;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
-public class MrCrayfishSkateboardingMod {
-	
+public class MrCrayfishSkateboardingMod
+{
+
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static CommonProxy proxy;
-	
+
 	public static CreativeTabs skateTab = new SkateTab("skateTab");
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		SkateboardingItems.init();
 		SkateboardingItems.register();
-		
+
 		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 10, true);
 
 		PacketHandler.init();
-		
+
 		TrickRegistry.registerTricks();
 	}
-	
+
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerRenders();
-		
-		if(event.getSide() == Side.CLIENT)
+
+		if (event.getSide() == Side.CLIENT)
 		{
 			FMLCommonHandler.instance().bus().register(new SkateboardInput());
 		}
 	}
-	
+
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		
+
 	}
 
 }

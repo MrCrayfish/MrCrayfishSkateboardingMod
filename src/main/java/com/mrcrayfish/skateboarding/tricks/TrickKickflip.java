@@ -1,8 +1,8 @@
 package com.mrcrayfish.skateboarding.tricks;
 
-import com.mrcrayfish.skateboarding.api.Trick;
-
 import net.minecraft.client.model.ModelRenderer;
+
+import com.mrcrayfish.skateboarding.api.Trick;
 
 public class TrickKickflip implements Trick
 {
@@ -25,5 +25,5 @@ public class TrickKickflip implements Trick
 	public int performTime()
 	{
 		return 8;
-	}	
+	}
 }

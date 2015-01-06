@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding;
 
-public class Reference {
+public class Reference
+{
 	public static final String MOD_ID = "csm";
 	public static final String MOD_NAME = "MrCrayfish's Skateboarding Mod";
 	public static final String MOD_VERSION = "1.0";

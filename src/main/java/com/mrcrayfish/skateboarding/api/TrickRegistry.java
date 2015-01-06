@@ -33,7 +33,7 @@ public class TrickRegistry
 	{
 		return trickToId.get(trick);
 	}
-	
+
 	public static final Trick kickflip = new TrickKickflip();
 	public static final Trick heelflip = new TrickHeelflip();
 	public static final Trick popshove = new TrickPopShove();

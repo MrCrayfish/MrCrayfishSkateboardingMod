@@ -23,6 +23,7 @@ public class EntitySkateboard extends Entity
 	public boolean inTrick = false;
 	public int inTrickTimer = 0;
 	public Trick currentTrick = null;
+	private boolean grinding = false;
 
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
@@ -259,9 +260,9 @@ public class EntitySkateboard extends Entity
 			if (this.riddenByEntity instanceof EntityLivingBase)
 			{
 				EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-				System.out.println("B:"+this.rotationYaw);
+				System.out.println("B:" + this.rotationYaw);
 				this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
-				System.out.println("A:"+this.rotationYaw);
+				System.out.println("A:" + this.rotationYaw);
 			}
 		}
 

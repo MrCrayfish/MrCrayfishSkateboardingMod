@@ -13,22 +13,24 @@ public class MessageTrick implements IMessage, IMessageHandler<MessageTrick, IMe
 {
 	private int entityId;
 	private int trickId;
-	
-	public MessageTrick(){}
-	
+
+	public MessageTrick()
+	{
+	}
+
 	public MessageTrick(int entityId, int trickId)
 	{
 		this.entityId = entityId;
 		this.trickId = trickId;
 	}
-	
+
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
 		buf.writeInt(entityId);
 		buf.writeInt(trickId);
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{

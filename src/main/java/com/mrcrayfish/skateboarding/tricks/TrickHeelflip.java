@@ -11,7 +11,7 @@ public class TrickHeelflip implements Trick
 	{
 		if (tick <= performTime())
 		{
-			skateboard.rotateAngleZ = (float) Math.toRadians((360F / (float)performTime()) * (float)tick);
+			skateboard.rotateAngleZ = (float) Math.toRadians((360F / (float) performTime()) * (float) tick);
 		}
 	}
 
@@ -22,7 +22,7 @@ public class TrickHeelflip implements Trick
 	}
 
 	@Override
-	public int performTime() 
+	public int performTime()
 	{
 		return 8;
 	}

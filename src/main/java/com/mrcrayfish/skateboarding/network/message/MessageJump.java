@@ -11,20 +11,22 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 public class MessageJump implements IMessage, IMessageHandler<MessageJump, IMessage>
 {
 	private int entityId;
-	
-	public MessageJump(){}
-	
+
+	public MessageJump()
+	{
+	}
+
 	public MessageJump(int entityId)
 	{
 		this.entityId = entityId;
 	}
-	
+
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
 		buf.writeInt(entityId);
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{
