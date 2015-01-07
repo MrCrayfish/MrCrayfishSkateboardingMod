@@ -146,6 +146,21 @@ public class EntitySkateboard extends Entity
 	@Override
 	public void onUpdate()
 	{
+		if (this.riddenByEntity != null)
+		{
+			if (this.ticksExisted % 60 == 0)
+			{
+				System.out.println("");
+				System.out.println("pushed:" + pushed);
+				System.out.println("jumping:" + jumping);
+				System.out.println("jumpingTimer:" + jumpingTimer);
+				System.out.println("inTrick:" + inTrick);
+				System.out.println("inTrickTimer:" + inTrickTimer);
+				System.out.println("currentTrick:" + currentTrick);
+				System.out.println("grinding:" + grinding);
+			}
+		}
+
 		super.onUpdate();
 
 		this.prevPosX = this.posX;
@@ -197,9 +212,9 @@ public class EntitySkateboard extends Entity
 			EnumFacing face = EnumFacing.fromAngle(this.rotationYaw).rotateY();
 			// System.out.println("Setting Pos");
 			if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
-				this.setPosition(Math.floor(this.posX) + 0.5, this.posY, this.posZ);
+				this.setPosition(Math.floor(this.posX) + 0.5, Math.floor(this.posY), this.posZ);
 			if (face == EnumFacing.EAST | face == EnumFacing.WEST)
-				this.setPosition(this.posX, this.posY, Math.floor(this.posZ) + 0.5);
+				this.setPosition(this.posX, Math.floor(this.posY), Math.floor(this.posZ) + 0.5);
 		}
 
 		/** When collided with block, slow speed by 75% */
@@ -238,17 +253,18 @@ public class EntitySkateboard extends Entity
 						jumpingTimer = 0;
 					}
 				}
-
-				if (this.onGround && !grinding)
-				{
-					System.out.println("Stopping Jump");
-					currentTrick = null;
-					inTrick = false;
-					jumping = false;
-					inTrickTimer = 0;
-					jumpingTimer = 0;
-				}
 			}
+
+			if (this.onGround && !grinding)
+			{
+				System.out.println("Stopping Jump");
+				currentTrick = null;
+				inTrick = false;
+				jumping = false;
+				inTrickTimer = 0;
+				jumpingTimer = 0;
+			}
+
 			jumpingTimer++;
 		}
 
@@ -392,6 +408,7 @@ public class EntitySkateboard extends Entity
 			{
 				jumping = false;
 				grinding = true;
+				onGround = true;
 			}
 			else
 			{
@@ -410,6 +427,7 @@ public class EntitySkateboard extends Entity
 			jumping = false;
 			inTrickTimer = 0;
 			jumpingTimer = 0;
+			grinding = false;
 		}
 		jumping = true;
 		onGround = false;
