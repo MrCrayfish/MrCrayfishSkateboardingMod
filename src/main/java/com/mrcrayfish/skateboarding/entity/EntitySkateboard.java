@@ -29,6 +29,7 @@ public class EntitySkateboard extends Entity
 	public int inTrickTimer = 0;
 	public Trick currentTrick = null;
 	public boolean grinding = false;
+	public boolean allowOnce = false;
 
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
@@ -191,7 +192,7 @@ public class EntitySkateboard extends Entity
 			 * If skateboard is not jumping, allow turning. Exception if
 			 * grinding
 			 */
-			if (!jumping)
+			if (!jumping | allowOnce)
 			{
 				float f = this.riddenByEntity.rotationYaw;
 				// System.out.println(f);
@@ -201,7 +202,7 @@ public class EntitySkateboard extends Entity
 				}
 				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
-
+				allowOnce = false;
 				// System.out.println(motionX * motionX + motionZ * motionZ);
 			}
 		}
@@ -428,6 +429,7 @@ public class EntitySkateboard extends Entity
 			inTrickTimer = 0;
 			jumpingTimer = 0;
 			grinding = false;
+			allowOnce = true;
 		}
 		jumping = true;
 		onGround = false;
