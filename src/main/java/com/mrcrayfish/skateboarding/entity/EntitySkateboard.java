@@ -149,7 +149,7 @@ public class EntitySkateboard extends Entity
 	{
 		if (this.riddenByEntity != null)
 		{
-			if (this.ticksExisted % 60 == 0)
+			if (this.ticksExisted % 60 == 0 && false)
 			{
 				System.out.println("");
 				System.out.println("pushed:" + pushed);

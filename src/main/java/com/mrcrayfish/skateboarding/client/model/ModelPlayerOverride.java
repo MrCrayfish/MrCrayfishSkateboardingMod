@@ -3,6 +3,8 @@ package com.mrcrayfish.skateboarding.client.model;
 import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;
 
+import com.mrcrayfish.skateboarding.api.trick.Grind;
+import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class ModelPlayerOverride extends ModelPlayerBase
@@ -49,7 +51,16 @@ public class ModelPlayerOverride extends ModelPlayerBase
 			this.modelPlayer.bipedRightArm.rotationPointY = 2F;
 			this.modelPlayer.bipedRightArm.rotationPointX = -1.3F;
 
-			// player.rotationYaw = this.modelBiped.bipedBody.rotateAngleY;
+			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.ridingEntity;
+			if (skateboard.inTrick && skateboard.currentTrick != null)
+			{
+				Trick trick = skateboard.currentTrick;
+				if (trick instanceof Grind)
+				{
+					Grind grind = (Grind) trick;
+					grind.updatePlayer(modelPlayer, skateboard);
+				}
+			}
 		}
 		else
 		{

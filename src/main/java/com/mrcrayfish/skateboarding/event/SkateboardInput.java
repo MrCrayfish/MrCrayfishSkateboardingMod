@@ -52,26 +52,25 @@ public class SkateboardInput
 						if (settings.keyBindForward.isKeyDown())
 						{
 							keys.add(Key.UP);
-							timeLeft += 5;
+							timeLeft = 6;
 						}
 						else if (settings.keyBindBack.isKeyDown())
 						{
-							System.out.println("Addign Down");
 							keys.add(Key.DOWN);
-							timeLeft += 5;
+							timeLeft = 6;
 						}
 						else if (settings.keyBindLeft.isKeyDown())
 						{
 							keys.add(Key.LEFT);
-							timeLeft += 5;
+							timeLeft = 6;
 						}
 						else if (settings.keyBindRight.isKeyDown())
 						{
 							keys.add(Key.RIGHT);
-							timeLeft += 5;
+							timeLeft = 6;
 						}
-						KeyBinding.unPressAllKeys();
 					}
+					KeyBinding.unPressAllKeys();
 				}
 			}
 		}
@@ -82,6 +81,12 @@ public class SkateboardInput
 	{
 		if (keys.size() > 0 && timeLeft == 0)
 		{
+			System.out.println("Perforing Combo: ");
+			for(Key key : keys)
+			{
+				System.out.println(key.name() + " ");
+			}
+			System.out.println("");
 			Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
 			if (entity != null && entity instanceof EntitySkateboard)
 			{
@@ -99,6 +104,7 @@ public class SkateboardInput
 
 		if (timeLeft > 0)
 		{
+			System.out.println(timeLeft);
 			timeLeft--;
 		}
 	}

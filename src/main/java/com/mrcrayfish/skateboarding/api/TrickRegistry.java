@@ -13,7 +13,8 @@ import com.mrcrayfish.skateboarding.tricks.TrickHeelflip;
 import com.mrcrayfish.skateboarding.tricks.TrickKickflip;
 import com.mrcrayfish.skateboarding.tricks.TrickPopShove;
 import com.mrcrayfish.skateboarding.tricks.TrickTreflip;
-import com.mrcrayfish.skateboarding.tricks.grind.FiftyFifty;
+import com.mrcrayfish.skateboarding.tricks.grind.Trick5050;
+import com.mrcrayfish.skateboarding.tricks.grind.TrickBoardslide;
 
 public class TrickRegistry
 {
@@ -36,11 +37,17 @@ public class TrickRegistry
 		return trickToId.get(trick);
 	}
 
+	/** Flips */
 	public static final Trick kickflip = new TrickKickflip();
 	public static final Trick heelflip = new TrickHeelflip();
 	public static final Trick popshove = new TrickPopShove();
 	public static final Trick treflip = new TrickTreflip();
-	public static final Trick fifty_fifty = new FiftyFifty(); 
+	
+	/** Grinds */
+	public static final Trick fifty_fifty = new Trick5050(); 
+	public static final Trick boardslide = new TrickBoardslide(); 
+	
+	/** Grabs */
 
 	public static void registerTricks()
 	{
@@ -48,7 +55,9 @@ public class TrickRegistry
 		registerTrick(heelflip);
 		registerTrick(popshove);
 		registerTrick(treflip);
+		
 		registerTrick(fifty_fifty);
+		registerTrick(boardslide);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -59,5 +68,6 @@ public class TrickRegistry
 		TrickMap.addCombo(popshove, Key.DOWN);
 		TrickMap.addCombo(treflip, Key.LEFT, Key.DOWN);
 		TrickMap.addCombo(fifty_fifty, Key.UP);
+		TrickMap.addCombo(boardslide, Key.DOWN, Key.DOWN);
 	}
 }

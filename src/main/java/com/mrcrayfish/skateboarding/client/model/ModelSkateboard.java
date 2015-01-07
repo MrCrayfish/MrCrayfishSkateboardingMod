@@ -124,9 +124,7 @@ public class ModelSkateboard extends ModelBase
 			else if (trick instanceof Grind)
 			{
 				Grind grind = (Grind) trick;
-				boardBase.rotateAngleX = 0.0F;
-				boardBase.rotateAngleY = 0.0F;
-				boardBase.rotateAngleZ = 0.0F;
+				grind.updateBoard(boardBase, skateboard.inTrickTimer);
 			}
 			else if (trick instanceof Grab)
 			{
