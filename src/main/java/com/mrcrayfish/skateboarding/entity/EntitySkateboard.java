@@ -5,16 +5,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
+import com.mrcrayfish.skateboarding.network.PacketHandler;
+import com.mrcrayfish.skateboarding.network.message.MessageStack;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
 
 public class EntitySkateboard extends Entity
@@ -30,6 +33,8 @@ public class EntitySkateboard extends Entity
 	public Trick currentTrick = null;
 	public boolean grinding = false;
 	public boolean allowOnce = false;
+
+	private float angleOnJump;
 
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
@@ -100,7 +105,7 @@ public class EntitySkateboard extends Entity
 	@Override
 	public boolean canBePushed()
 	{
-		return true;
+		return false;
 	}
 
 	@Override
@@ -149,7 +154,7 @@ public class EntitySkateboard extends Entity
 	{
 		if (this.riddenByEntity != null)
 		{
-			if (this.ticksExisted % 60 == 0 && false)
+			if (this.ticksExisted % 60 == 0)
 			{
 				System.out.println("");
 				System.out.println("pushed:" + pushed);
@@ -159,17 +164,15 @@ public class EntitySkateboard extends Entity
 				System.out.println("inTrickTimer:" + inTrickTimer);
 				System.out.println("currentTrick:" + currentTrick);
 				System.out.println("grinding:" + grinding);
+				System.out.println("onGround:" + onGround);
 			}
 		}
 
 		super.onUpdate();
 
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-
 		if (this.riddenByEntity instanceof EntityLivingBase)
 		{
+
 			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
 
 			/** Handles pushing */
@@ -205,6 +208,9 @@ public class EntitySkateboard extends Entity
 				allowOnce = false;
 				// System.out.println(motionX * motionX + motionZ * motionZ);
 			}
+		} else {
+			this.motionX = 0.0D;
+			this.motionZ = 0.0D;
 		}
 
 		/** If grinding, make position of skateboard go to edge of block. */
@@ -252,6 +258,8 @@ public class EntitySkateboard extends Entity
 						jumping = false;
 						inTrickTimer = 0;
 						jumpingTimer = 0;
+						onGround = true;
+						performStack();
 					}
 				}
 			}
@@ -264,6 +272,8 @@ public class EntitySkateboard extends Entity
 				jumping = false;
 				inTrickTimer = 0;
 				jumpingTimer = 0;
+				onGround = true;
+				handleLanding();
 			}
 
 			jumpingTimer++;
@@ -287,6 +297,7 @@ public class EntitySkateboard extends Entity
 						currentTrick = null;
 						inTrick = false;
 						inTrickTimer = 0;
+						onGround = false;
 					}
 				}
 			}
@@ -294,6 +305,11 @@ public class EntitySkateboard extends Entity
 		this.motionY -= 0.08D;
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+
+		if (this.riddenByEntity != null)
+		{
+			// landedCorrectly();
+		}
 
 		/** Yaw Rotation Handling **/
 
@@ -395,6 +411,27 @@ public class EntitySkateboard extends Entity
 
 	}
 
+	public void handleLanding()
+	{
+		if (worldObj.isRemote)
+		{
+			float difference = Math.abs(Math.abs(this.angleOnJump) - Math.abs(this.rotationYaw));
+
+			if (difference > 50)
+			{
+				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
+				performStack();
+			}
+		}
+	}
+
+	public void performStack()
+	{
+		riddenByEntity.attackEntityFrom(MrCrayfishSkateboardingMod.skateboardDamage, 2);
+		riddenByEntity.ridingEntity = null;
+		riddenByEntity = null;
+	}
+
 	public void startTrick(Trick trick)
 	{
 		inTrick = true;
@@ -433,6 +470,7 @@ public class EntitySkateboard extends Entity
 		}
 		jumping = true;
 		onGround = false;
+		angleOnJump = rotationYaw;
 	}
 
 	private float interpolateRotation(float start, float end)

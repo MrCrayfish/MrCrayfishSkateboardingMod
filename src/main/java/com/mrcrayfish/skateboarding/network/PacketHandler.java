@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mrcrayfish.skateboarding.Reference;
 import com.mrcrayfish.skateboarding.network.message.MessageJump;
+import com.mrcrayfish.skateboarding.network.message.MessageStack;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
 
 public class PacketHandler
@@ -33,5 +34,6 @@ public class PacketHandler
 	{
 		INSTANCE.registerMessage(MessageJump.class, MessageJump.class, 0, Side.SERVER);
 		INSTANCE.registerMessage(MessageTrick.class, MessageTrick.class, 1, Side.SERVER);
+		INSTANCE.registerMessage(MessageStack.class, MessageStack.class, 2, Side.SERVER);
 	}
 }
