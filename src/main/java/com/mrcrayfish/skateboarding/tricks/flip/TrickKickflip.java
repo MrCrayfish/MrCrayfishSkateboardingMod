@@ -1,24 +1,24 @@
-package com.mrcrayfish.skateboarding.tricks;
+package com.mrcrayfish.skateboarding.tricks.flip;
 
 import net.minecraft.client.model.ModelRenderer;
 
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 
-public class TrickHeelflip implements Flip
+public class TrickKickflip implements Flip
 {
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)
 	{
 		if (tick <= performTime())
 		{
-			skateboard.rotateAngleZ = (float) Math.toRadians((360F / (float) performTime()) * (float) tick);
+			skateboard.rotateAngleZ = (float) Math.toRadians(-(360F / performTime()) * tick);
 		}
 	}
 
 	@Override
 	public String getName()
 	{
-		return "Heelflip";
+		return "Kickflip";
 	}
 
 	@Override
@@ -26,5 +26,4 @@ public class TrickHeelflip implements Flip
 	{
 		return 8;
 	}
-
 }

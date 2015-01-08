@@ -1,6 +1,7 @@
-package com.mrcrayfish.skateboarding.tricks;
+package com.mrcrayfish.skateboarding.tricks.flip;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 
@@ -9,10 +10,7 @@ public class TrickPopShove implements Flip
 	@Override
 	public void updateMovement(ModelRenderer skateboard, int tick)
 	{
-		if (tick <= performTime())
-		{
-			skateboard.rotateAngleY = (float) Math.toRadians((180F / performTime()) * tick);
-		}
+		GlStateManager.rotate((180F / performTime()) * tick, 0, 1, 0);
 	}
 
 	@Override
