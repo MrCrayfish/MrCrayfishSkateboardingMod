@@ -1,16 +1,17 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
+  "modid": "csm",
+  "name": "MrCrayfish's Skateboarding Mod",
+  "description": "This mod adds skateboarding into Minecraft",
+  "version": "1.0",
+  "mcversion": "1.8",
+  "url": "http://www.mrcrayfish.com/",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["MrCrayfish"],
+  "credits": "Spinklington for creating icon and model textures",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": [ "Forge", "RenderPlayerAPI" ],
+  "dependencies": ["RenderPlayerAPI"]
 }
 ]

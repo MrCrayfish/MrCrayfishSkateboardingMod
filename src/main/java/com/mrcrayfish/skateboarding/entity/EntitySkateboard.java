@@ -151,7 +151,7 @@ public class EntitySkateboard extends Entity
 	@Override
 	public void onUpdate()
 	{
-		if (this.riddenByEntity != null)
+		/*if (this.riddenByEntity != null)
 		{
 			if (this.ticksExisted % 60 == 0 && false)
 			{
@@ -165,7 +165,7 @@ public class EntitySkateboard extends Entity
 				System.out.println("grinding:" + grinding);
 				System.out.println("onGround:" + onGround);
 			}
-		}
+		}*/
 
 		super.onUpdate();
 
