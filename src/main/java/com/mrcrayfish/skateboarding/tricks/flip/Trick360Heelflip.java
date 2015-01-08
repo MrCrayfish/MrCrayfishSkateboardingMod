@@ -23,7 +23,7 @@ public class Trick360Heelflip implements Flip
 	@Override
 	public int performTime()
 	{
-		return 10;
+		return 12;
 	}
 
 }

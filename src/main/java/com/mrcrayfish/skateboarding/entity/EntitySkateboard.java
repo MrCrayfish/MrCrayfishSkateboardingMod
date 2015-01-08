@@ -237,7 +237,7 @@ public class EntitySkateboard extends Entity
 		{
 
 			if (jumpingTimer < 10)
-				motionY = 0.5D - (double) jumpingTimer * 0.04D;
+				motionY = 0.5D - (double) jumpingTimer * 0.03D;
 
 			if (inTrick && currentTrick != null)
 			{
