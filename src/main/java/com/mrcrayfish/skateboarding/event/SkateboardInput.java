@@ -98,8 +98,8 @@ public class SkateboardInput
 					PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
 					skateboard.startTrick(trick);
 				}
-				keys.clear();
 			}
+			keys.clear();
 		}
 
 		if (timeLeft > 0)

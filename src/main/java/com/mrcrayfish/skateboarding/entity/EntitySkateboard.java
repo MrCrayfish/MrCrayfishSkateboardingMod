@@ -8,7 +8,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -154,7 +153,7 @@ public class EntitySkateboard extends Entity
 	{
 		if (this.riddenByEntity != null)
 		{
-			if (this.ticksExisted % 60 == 0)
+			if (this.ticksExisted % 60 == 0 && false)
 			{
 				System.out.println("");
 				System.out.println("pushed:" + pushed);
@@ -170,9 +169,9 @@ public class EntitySkateboard extends Entity
 
 		super.onUpdate();
 
+		/** Will only execute code if player is riding skateboard */
 		if (this.riddenByEntity instanceof EntityLivingBase)
 		{
-
 			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
 
 			/** Handles pushing */
@@ -192,32 +191,36 @@ public class EntitySkateboard extends Entity
 			}
 
 			/**
-			 * If skateboard is not jumping, allow turning. Exception if
-			 * grinding
+			 * If skateboard is not jumping, allow turning. When player jumps
+			 * from grinding, give exception to jump off in a direction using
+			 * allowOnce.
 			 */
 			if (!jumping | allowOnce)
 			{
 				float f = this.riddenByEntity.rotationYaw;
-				// System.out.println(f);
+
+				/** If grinding, set direction to direction of grinding. */
 				if (grinding)
 				{
 					f = EnumFacing.fromAngle(this.rotationYaw).rotateY().getHorizontalIndex() * 90F;
 				}
+
 				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 				allowOnce = false;
-				// System.out.println(motionX * motionX + motionZ * motionZ);
 			}
-		} else {
+		}
+		else
+		{
+			/** If no player riding, make the board stop */
 			this.motionX = 0.0D;
 			this.motionZ = 0.0D;
 		}
 
-		/** If grinding, make position of skateboard go to edge of block. */
+		/** If grinding, make position of skateboard go to center of block. */
 		if (grinding)
 		{
 			EnumFacing face = EnumFacing.fromAngle(this.rotationYaw).rotateY();
-			// System.out.println("Setting Pos");
 			if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
 				this.setPosition(Math.floor(this.posX) + 0.5, Math.floor(this.posY), this.posZ);
 			if (face == EnumFacing.EAST | face == EnumFacing.WEST)
@@ -234,7 +237,7 @@ public class EntitySkateboard extends Entity
 		{
 
 			if (jumpingTimer < 10)
-				motionY = 0.5D - (double) jumpingTimer * 0.02D;
+				motionY = 0.5D - (double) jumpingTimer * 0.04D;
 
 			if (inTrick && currentTrick != null)
 			{
@@ -246,19 +249,15 @@ public class EntitySkateboard extends Entity
 					if (inTrickTimer > flip.performTime())
 					{
 						System.out.println("Trick Finished");
-						currentTrick = null;
-						inTrick = false;
-						inTrickTimer = 0;
+						resetTrick();
 					}
 					else if (this.onGround && flip.performTime() > inTrickTimer)
 					{
 						System.out.println("Failed Trick");
-						currentTrick = null;
-						inTrick = false;
 						jumping = false;
-						inTrickTimer = 0;
 						jumpingTimer = 0;
 						onGround = true;
+						resetTrick();
 						performStack();
 					}
 				}
@@ -267,12 +266,9 @@ public class EntitySkateboard extends Entity
 			if (this.onGround && !grinding)
 			{
 				System.out.println("Stopping Jump");
-				currentTrick = null;
-				inTrick = false;
 				jumping = false;
-				inTrickTimer = 0;
 				jumpingTimer = 0;
-				onGround = true;
+				resetTrick();
 				handleLanding();
 			}
 
@@ -293,10 +289,8 @@ public class EntitySkateboard extends Entity
 					Grind grind = (Grind) currentTrick;
 					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 					{
+						resetTrick();
 						grinding = false;
-						currentTrick = null;
-						inTrick = false;
-						inTrickTimer = 0;
 						onGround = false;
 					}
 				}
@@ -413,23 +407,27 @@ public class EntitySkateboard extends Entity
 
 	public void handleLanding()
 	{
-		if (worldObj.isRemote)
+		if (worldObj.isRemote && currentSpeed > 4)
 		{
-			float difference = Math.abs(Math.abs(this.angleOnJump) - Math.abs(this.rotationYaw));
-
+			float difference = Math.abs(Math.abs(this.angleOnJump) - Math.abs(MathHelper.wrapAngleTo180_float(this.rotationYaw)));
+			System.out.println("Dif:" + difference);
 			if (difference > 50)
 			{
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
-				performStack();
 			}
 		}
 	}
 
 	public void performStack()
 	{
-		riddenByEntity.attackEntityFrom(MrCrayfishSkateboardingMod.skateboardDamage, 2);
-		riddenByEntity.ridingEntity = null;
-		riddenByEntity = null;
+		if (!worldObj.isRemote && riddenByEntity != null)
+		{
+			riddenByEntity.attackEntityFrom(MrCrayfishSkateboardingMod.skateboardDamage, 2);
+			if (riddenByEntity instanceof EntityLivingBase)
+			{
+				((EntityLivingBase) riddenByEntity).mountEntity((Entity) null);
+			}
+		}
 	}
 
 	public void startTrick(Trick trick)
@@ -456,21 +454,30 @@ public class EntitySkateboard extends Entity
 		}
 	}
 
+	public void resetTrick()
+	{
+		currentTrick = null;
+		inTrick = false;
+		inTrickTimer = 0;
+	}
+
 	public void jump()
 	{
 		if (grinding)
 		{
-			currentTrick = null;
-			inTrick = false;
 			jumping = false;
-			inTrickTimer = 0;
 			jumpingTimer = 0;
 			grinding = false;
 			allowOnce = true;
 		}
+		resetTrick();
 		jumping = true;
 		onGround = false;
 		angleOnJump = rotationYaw;
+		if (worldObj.isRemote)
+		{
+			System.out.println("OnJump:" + angleOnJump);
+		}
 	}
 
 	private float interpolateRotation(float start, float end)
