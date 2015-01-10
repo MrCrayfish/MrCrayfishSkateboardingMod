@@ -25,4 +25,16 @@ public class TrickTailslide implements Grind
 	{
 		
 	}
+
+	@Override
+	public void onStart(EntitySkateboard skateboard)
+	{
+		
+	}
+
+	@Override
+	public void onEnd(EntitySkateboard skateboard)
+	{
+		
+	}
 }

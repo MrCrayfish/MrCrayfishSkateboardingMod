@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
 import com.mrcrayfish.skateboarding.api.trick.Flip;
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class Trick360Kickflip implements Flip
 {
@@ -24,6 +25,18 @@ public class Trick360Kickflip implements Flip
 	public int performTime()
 	{
 		return 12;
+	}
+
+	@Override
+	public void onStart(EntitySkateboard skateboard)
+	{
+		
+	}
+
+	@Override
+	public void onEnd(EntitySkateboard skateboard)
+	{
+		
 	}
 
 }

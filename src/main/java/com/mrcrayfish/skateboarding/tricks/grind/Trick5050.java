@@ -8,6 +8,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class Trick5050 implements Grind
 {
+	
 	@Override
 	public String getName()
 	{
@@ -25,4 +26,17 @@ public class Trick5050 implements Grind
 	{
 		
 	}
+
+	@Override
+	public void onStart(EntitySkateboard skateboard)
+	{
+		
+	}
+
+	@Override
+	public void onEnd(EntitySkateboard skateboard)
+	{
+		
+	}
+	
 }

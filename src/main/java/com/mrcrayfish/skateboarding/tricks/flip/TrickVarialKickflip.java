@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
 import com.mrcrayfish.skateboarding.api.trick.Flip;
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class TrickVarialKickflip implements Flip
 {
@@ -24,6 +25,18 @@ public class TrickVarialKickflip implements Flip
 	public int performTime()
 	{
 		return 10;
+	}
+
+	@Override
+	public void onStart(EntitySkateboard skateboard)
+	{
+		
+	}
+
+	@Override
+	public void onEnd(EntitySkateboard skateboard)
+	{
+		skateboard.setFlipped();
 	}
 
 }

@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,7 +33,7 @@ public class ModelSkateboard extends ModelBase
 
 		boardBase = new ModelRenderer(this, 0, 0);
 		boardBase.addBox(-3F, 0F, -7F, 6, 1, 14);
-		boardBase.setRotationPoint(0F, 20.8F, 0F);
+		boardBase.setRotationPoint(0F, 0F, 0F);
 		boardBase.setTextureSize(64, 32);
 		boardBase.mirror = true;
 		setRotation(boardBase, 0F, 0F, 0F);
@@ -113,6 +114,7 @@ public class ModelSkateboard extends ModelBase
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
 		EntitySkateboard skateboard = (EntitySkateboard) entity;
+		
 		if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 		{
 			Trick trick = skateboard.getCurrentTrick();
@@ -137,6 +139,12 @@ public class ModelSkateboard extends ModelBase
 			boardBase.rotateAngleY = 0.0F;
 			boardBase.rotateAngleZ = 0.0F;
 		}
+		
+		if (skateboard.isFlipped())
+		{
+			boardBase.rotateAngleY = (float) Math.toRadians(180F);
+		}
+
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}
 

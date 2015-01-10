@@ -23,6 +23,7 @@ public class EntitySkateboard extends Entity
 {
 	public double currentSpeed = 0.0;
 	public double maxSpeed = 8.0;
+	private boolean allowOnce = false;
 
 	private boolean pushed = false;
 	private boolean jumping = false;
@@ -33,10 +34,9 @@ public class EntitySkateboard extends Entity
 	private Trick currentTrick = null;
 	
 	private boolean grinding = false;
-	private boolean allowOnce = false;
-
 	private boolean goofy = false;
 	private boolean switch_ = false;
+	private boolean flipped = false;
 	
 	private float angleOnJump;
 
@@ -253,7 +253,7 @@ public class EntitySkateboard extends Entity
 					Flip flip = (Flip) currentTrick;
 					if (inTrickTimer > flip.performTime())
 					{
-						System.out.println("Trick Finished");
+						getCurrentTrick().onEnd(this);
 						resetTrick();
 					}
 					else if (this.onGround && flip.performTime() > inTrickTimer)
@@ -294,6 +294,7 @@ public class EntitySkateboard extends Entity
 					Grind grind = (Grind) currentTrick;
 					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 					{
+						getCurrentTrick().onEnd(this);
 						resetTrick();
 						grinding = false;
 						onGround = false;
@@ -580,5 +581,15 @@ public class EntitySkateboard extends Entity
 	public int getInTrickTimer()
 	{
 		return inTrickTimer;
+	}
+
+	public boolean isFlipped()
+	{
+		return flipped;
+	}
+
+	public void setFlipped()
+	{
+		this.flipped ^= true;
 	}
 }

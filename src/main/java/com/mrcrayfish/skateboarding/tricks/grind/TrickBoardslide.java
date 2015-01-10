@@ -28,4 +28,16 @@ public class TrickBoardslide implements Grind
 		Minecraft.getMinecraft().thePlayer.renderYawOffset = skateboard.rotationYaw;
 	}
 
+	@Override
+	public void onStart(EntitySkateboard skateboard)
+	{
+
+	}
+
+	@Override
+	public void onEnd(EntitySkateboard skateboard)
+	{
+
+	}
+
 }
