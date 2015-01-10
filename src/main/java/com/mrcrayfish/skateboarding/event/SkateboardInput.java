@@ -36,7 +36,7 @@ public class SkateboardInput
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
 			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
 			{
-				if (!skateboard.jumping)
+				if (!skateboard.isJumping())
 				{
 					skateboard.jump();
 					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
@@ -44,7 +44,7 @@ public class SkateboardInput
 			}
 			else
 			{
-				if (skateboard.jumping)
+				if (skateboard.isJumping())
 				{
 					GameSettings settings = Minecraft.getMinecraft().gameSettings;
 					if (keys.size() < 4)
@@ -93,7 +93,7 @@ public class SkateboardInput
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));
 
-				if (trick != null && !skateboard.inTrick)
+				if (trick != null && !skateboard.isInTrick())
 				{
 					PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
 					skateboard.startTrick(trick);

@@ -25,14 +25,19 @@ public class EntitySkateboard extends Entity
 	public double maxSpeed = 8.0;
 
 	private boolean pushed = false;
-	public boolean jumping = false;
-	public int jumpingTimer = 0;
-	public boolean inTrick = false;
-	public int inTrickTimer = 0;
-	public Trick currentTrick = null;
-	public boolean grinding = false;
-	public boolean allowOnce = false;
+	private boolean jumping = false;
+	private int jumpingTimer = 0;
+	
+	private boolean inTrick = false;
+	private int inTrickTimer = 0;
+	private Trick currentTrick = null;
+	
+	private boolean grinding = false;
+	private boolean allowOnce = false;
 
+	private boolean goofy = false;
+	private boolean switch_ = false;
+	
 	private float angleOnJump;
 
 	@SideOnly(Side.CLIENT)
@@ -495,5 +500,85 @@ public class EntitySkateboard extends Entity
 		}
 
 		return start + 0.1F * f3;
+	}
+
+	public boolean isPushed()
+	{
+		return pushed;
+	}
+
+	public void setPushed(boolean pushed)
+	{
+		this.pushed = pushed;
+	}
+
+	public boolean isJumping()
+	{
+		return jumping;
+	}
+
+	public void setJumping(boolean jumping)
+	{
+		this.jumping = jumping;
+	}
+
+	public boolean isInTrick()
+	{
+		return inTrick;
+	}
+
+	public void setInTrick(boolean inTrick)
+	{
+		this.inTrick = inTrick;
+	}
+
+	public Trick getCurrentTrick()
+	{
+		return currentTrick;
+	}
+
+	public void setCurrentTrick(Trick currentTrick)
+	{
+		this.currentTrick = currentTrick;
+	}
+
+	public boolean isGrinding()
+	{
+		return grinding;
+	}
+
+	public void setGrinding(boolean grinding)
+	{
+		this.grinding = grinding;
+	}
+
+	public boolean isGoofy()
+	{
+		return goofy;
+	}
+
+	public void setGoofy(boolean goofy)
+	{
+		this.goofy = goofy;
+	}
+
+	public boolean isSwitch_()
+	{
+		return switch_;
+	}
+
+	public void setSwitch_(boolean switch_)
+	{
+		this.switch_ = switch_;
+	}
+
+	public int getJumpingTimer()
+	{
+		return jumpingTimer;
+	}
+
+	public int getInTrickTimer()
+	{
+		return inTrickTimer;
 	}
 }

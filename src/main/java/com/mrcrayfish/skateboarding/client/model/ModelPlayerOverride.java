@@ -52,9 +52,9 @@ public class ModelPlayerOverride extends ModelPlayerBase
 			this.modelPlayer.bipedRightArm.rotationPointX = -1.3F;
 
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.ridingEntity;
-			if (skateboard.inTrick && skateboard.currentTrick != null)
+			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 			{
-				Trick trick = skateboard.currentTrick;
+				Trick trick = skateboard.getCurrentTrick();
 				if (trick instanceof Grind)
 				{
 					Grind grind = (Grind) trick;

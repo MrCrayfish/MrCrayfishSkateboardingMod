@@ -113,18 +113,18 @@ public class ModelSkateboard extends ModelBase
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
 		EntitySkateboard skateboard = (EntitySkateboard) entity;
-		if (skateboard.inTrick && skateboard.currentTrick != null)
+		if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 		{
-			Trick trick = skateboard.currentTrick;
+			Trick trick = skateboard.getCurrentTrick();
 			if (trick instanceof Flip)
 			{
 				Flip flip = (Flip) trick;
-				flip.updateMovement(boardBase, skateboard.inTrickTimer);
+				flip.updateMovement(boardBase, skateboard.getInTrickTimer());
 			}
 			else if (trick instanceof Grind)
 			{
 				Grind grind = (Grind) trick;
-				grind.updateBoard(boardBase, skateboard.inTrickTimer);
+				grind.updateBoard(boardBase, skateboard.getInTrickTimer());
 			}
 			else if (trick instanceof Grab)
 			{

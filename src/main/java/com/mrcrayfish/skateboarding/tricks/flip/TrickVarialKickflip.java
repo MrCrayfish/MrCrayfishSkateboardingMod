@@ -17,7 +17,7 @@ public class TrickVarialKickflip implements Flip
 	@Override
 	public String getName()
 	{
-		return "360 Flip";
+		return "Varial Kickflip";
 	}
 
 	@Override
