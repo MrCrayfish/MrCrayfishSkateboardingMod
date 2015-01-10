@@ -51,9 +51,9 @@ public class RenderSkateboard extends Render
 				}
 			}
 		}
+		GlStateManager.translate(x, y + 0.05, z);
 		GlStateManager.rotate(-entity.rotationYaw, 0, 1, 0);
 		GlStateManager.rotate(-90F, 0, 1, 0);
-		GlStateManager.translate(x, y + 0.05, z);
 		this.bindEntityTexture(entity);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 		this.modelSkateboard.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);

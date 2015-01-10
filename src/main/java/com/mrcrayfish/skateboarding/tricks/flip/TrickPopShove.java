@@ -35,7 +35,7 @@ public class TrickPopShove implements Flip
 	@Override
 	public void onEnd(EntitySkateboard skateboard)
 	{
-		
+		skateboard.setFlipped();
 	}
 
 }

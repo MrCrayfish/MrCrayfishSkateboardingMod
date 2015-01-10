@@ -113,8 +113,9 @@ public class ModelSkateboard extends ModelBase
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
-		EntitySkateboard skateboard = (EntitySkateboard) entity;
+		boardBase.rotateAngleY = 0.0F;
 		
+		EntitySkateboard skateboard = (EntitySkateboard) entity;
 		if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 		{
 			Trick trick = skateboard.getCurrentTrick();
@@ -136,13 +137,12 @@ public class ModelSkateboard extends ModelBase
 		else
 		{
 			boardBase.rotateAngleX = 0.0F;
-			boardBase.rotateAngleY = 0.0F;
 			boardBase.rotateAngleZ = 0.0F;
 		}
 		
 		if (skateboard.isFlipped())
 		{
-			boardBase.rotateAngleY = (float) Math.toRadians(180F);
+			boardBase.rotateAngleY += (float) Math.toRadians(180F);
 		}
 
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
