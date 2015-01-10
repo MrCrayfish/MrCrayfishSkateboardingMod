@@ -34,6 +34,12 @@ public class SkateboardInput
 		if (entity != null && entity instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
+			
+			if(Minecraft.getMinecraft().gameSettings.keyBindDrop.isKeyDown())
+			{
+				skateboard.setGoofy(!skateboard.isGoofy());
+			}
+			
 			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
 			{
 				if (!skateboard.isJumping())
@@ -81,12 +87,6 @@ public class SkateboardInput
 	{
 		if (keys.size() > 0 && timeLeft == 0)
 		{
-			System.out.println("Perforing Combo: ");
-			for(Key key : keys)
-			{
-				System.out.println(key.name() + " ");
-			}
-			System.out.println("");
 			Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
 			if (entity != null && entity instanceof EntitySkateboard)
 			{
@@ -104,7 +104,6 @@ public class SkateboardInput
 
 		if (timeLeft > 0)
 		{
-			System.out.println(timeLeft);
 			timeLeft--;
 		}
 	}

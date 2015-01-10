@@ -34,7 +34,7 @@ public class EntitySkateboard extends Entity
 	private Trick currentTrick = null;
 	
 	private boolean grinding = false;
-	private boolean goofy = false;
+	private boolean goofy = true;
 	private boolean switch_ = false;
 	private boolean flipped = false;
 	
@@ -258,7 +258,6 @@ public class EntitySkateboard extends Entity
 					}
 					else if (this.onGround && flip.performTime() > inTrickTimer)
 					{
-						System.out.println("Failed Trick");
 						jumping = false;
 						jumpingTimer = 0;
 						onGround = true;
@@ -270,7 +269,6 @@ public class EntitySkateboard extends Entity
 
 			if (this.onGround && !grinding)
 			{
-				System.out.println("Stopping Jump");
 				jumping = false;
 				jumpingTimer = 0;
 				resetTrick();
@@ -282,13 +280,10 @@ public class EntitySkateboard extends Entity
 
 		if (grinding)
 		{
-			// System.out.println("Stage 1");
 			if (inTrick && currentTrick != null)
 			{
-				// System.out.println("Stage 2");
 				if (currentTrick instanceof Grind)
 				{
-					// System.out.println("Stage 3");
 					inTrickTimer++;
 
 					Grind grind = (Grind) currentTrick;
@@ -376,7 +371,7 @@ public class EntitySkateboard extends Entity
 			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick && !grinding ? 0.25D : 0D), this.posZ);
 			if (this.riddenByEntity instanceof EntityLivingBase)
 			{
-				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.rotationYaw + 90F;
+				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.rotationYaw + (this.isGoofy() ? -90F : 90F);
 			}
 		}
 	}
@@ -416,7 +411,6 @@ public class EntitySkateboard extends Entity
 		if (worldObj.isRemote && currentSpeed > 4)
 		{
 			float difference = Math.abs(Math.abs(this.angleOnJump) - Math.abs(MathHelper.wrapAngleTo180_float(this.rotationYaw)));
-			System.out.println("Dif:" + difference);
 			if (difference > 50)
 			{
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
@@ -480,10 +474,6 @@ public class EntitySkateboard extends Entity
 		jumping = true;
 		onGround = false;
 		angleOnJump = rotationYaw;
-		if (worldObj.isRemote)
-		{
-			System.out.println("OnJump:" + angleOnJump);
-		}
 	}
 
 	private float interpolateRotation(float start, float end)

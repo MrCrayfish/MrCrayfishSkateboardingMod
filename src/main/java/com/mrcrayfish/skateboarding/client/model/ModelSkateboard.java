@@ -122,7 +122,7 @@ public class ModelSkateboard extends ModelBase
 			if (trick instanceof Flip)
 			{
 				Flip flip = (Flip) trick;
-				flip.updateMovement(boardBase, skateboard.getInTrickTimer());
+				flip.updateMovement(skateboard, boardBase);
 			}
 			else if (trick instanceof Grind)
 			{

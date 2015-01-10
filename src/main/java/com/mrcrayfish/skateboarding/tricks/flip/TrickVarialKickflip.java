@@ -5,14 +5,16 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.util.TrickHelper;
+import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
 public class TrickVarialKickflip implements Flip
 {
 	@Override
-	public void updateMovement(ModelRenderer skateboard, int tick)
+	public void updateMovement(EntitySkateboard skateboard, ModelRenderer boardModel)
 	{
-		skateboard.rotateAngleZ = (float) Math.toRadians(-360F / performTime() * tick);
-		GlStateManager.rotate((180F / performTime()) * tick, 0, 1, 0);
+		TrickHelper.flipBoard(skateboard, boardModel, 360F, performTime(), Axis.Z);
+		TrickHelper.spinBoard(skateboard, boardModel, 180F, performTime());
 	}
 
 	@Override
