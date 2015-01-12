@@ -17,10 +17,14 @@ import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageStack;
+import com.mrcrayfish.skateboarding.util.ComboBuilder;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
 
 public class EntitySkateboard extends Entity
 {
+	public ComboBuilder combo = new ComboBuilder();
+	public int comboTimer;
+
 	public double currentSpeed = 0.0;
 	public double maxSpeed = 8.0;
 	private boolean allowOnce = false;
@@ -28,16 +32,16 @@ public class EntitySkateboard extends Entity
 	private boolean pushed = false;
 	private boolean jumping = false;
 	private int jumpingTimer = 0;
-	
+
 	private boolean inTrick = false;
 	private int inTrickTimer = 0;
 	private Trick currentTrick = null;
-	
+
 	private boolean grinding = false;
 	private boolean goofy = true;
 	private boolean switch_ = false;
 	private boolean flipped = false;
-	
+
 	private float angleOnJump;
 
 	@SideOnly(Side.CLIENT)
@@ -156,23 +160,19 @@ public class EntitySkateboard extends Entity
 	@Override
 	public void onUpdate()
 	{
-		/*if (this.riddenByEntity != null)
-		{
-			if (this.ticksExisted % 60 == 0 && false)
-			{
-				System.out.println("");
-				System.out.println("pushed:" + pushed);
-				System.out.println("jumping:" + jumping);
-				System.out.println("jumpingTimer:" + jumpingTimer);
-				System.out.println("inTrick:" + inTrick);
-				System.out.println("inTrickTimer:" + inTrickTimer);
-				System.out.println("currentTrick:" + currentTrick);
-				System.out.println("grinding:" + grinding);
-				System.out.println("onGround:" + onGround);
-			}
-		}*/
-
 		super.onUpdate();
+
+		if (!inTrick)
+		{
+			if (comboTimer > 0)
+			{
+				comboTimer--;
+			}
+			else
+			{
+				combo.reset();
+			}
+		}
 
 		/** Will only execute code if player is riding skateboard */
 		if (this.riddenByEntity instanceof EntityLivingBase)
@@ -253,6 +253,8 @@ public class EntitySkateboard extends Entity
 					Flip flip = (Flip) currentTrick;
 					if (inTrickTimer > flip.performTime())
 					{
+						combo.addTrick(getCurrentTrick());
+						comboTimer = 100;
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 					}
@@ -289,6 +291,8 @@ public class EntitySkateboard extends Entity
 					Grind grind = (Grind) currentTrick;
 					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 					{
+						combo.addTrick(getCurrentTrick());
+						comboTimer = 100;
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 						grinding = false;
