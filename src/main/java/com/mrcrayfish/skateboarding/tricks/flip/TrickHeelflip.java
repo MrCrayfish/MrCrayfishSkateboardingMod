@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.tricks.flip;
 
 import net.minecraft.client.model.ModelRenderer;
 
+import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.util.TrickHelper;
@@ -43,5 +44,11 @@ public class TrickHeelflip implements Flip
 	public double points()
 	{
 		return 30;
+	}
+	
+	@Override
+	public Difficulty difficulty()
+	{
+		return Difficulty.EASY;
 	}
 }

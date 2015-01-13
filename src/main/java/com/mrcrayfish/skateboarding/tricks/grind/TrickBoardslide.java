@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.model.ModelRenderer;
 
+import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
@@ -44,5 +45,11 @@ public class TrickBoardslide implements Grind
 	public double points()
 	{
 		return 1;
+	}
+	
+	@Override
+	public Difficulty difficulty()
+	{
+		return Difficulty.EASY;
 	}
 }

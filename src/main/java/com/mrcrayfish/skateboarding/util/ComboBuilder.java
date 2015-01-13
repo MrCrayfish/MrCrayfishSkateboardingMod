@@ -22,7 +22,23 @@ public class ComboBuilder
 
 	public void addTrick(Trick trick)
 	{
-		int count = 1;
+		if (!inCombo)
+		{
+			reset();
+			inCombo = true;
+		}
+		
+		int count = getTrickCount(trick);
+		addPoints(decrease(trick.points(), count, 80));
+		addExtraTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
+		
+		performedTricks.add(trick.getName());
+		compileString();
+	}
+
+	private int getTrickCount(Trick trick)
+	{
+		int count = 0;
 		for (String name : performedTricks)
 		{
 			if (name.equals(trick.getName()))
@@ -30,19 +46,16 @@ public class ComboBuilder
 				count++;
 			}
 		}
-		double points = trick.points();
-		if (count > 1)
-		{
-			if (count > 5)
-			{
-				count = 5;
-			}
-			points -= ((points / count) / 100) * 20;
-		}
-		addPoints(points);
+		return count;
+	}
 
-		performedTricks.add(trick.getName());
-		compileString();
+	private double decrease(double value, int trickCount, int percent)
+	{
+		if (trickCount > 0)
+		{
+			value = ((value / trickCount) / 100) * percent;
+		}
+		return value;
 	}
 
 	private void compileString()
@@ -58,7 +71,7 @@ public class ComboBuilder
 			}
 			else
 			{
-				pre += " + " + EnumChatFormatting.AQUA.toString() + performedTricks.get(i);
+				pre += EnumChatFormatting.BLACK.toString() + " + " + EnumChatFormatting.RESET.toString() + performedTricks.get(i);
 			}
 			if (compiledTricks[i / 4] == null)
 			{
@@ -73,9 +86,18 @@ public class ComboBuilder
 		points += amount;
 	}
 
+	public void addExtraTime(int amount)
+	{
+		comboTimer += amount;
+		if (comboTimer > 500)
+		{
+			comboTimer = 500;
+		}
+	}
+
 	public void update()
 	{
-		if (!inCombo)
+		if (!inCombo && compiledTricks != null)
 		{
 			if (coolDown > 0)
 			{
@@ -119,11 +141,17 @@ public class ComboBuilder
 	{
 		this.inCombo = inCombo;
 	}
+	
+	public int getSize()
+	{
+		return performedTricks.size();
+	}
 
-	public void reset()
+	private void reset()
 	{
 		performedTricks.clear();
 		compiledTricks = null;
+		coolDown = 20;
 		points = 0;
 	}
 }
