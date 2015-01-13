@@ -37,4 +37,10 @@ public class TrickTailslide implements Grind
 	{
 		
 	}
+	
+	@Override
+	public double points()
+	{
+		return 2;
+	}
 }

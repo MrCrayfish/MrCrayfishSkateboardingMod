@@ -39,4 +39,9 @@ public class Trick5050 implements Grind
 		
 	}
 	
+	@Override
+	public double points()
+	{
+		return 1;
+	}
 }

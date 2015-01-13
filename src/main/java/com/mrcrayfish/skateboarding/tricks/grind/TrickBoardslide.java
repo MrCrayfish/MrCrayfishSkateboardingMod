@@ -40,4 +40,9 @@ public class TrickBoardslide implements Grind
 
 	}
 
+	@Override
+	public double points()
+	{
+		return 1;
+	}
 }

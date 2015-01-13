@@ -41,4 +41,9 @@ public class TrickVarialKickflip implements Flip
 		skateboard.setFlipped();
 	}
 
+	@Override
+	public double points()
+	{
+		return 60;
+	}
 }

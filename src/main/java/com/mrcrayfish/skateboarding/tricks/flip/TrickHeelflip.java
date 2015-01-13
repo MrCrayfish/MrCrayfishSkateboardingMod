@@ -39,4 +39,9 @@ public class TrickHeelflip implements Flip
 		
 	}
 
+	@Override
+	public double points()
+	{
+		return 30;
+	}
 }

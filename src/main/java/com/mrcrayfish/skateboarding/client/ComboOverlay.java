@@ -1,12 +1,13 @@
 package com.mrcrayfish.skateboarding.client;
 
-import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class ComboOverlay
 {
@@ -41,6 +42,10 @@ public class ComboOverlay
 						mc.fontRendererObj.drawString(skateboard.combo.getTricks()[i], width - (stringWidth / 2), height + (i * 10), 0);
 					}
 				}
+
+				int y = height + skateboard.combo.getTricks().length * 10;
+				int stringWidth = mc.fontRendererObj.getStringWidth(Double.toString(skateboard.combo.getPoints()));
+				mc.fontRendererObj.drawString(EnumChatFormatting.YELLOW + Double.toString(skateboard.combo.getPoints()), width - (stringWidth / 2), y, 0);
 			}
 		}
 	}

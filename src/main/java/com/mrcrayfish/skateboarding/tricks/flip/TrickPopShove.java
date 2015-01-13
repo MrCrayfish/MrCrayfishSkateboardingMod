@@ -39,4 +39,9 @@ public class TrickPopShove implements Flip
 		skateboard.setFlipped();
 	}
 
+	@Override
+	public double points()
+	{
+		return 30;
+	}
 }

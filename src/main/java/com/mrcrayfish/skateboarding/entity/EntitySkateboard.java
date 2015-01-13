@@ -23,7 +23,6 @@ import com.mrcrayfish.skateboarding.util.GrindHelper;
 public class EntitySkateboard extends Entity
 {
 	public ComboBuilder combo = new ComboBuilder();
-	public int comboTimer;
 
 	public double currentSpeed = 0.0;
 	public double maxSpeed = 8.0;
@@ -164,14 +163,7 @@ public class EntitySkateboard extends Entity
 
 		if (!inTrick)
 		{
-			if (comboTimer > 0)
-			{
-				comboTimer--;
-			}
-			else
-			{
-				combo.reset();
-			}
+			combo.update();
 		}
 
 		/** Will only execute code if player is riding skateboard */
@@ -254,7 +246,6 @@ public class EntitySkateboard extends Entity
 					if (inTrickTimer > flip.performTime())
 					{
 						combo.addTrick(getCurrentTrick());
-						comboTimer = 100;
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 					}
@@ -292,11 +283,12 @@ public class EntitySkateboard extends Entity
 					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 					{
 						combo.addTrick(getCurrentTrick());
-						comboTimer = 100;
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 						grinding = false;
 						onGround = false;
+					} else {
+						
 					}
 				}
 			}

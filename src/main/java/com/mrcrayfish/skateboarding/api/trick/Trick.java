@@ -9,4 +9,6 @@ public interface Trick
 	public void onStart(EntitySkateboard skateboard);
 	
 	public void onEnd(EntitySkateboard skateboard);
+	
+	public double points();
 }

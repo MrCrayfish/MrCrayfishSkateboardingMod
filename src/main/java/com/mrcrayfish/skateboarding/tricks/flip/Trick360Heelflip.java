@@ -40,4 +40,10 @@ public class Trick360Heelflip implements Flip
 		
 	}
 
+	@Override
+	public double points()
+	{
+		return 80;
+	}
+
 }

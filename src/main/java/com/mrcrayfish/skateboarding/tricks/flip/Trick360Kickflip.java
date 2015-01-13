@@ -41,4 +41,9 @@ public class Trick360Kickflip implements Flip
 		
 	}
 
+	@Override
+	public double points()
+	{
+		return 80;
+	}
 }
