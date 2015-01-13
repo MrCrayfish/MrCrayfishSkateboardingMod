@@ -3,22 +3,18 @@ package com.mrcrayfish.skateboarding.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.mrcrayfish.skateboarding.api.trick.Trick;
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class ComboBuilder
 {
 	private List<String> performedTricks = new ArrayList<String>();
-	private String[] compiledTricks = null;
-
 	private double points;
-
 	private int comboTimer;
-	private boolean inCombo;
 	private int coolDown = 20;
+	private int animation = 0;
+	private boolean inCombo;
+	private boolean recentlyAdded;
 
 	public void addTrick(Trick trick)
 	{
@@ -27,13 +23,14 @@ public class ComboBuilder
 			reset();
 			inCombo = true;
 		}
-		
+
 		int count = getTrickCount(trick);
 		addPoints(decrease(trick.points(), count, 80));
 		addExtraTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
-		
+
 		performedTricks.add(trick.getName());
-		compileString();
+
+		recentlyAdded = true;
 	}
 
 	private int getTrickCount(Trick trick)
@@ -58,29 +55,6 @@ public class ComboBuilder
 		return value;
 	}
 
-	private void compileString()
-	{
-		int lines = (int) performedTricks.size() / 4;
-		compiledTricks = new String[lines + 1];
-		for (int i = 0; i < performedTricks.size(); i++)
-		{
-			String pre = "";
-			if (i == 0)
-			{
-				pre += performedTricks.get(i);
-			}
-			else
-			{
-				pre += EnumChatFormatting.BLACK.toString() + " + " + EnumChatFormatting.RESET.toString() + performedTricks.get(i);
-			}
-			if (compiledTricks[i / 4] == null)
-			{
-				compiledTricks[i / 4] = "";
-			}
-			compiledTricks[i / 4] += pre;
-		}
-	}
-
 	public void addPoints(double amount)
 	{
 		points += amount;
@@ -95,36 +69,49 @@ public class ComboBuilder
 		}
 	}
 
-	public void update()
+	public void update(EntitySkateboard skateboard)
 	{
-		if (!inCombo && compiledTricks != null)
+		if (!skateboard.isInTrick())
 		{
-			if (coolDown > 0)
+			if (!inCombo && performedTricks.size() > 0)
 			{
-				coolDown--;
+				if (coolDown > 0)
+				{
+					coolDown--;
+				}
+				else
+				{
+					reset();
+				}
 			}
-			else
+
+			if (inCombo)
 			{
-				reset();
+				if (comboTimer > 0)
+				{
+					comboTimer--;
+				}
+				else
+				{
+					inCombo = false;
+				}
 			}
 		}
 
-		if (inCombo)
+		if (recentlyAdded)
 		{
-			if (comboTimer > 0)
+			animation++;
+			if (animation > 10)
 			{
-				comboTimer--;
-			}
-			else
-			{
-				inCombo = false;
+				animation = 0;
+				recentlyAdded = false;
 			}
 		}
 	}
 
 	public String[] getTricks()
 	{
-		return compiledTricks;
+		return performedTricks.toArray(new String[0]);
 	}
 
 	public double getPoints()
@@ -141,16 +128,30 @@ public class ComboBuilder
 	{
 		this.inCombo = inCombo;
 	}
-	
+
 	public int getSize()
 	{
 		return performedTricks.size();
 	}
 
+	public boolean hasRecentlyAdded()
+	{
+		return recentlyAdded;
+	}
+
+	public void setRecentlyAdded(boolean recentlyAdded)
+	{
+		this.recentlyAdded = recentlyAdded;
+	}
+
+	public int getAnimation()
+	{
+		return animation;
+	}
+
 	private void reset()
 	{
 		performedTricks.clear();
-		compiledTricks = null;
 		coolDown = 20;
 		points = 0;
 	}
