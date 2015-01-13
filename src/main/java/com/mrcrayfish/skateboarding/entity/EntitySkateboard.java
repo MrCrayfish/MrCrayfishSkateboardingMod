@@ -160,11 +160,7 @@ public class EntitySkateboard extends Entity
 	public void onUpdate()
 	{
 		super.onUpdate();
-
-		if (!inTrick)
-		{
-			combo.update();
-		}
+		combo.update(this);
 
 		/** Will only execute code if player is riding skateboard */
 		if (this.riddenByEntity instanceof EntityLivingBase)
@@ -282,13 +278,12 @@ public class EntitySkateboard extends Entity
 					Grind grind = (Grind) currentTrick;
 					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 					{
-						combo.addTrick(getCurrentTrick());
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 						grinding = false;
 						onGround = false;
 					} else {
-						
+						combo.addPoints(getCurrentTrick().points());
 					}
 				}
 			}
@@ -438,6 +433,7 @@ public class EntitySkateboard extends Entity
 		{
 			if (GrindHelper.canGrind(worldObj, posX, posY, posZ))
 			{
+				combo.addTrick(trick);
 				jumping = false;
 				grinding = true;
 				onGround = true;
