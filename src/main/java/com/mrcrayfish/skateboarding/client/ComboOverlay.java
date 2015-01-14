@@ -1,6 +1,9 @@
 package com.mrcrayfish.skateboarding.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -14,7 +17,8 @@ import com.mrcrayfish.skateboarding.util.ComboBuilder;
 
 public class ComboOverlay
 {
-
+	private ModelResourceLocation resource = new ModelResourceLocation("csm:textures/gui/overlay.png");
+	
 	@SubscribeEvent
 	public void onTick(TickEvent.RenderTickEvent event)
 	{
@@ -36,10 +40,19 @@ public class ComboOverlay
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Minecraft mc = Minecraft.getMinecraft();
 				int width = (mc.displayWidth / 4);
-				int height = (mc.displayHeight / 3) + 10;
-
+				
+				mc.getTextureManager().bindTexture(resource);
+				this.drawTexturedModalRect(10, 10, 0, 0, 104, 16);
+				
 				ComboBuilder combo = skateboard.combo;
-
+				this.drawTexturedModalRect(12, 12, 0, 16, combo.getTime(), 14);
+				
+				EnumChatFormatting format = EnumChatFormatting.RESET;
+				if(!combo.isInCombo())
+				{
+					format = EnumChatFormatting.GREEN;
+				}
+				
 				if (combo.getTricks().length > 0)
 				{
 					for (int i = 0; i < combo.getTricks().length; i++)
@@ -54,12 +67,11 @@ public class ComboOverlay
 							int y = 40 + (combo.getTricks().length * 10) - (i * 10) + combo.getAnimation() - (combo.hasRecentlyAdded() ? 10 : 0);
 							if (y * 2 < mc.displayHeight)
 							{
-								mc.fontRendererObj.drawStringWithShadow(combo.getTricks()[i], 9, y - 1, 16777215);
+								mc.fontRendererObj.drawStringWithShadow(format + combo.getTricks()[i], 9, y - 1, 16777215);
 							}
 						}
 					}
 					int stringWidth = mc.fontRendererObj.getStringWidth(Integer.toString((int) combo.getPoints()));
-					GL11.glColor4d(1, 1, 1, 100);
 					GL11.glScalef(2.0F, 2.0F, 2.0F);
 					mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.YELLOW + Integer.toString((int) combo.getPoints()), (width) - stringWidth - 4, 25, 16777215);
 					GL11.glScalef(1.0F, 1.0F, 1.0F);
@@ -67,4 +79,18 @@ public class ComboOverlay
 			}
 		}
 	}
+	
+	public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height)
+    {
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.startDrawingQuads();
+        worldrenderer.addVertexWithUV((double)(x + 0), (double)(y + height), (double)0, (double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1));
+        worldrenderer.addVertexWithUV((double)(x + width), (double)(y + height), (double)0, (double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1));
+        worldrenderer.addVertexWithUV((double)(x + width), (double)(y + 0), (double)0l, (double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1));
+        worldrenderer.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)0, (double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1));
+        tessellator.draw();
+    }
 }

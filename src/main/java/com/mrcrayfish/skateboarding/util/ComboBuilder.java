@@ -26,7 +26,7 @@ public class ComboBuilder
 
 		int count = getTrickCount(trick);
 		addPoints(decrease(trick.points(), count, 80));
-		addExtraTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
+		addTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
 
 		performedTricks.add(trick.getName());
 
@@ -60,13 +60,18 @@ public class ComboBuilder
 		points += amount;
 	}
 
-	public void addExtraTime(int amount)
+	public void addTime(int amount)
 	{
 		comboTimer += amount;
 		if (comboTimer > 500)
 		{
 			comboTimer = 500;
 		}
+	}
+	
+	public int getTime()
+	{
+		return comboTimer;
 	}
 
 	public void update(EntitySkateboard skateboard)
