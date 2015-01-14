@@ -42,10 +42,10 @@ public class ComboOverlay
 				int width = (mc.displayWidth / 4);
 				
 				mc.getTextureManager().bindTexture(resource);
-				this.drawTexturedModalRect(10, 10, 0, 0, 104, 16);
+				this.drawTexturedModalRect(10, 10, 0, 0, 106, 15);
 				
 				ComboBuilder combo = skateboard.combo;
-				this.drawTexturedModalRect(12, 12, 0, 16, combo.getTime(), 14);
+				this.drawTexturedModalRect(15, 14, 0, 15, combo.getTime(), 7);
 				
 				EnumChatFormatting format = EnumChatFormatting.RESET;
 				if(!combo.isInCombo())
@@ -73,7 +73,7 @@ public class ComboOverlay
 					}
 					int stringWidth = mc.fontRendererObj.getStringWidth(Integer.toString((int) combo.getPoints()));
 					GL11.glScalef(2.0F, 2.0F, 2.0F);
-					mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.YELLOW + Integer.toString((int) combo.getPoints()), (width) - stringWidth - 4, 25, 16777215);
+					mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.YELLOW + Integer.toString((int) combo.getPoints()), 5, 15, 16777215);
 					GL11.glScalef(1.0F, 1.0F, 1.0F);
 				}
 			}
