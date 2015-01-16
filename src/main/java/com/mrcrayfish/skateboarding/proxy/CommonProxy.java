@@ -11,8 +11,8 @@ public class CommonProxy
 	{
 	}
 
-	public World getWorld()
+	public World getClientWorld()
 	{
-		return MinecraftServer.getServer().getEntityWorld();
+		return null;
 	}
 }

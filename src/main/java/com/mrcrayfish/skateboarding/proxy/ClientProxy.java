@@ -34,7 +34,8 @@ public class ClientProxy extends CommonProxy
 		TrickMap.printTrickMap(TrickMap.trickMap);
 	}
 
-	public World getWorld()
+	@Override
+	public World getClientWorld()
 	{
 		return Minecraft.getMinecraft().theWorld;
 	}

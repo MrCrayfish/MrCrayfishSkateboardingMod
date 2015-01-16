@@ -14,87 +14,67 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
 import com.mrcrayfish.skateboarding.api.map.TrickMap.Key;
-import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageJump;
+import com.mrcrayfish.skateboarding.network.message.MessagePush;
 import com.mrcrayfish.skateboarding.network.message.MessageTrick;
-import com.mrcrayfish.skateboarding.util.GrindHelper;
 
-public class SkateboardInput
-{
+public class SkateboardInput {
 	private List<Key> keys = new ArrayList<Key>();
 	private int timeLeft;
 
 	@SubscribeEvent
-	public void onKeyInput(InputEvent.KeyInputEvent event)
-	{
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
-		if (entity != null && entity instanceof EntitySkateboard)
-		{
+		if (entity != null && entity instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
-			
-			if(Minecraft.getMinecraft().gameSettings.keyBindDrop.isKeyDown())
-			{
+
+			if (Minecraft.getMinecraft().gameSettings.keyBindDrop.isKeyDown()) {
 				skateboard.setGoofy(!skateboard.isGoofy());
 			}
-			
-			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
-			{
-				if (!skateboard.isJumping())
-				{
-					skateboard.jump();
+
+			if (!skateboard.isJumping()) {
+				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
+
 					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
 				}
-			}
-			else
-			{
-				if (skateboard.isJumping())
+				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
 				{
-					GameSettings settings = Minecraft.getMinecraft().gameSettings;
-					if (keys.size() < 4)
-					{
-						if (settings.keyBindForward.isKeyDown())
-						{
-							keys.add(Key.UP);
-							timeLeft = 6;
-						}
-						else if (settings.keyBindBack.isKeyDown())
-						{
-							keys.add(Key.DOWN);
-							timeLeft = 6;
-						}
-						else if (settings.keyBindLeft.isKeyDown())
-						{
-							keys.add(Key.LEFT);
-							timeLeft = 6;
-						}
-						else if (settings.keyBindRight.isKeyDown())
-						{
-							keys.add(Key.RIGHT);
-							timeLeft = 6;
-						}
-					}
-					KeyBinding.unPressAllKeys();
+					PacketHandler.INSTANCE.sendToServer(new MessagePush(skateboard.getEntityId()));
 				}
+			} else {
+				GameSettings settings = Minecraft.getMinecraft().gameSettings;
+				if (keys.size() < 4) {
+					if (settings.keyBindForward.isKeyDown()) {
+						keys.add(Key.UP);
+						timeLeft = 6;
+					} else if (settings.keyBindBack.isKeyDown()) {
+						keys.add(Key.DOWN);
+						timeLeft = 6;
+					} else if (settings.keyBindLeft.isKeyDown()) {
+						keys.add(Key.LEFT);
+						timeLeft = 6;
+					} else if (settings.keyBindRight.isKeyDown()) {
+						keys.add(Key.RIGHT);
+						timeLeft = 6;
+					}
+				}
+				KeyBinding.unPressAllKeys();
 			}
 		}
 	}
 
 	@SubscribeEvent
-	public void onTick(ClientTickEvent event)
-	{
-		if (keys.size() > 0 && timeLeft == 0)
-		{
+	public void onTick(ClientTickEvent event) {
+		if (keys.size() > 0 && timeLeft == 0) {
 			Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
-			if (entity != null && entity instanceof EntitySkateboard)
-			{
+			if (entity != null && entity instanceof EntitySkateboard) {
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));
 
-				if (trick != null && !skateboard.isInTrick())
-				{
+				if (trick != null && !skateboard.isInTrick()) {
 					PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
 					skateboard.startTrick(trick);
 				}
@@ -102,8 +82,7 @@ public class SkateboardInput
 			keys.clear();
 		}
 
-		if (timeLeft > 0)
-		{
+		if (timeLeft > 0) {
 			timeLeft--;
 		}
 	}
