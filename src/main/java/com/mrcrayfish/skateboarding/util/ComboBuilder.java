@@ -3,6 +3,9 @@ package com.mrcrayfish.skateboarding.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+
 import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
@@ -16,7 +19,7 @@ public class ComboBuilder
 	private boolean inCombo;
 	private boolean recentlyAdded;
 
-	public void addTrick(Trick trick)
+	public void addTrick(Trick trick, double rotation)
 	{
 		if (!inCombo)
 		{
@@ -25,10 +28,20 @@ public class ComboBuilder
 		}
 
 		int count = getTrickCount(trick);
-		addPoints(decrease(trick.points(), count, 80));
+		int multiplier = (int) (rotation / 180) + 1;
+		addPoints(decrease(trick.points(), count, 80) * multiplier);
 		addTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
 
-		performedTricks.add(trick.getName());
+		String pre = "";
+		rotation += 10;
+		int rotCount = (int) ((rotation) / 180);
+		System.out.println(rotation);
+		System.out.println(rotCount);
+		if (rotCount > 0)
+		{
+			pre += rotCount * 180 + " ";
+		}
+		performedTricks.add(pre + trick.getName());
 
 		recentlyAdded = true;
 	}
@@ -68,7 +81,7 @@ public class ComboBuilder
 			comboTimer = 500;
 		}
 	}
-	
+
 	public int getTime()
 	{
 		return comboTimer;

@@ -17,9 +17,15 @@ public class Trick5050 implements Grind
 	}
 
 	@Override
-	public void updateBoard(ModelRenderer skateboard, int tick)
+	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
 	{
 		
+	}
+	
+	@Override
+	public double[] offsetBoardPosition(EntitySkateboard skateboard)
+	{
+		return new double[] { 0, 0, 0 };
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
+import com.mrcrayfish.skateboarding.api.TrickProperties.Facing;
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
@@ -23,6 +24,7 @@ import com.mrcrayfish.skateboarding.util.GrindHelper;
 public class EntitySkateboard extends Entity
 {
 	public ComboBuilder combo = new ComboBuilder();
+	public EnumFacing prevFacing = null;
 
 	public double currentSpeed = 0.0;
 	public double maxSpeed = 8.0;
@@ -32,16 +34,18 @@ public class EntitySkateboard extends Entity
 	private boolean jumping = false;
 	private int jumpingTimer = 0;
 
-	private boolean inTrick = false;
 	private int inTrickTimer = 0;
 	private Trick currentTrick = null;
 
 	private boolean grinding = false;
-	private boolean goofy = true;
+	private boolean goofy = false;
 	private boolean switch_ = false;
 	private boolean flipped = false;
 
-	private float angleOnJump;
+	public float angleOnJump;
+	private EnumFacing faceOnJump;
+	private float angleOnTrick;
+	private int rotation;
 
 	@SideOnly(Side.CLIENT)
 	private double velocityX;
@@ -171,7 +175,6 @@ public class EntitySkateboard extends Entity
 			if (entity.moveForward > 0 && this.isCollidedVertically && !pushed && !grinding)
 			{
 				currentSpeed += 1.0D;
-
 				if (currentSpeed > maxSpeed)
 				{
 					currentSpeed = maxSpeed;
@@ -195,7 +198,7 @@ public class EntitySkateboard extends Entity
 				/** If grinding, set direction to direction of grinding. */
 				if (grinding)
 				{
-					f = EnumFacing.fromAngle(this.rotationYaw).rotateY().getHorizontalIndex() * 90F;
+					f = EnumFacing.fromAngle(this.angleOnJump).rotateY().getHorizontalIndex() * 90F;
 				}
 
 				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
@@ -213,11 +216,16 @@ public class EntitySkateboard extends Entity
 		/** If grinding, make position of skateboard go to center of block. */
 		if (grinding)
 		{
-			EnumFacing face = EnumFacing.fromAngle(this.rotationYaw).rotateY();
+			double[] offsets = ((Grind) getCurrentTrick()).offsetBoardPosition(this);
+			EnumFacing face = EnumFacing.fromAngle(this.angleOnJump).rotateY();
 			if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
-				this.setPosition(Math.floor(this.posX) + 0.5, Math.floor(this.posY), this.posZ);
+			{
+				this.setPosition(Math.floor(this.posX) + 0.5 + offsets[0], Math.floor(this.posY) + offsets[1], this.posZ + offsets[2]);
+			}
 			if (face == EnumFacing.EAST | face == EnumFacing.WEST)
-				this.setPosition(this.posX, Math.floor(this.posY), Math.floor(this.posZ) + 0.5);
+			{
+				this.setPosition(this.posX + offsets[0], Math.floor(this.posY) + offsets[1], Math.floor(this.posZ) + 0.5 + offsets[2]);
+			}
 		}
 
 		/** When collided with block, slow speed by 75% */
@@ -232,7 +240,7 @@ public class EntitySkateboard extends Entity
 			if (jumpingTimer < 10)
 				motionY = 0.5D - (double) jumpingTimer * 0.03D;
 
-			if (inTrick && currentTrick != null)
+			if (currentTrick != null)
 			{
 				inTrickTimer++;
 
@@ -241,7 +249,8 @@ public class EntitySkateboard extends Entity
 					Flip flip = (Flip) currentTrick;
 					if (inTrickTimer > flip.performTime())
 					{
-						combo.addTrick(getCurrentTrick());
+						if (worldObj.isRemote)
+							combo.addTrick(getCurrentTrick(), Math.abs(rotation));
 						getCurrentTrick().onEnd(this);
 						resetTrick();
 					}
@@ -269,7 +278,7 @@ public class EntitySkateboard extends Entity
 
 		if (grinding)
 		{
-			if (inTrick && currentTrick != null)
+			if (currentTrick != null)
 			{
 				if (currentTrick instanceof Grind)
 				{
@@ -282,7 +291,9 @@ public class EntitySkateboard extends Entity
 						resetTrick();
 						grinding = false;
 						onGround = false;
-					} else {
+					}
+					else
+					{
 						combo.addPoints(getCurrentTrick().points());
 					}
 				}
@@ -334,8 +345,18 @@ public class EntitySkateboard extends Entity
 				{
 					EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
 					this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
+
+					if (prevFacing != EnumFacing.fromAngle(this.rotationYaw))
+					{
+						this.rotation += 90;
+						this.prevFacing = EnumFacing.fromAngle(this.rotationYaw);
+					}
 				}
 			}
+		}
+		else
+		{
+			this.setRotation(EnumFacing.fromAngle(this.angleOnJump).getHorizontalIndex() * 90, this.rotationPitch);
 		}
 
 		this.motionY *= 0.9800000190734863D;
@@ -359,7 +380,7 @@ public class EntitySkateboard extends Entity
 	{
 		if (this.riddenByEntity != null)
 		{
-			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (inTrick && !grinding ? 0.25D : 0D), this.posZ);
+			this.riddenByEntity.setPosition(this.posX, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset() + (currentTrick != null && !grinding ? 0.25D : 0D), this.posZ);
 			if (this.riddenByEntity instanceof EntityLivingBase)
 			{
 				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.rotationYaw + (this.isGoofy() ? -90F : 90F);
@@ -401,12 +422,26 @@ public class EntitySkateboard extends Entity
 	{
 		if (worldObj.isRemote && currentSpeed > 4)
 		{
-			float difference = Math.abs(Math.abs(this.angleOnJump) - Math.abs(MathHelper.wrapAngleTo180_float(this.rotationYaw)));
-			if (difference > 50)
+			int initFacing = EnumFacing.fromAngle(this.angleOnJump + 90F).getHorizontalIndex() * 90;
+			int newFacing = EnumFacing.fromAngle(this.rotationYaw + 90F).getHorizontalIndex() * 90;
+			if (initFacing != newFacing)
 			{
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
 			}
 		}
+	}
+
+	public int getDifferenceWithFix(int initAngle, int newAngle)
+	{
+		if (initAngle == 0 && newAngle == 270)
+		{
+			return 90;
+		}
+		if (initAngle == 270 && newAngle == 0)
+		{
+			return -90;
+		}
+		return initAngle - newAngle;
 	}
 
 	public void performStack()
@@ -423,33 +458,57 @@ public class EntitySkateboard extends Entity
 
 	public void startTrick(Trick trick)
 	{
-		inTrick = true;
 		currentTrick = trick;
 		if (trick instanceof Flip)
 		{
+			rotation = 0;
 			onGround = false;
 		}
 		if (trick instanceof Grind)
 		{
 			if (GrindHelper.canGrind(worldObj, posX, posY, posZ))
 			{
-				combo.addTrick(trick);
+				combo.addTrick(trick, 0);
 				jumping = false;
 				grinding = true;
-				onGround = true;
+				onGround = false;
 			}
 			else
 			{
-				inTrick = false;
 				currentTrick = null;
 			}
 		}
+		angleOnTrick = this.rotationYaw;
+		trick.onStart(this);
+	}
+
+	public Facing getFacing()
+	{
+		int initFacing = EnumFacing.fromAngle(this.angleOnJump + 90F).getHorizontalIndex() * 90;
+		int newFacing = EnumFacing.fromAngle(this.rotationYaw + 90F).getHorizontalIndex() * 90;
+		int difference = getDifferenceWithFix(initFacing, newFacing);
+		switch (difference)
+		{
+		case 90:
+			return Facing.FRONT;
+		case -90:
+			return Facing.BACK;
+		case 180:
+			return Facing.SWITCH;
+		case -180:
+			return Facing.SWITCH;
+		case 270:
+			return Facing.BACK;
+		case -270:
+			return Facing.FRONT;
+		}
+		return Facing.SAME;
 	}
 
 	public void resetTrick()
 	{
+		rotation = 0;
 		currentTrick = null;
-		inTrick = false;
 		inTrickTimer = 0;
 	}
 
@@ -465,7 +524,8 @@ public class EntitySkateboard extends Entity
 		resetTrick();
 		jumping = true;
 		onGround = false;
-		angleOnJump = rotationYaw;
+		angleOnJump = this.rotationYaw;
+		prevFacing = EnumFacing.fromAngle(angleOnJump);
 	}
 
 	private float interpolateRotation(float start, float end)
@@ -507,12 +567,7 @@ public class EntitySkateboard extends Entity
 
 	public boolean isInTrick()
 	{
-		return inTrick;
-	}
-
-	public void setInTrick(boolean inTrick)
-	{
-		this.inTrick = inTrick;
+		return currentTrick != null;
 	}
 
 	public Trick getCurrentTrick()

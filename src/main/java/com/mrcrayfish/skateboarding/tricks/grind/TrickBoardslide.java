@@ -7,6 +7,8 @@ import net.minecraft.client.model.ModelRenderer;
 import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.util.TrickHelper;
+import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
 public class TrickBoardslide implements Grind
 {
@@ -18,9 +20,15 @@ public class TrickBoardslide implements Grind
 	}
 
 	@Override
-	public void updateBoard(ModelRenderer skateboard, int tick)
+	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
 	{
-		skateboard.rotateAngleY = (float) Math.toRadians(90);
+		boardModel.rotateAngleY = (float) Math.toRadians(90);
+	}
+	
+	@Override
+	public double[] offsetBoardPosition(EntitySkateboard skateboard)
+	{
+		return new double[] { 0, 0, 0 };
 	}
 
 	@Override

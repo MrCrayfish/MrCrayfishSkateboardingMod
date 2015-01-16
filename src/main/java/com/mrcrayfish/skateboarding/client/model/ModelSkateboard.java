@@ -119,20 +119,7 @@ public class ModelSkateboard extends ModelBase
 		if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 		{
 			Trick trick = skateboard.getCurrentTrick();
-			if (trick instanceof Flip)
-			{
-				Flip flip = (Flip) trick;
-				flip.updateMovement(skateboard, boardBase);
-			}
-			else if (trick instanceof Grind)
-			{
-				Grind grind = (Grind) trick;
-				grind.updateBoard(boardBase, skateboard.getInTrickTimer());
-			}
-			else if (trick instanceof Grab)
-			{
-				Grab grab = (Grab) trick;
-			}
+			trick.updateBoard(skateboard, boardBase);
 		}
 		else
 		{

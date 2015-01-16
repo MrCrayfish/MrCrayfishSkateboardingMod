@@ -7,6 +7,4 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 public interface Flip extends Trick
 {
 	public int performTime();
-
-	public void updateMovement(EntitySkateboard skateboard, ModelRenderer boardModel);
 }
