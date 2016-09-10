@@ -11,9 +11,9 @@ import com.mrcrayfish.skateboarding.util.TrickHelper;
 public class TrickPopShove implements Flip
 {
 	@Override
-	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
+	public void updateBoard(EntitySkateboard skateboard)
 	{
-		TrickHelper.spinBoard(skateboard, boardModel, 180F, performTime());
+		TrickHelper.spinBoard(skateboard, 180F, performTime());
 	}
 
 	@Override

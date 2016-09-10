@@ -1,68 +1,78 @@
 package com.mrcrayfish.skateboarding.client.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
+import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.client.model.ModelSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
-public class RenderSkateboard extends Render
-{
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
+public class RenderSkateboard extends Render<EntitySkateboard>
+{
 	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/crayfish.png");
-	private ModelBase modelSkateboard = new ModelSkateboard();
+	private ModelSkateboard modelSkateboard = new ModelSkateboard();
 
 	public RenderSkateboard(RenderManager renderManager)
 	{
 		super(renderManager);
 		this.shadowSize = 0.0F;
 	}
-
+	
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float p_76986_8_, float partialTicks)
-	{
-		this.doRender((EntitySkateboard) entity, x, y, z, p_76986_8_, partialTicks);
-	}
-
-	public void doRender(EntitySkateboard entity, double x, double y, double z, float p_76986_8_, float partialTicks)
+	public void doRender(EntitySkateboard skateboard, double x, double y, double z, float p_76986_8_, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
-		if (entity.riddenByEntity != null)
 		{
-			if (entity.riddenByEntity instanceof EntityPlayer)
+			if (skateboard.isInTrick() && !skateboard.isGrinding())
 			{
-				EntityPlayer player = (EntityPlayer) entity.riddenByEntity;
-				if (player.getUniqueID().toString().equals(Minecraft.getMinecraft().thePlayer.getUniqueID().toString()))
+				y = -0.3;
+			}
+			
+			if (skateboard.getControllingPassenger() != null)
+			{
+				if (skateboard.getControllingPassenger() instanceof EntityPlayer)
 				{
-					x = 0;
-					y = 0;
-					z = 0;
-				}
-				if (entity.isInTrick() && !entity.isGrinding())
-				{
-					y = -0.3;
+					EntityPlayer player = (EntityPlayer) skateboard.getControllingPassenger();
+					player.renderYawOffset = (skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks) + 90F;
+					if(skateboard.isGrinding())
+					{
+						if(skateboard.getCurrentTrick() instanceof Grind)
+						{
+							Grind grind = (Grind) skateboard.getCurrentTrick();
+							grind.updatePlayer(skateboard);
+						}
+					}
+					
 				}
 			}
+			GlStateManager.translate(x, y + 0.18, z);
+			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
+			GlStateManager.rotate(-90F, 0, 1, 0);
+			this.bindEntityTexture(skateboard);
+			GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+			
+			modelSkateboard.setRotationAngles(0F, 0F, 0F, 0F, 0F, 0F, skateboard);
+			
+			GlStateManager.rotate((float) (skateboard.prevBoardYaw + (skateboard.boardYaw - skateboard.prevBoardYaw) * partialTicks), 0, 1, 0);
+			
+			modelSkateboard.boardBase.rotateAngleY = 0F;
+			modelSkateboard.boardBase.rotateAngleY += (float) Math.toRadians(skateboard.prevBoardRotationY + (skateboard.boardRotationY - skateboard.prevBoardRotationY) * partialTicks);
+			if(skateboard.isFlipped()) modelSkateboard.boardBase.rotateAngleY += Math.toRadians(180F);
+			
+			modelSkateboard.boardBase.rotateAngleX = (float) Math.toRadians(skateboard.prevBoardRotationX + (skateboard.boardRotationX - skateboard.prevBoardRotationX) * partialTicks);
+			modelSkateboard.boardBase.rotateAngleZ = (float) Math.toRadians(skateboard.prevBoardRotationZ + (skateboard.boardRotationZ - skateboard.prevBoardRotationZ) * partialTicks);
+			
+			modelSkateboard.render(skateboard, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		}
-		GlStateManager.translate(x, y + 0.05, z);
-		GlStateManager.rotate(-entity.rotationYaw, 0, 1, 0);
-		GlStateManager.rotate(-90F, 0, 1, 0);
-		this.bindEntityTexture(entity);
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-		this.modelSkateboard.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
-		super.doRender(entity, x, y, z, p_76986_8_, partialTicks);
+		//super.doRender(skateboard, x, y, z, p_76986_8_, partialTicks);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
+	protected ResourceLocation getEntityTexture(EntitySkateboard entity) 
 	{
 		return minecartTextures;
 	}

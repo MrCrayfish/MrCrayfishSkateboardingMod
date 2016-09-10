@@ -3,6 +3,8 @@ package com.mrcrayfish.skateboarding.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
@@ -27,7 +29,8 @@ public class SkateboardInput {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
+		System.out.println("Key evernt");
+		Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		if (entity != null && entity instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
 
@@ -37,7 +40,7 @@ public class SkateboardInput {
 
 			if (!skateboard.isJumping()) {
 				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
-
+					skateboard.jump();
 					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
 				}
 				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
@@ -69,7 +72,7 @@ public class SkateboardInput {
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
 		if (keys.size() > 0 && timeLeft == 0) {
-			Entity entity = Minecraft.getMinecraft().thePlayer.ridingEntity;
+			Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 			if (entity != null && entity instanceof EntitySkateboard) {
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));

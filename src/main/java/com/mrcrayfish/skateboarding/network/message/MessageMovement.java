@@ -35,7 +35,7 @@ public class MessageMovement implements IMessage, IMessageHandler<MessageMovemen
 		if(entity instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard)entity;
-			skateboard.setDestination(message.posX, message.posY, message.posZ);
+			skateboard.setPosition(message.posX, message.posY, message.posZ);
 			skateboard.setAngles(message.rotationYaw, skateboard.rotationPitch);
 		}
 		return null;

@@ -1,7 +1,10 @@
 package com.mrcrayfish.skateboarding.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import api.player.model.ModelPlayerAPI;
@@ -17,15 +20,19 @@ import com.mrcrayfish.skateboarding.init.SkateboardingItems;
 
 public class ClientProxy extends CommonProxy
 {
+	
+	@Override
+	public void preInit() 
+	{
+		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderFactory());
+	}
+	
 	@Override
 	public void registerRenders()
 	{
 		SkateboardingItems.registerRenders();
 
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
-
-		EntityRegistry.registerGlobalEntityID(EntitySkateboard.class, "csmSkateboard", EntityRegistry.findGlobalUniqueEntityId());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderSkateboard(Minecraft.getMinecraft().getRenderManager()));
 
 		Keybinds.init();
 		Keybinds.register();
@@ -38,5 +45,14 @@ public class ClientProxy extends CommonProxy
 	public World getClientWorld()
 	{
 		return Minecraft.getMinecraft().theWorld;
+	}
+	
+	private static class RenderFactory implements IRenderFactory<EntitySkateboard>
+	{
+		@Override
+		public Render<? super EntitySkateboard> createRenderFor(RenderManager manager) 
+		{
+			return new RenderSkateboard(manager);
+		}
 	}
 }

@@ -7,27 +7,30 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class TrickHelper
 {
-	public static void spinBoard(EntitySkateboard skateboard, ModelRenderer board, float totalSpin, int performTime)
+	public static void spinBoard(EntitySkateboard skateboard, float totalSpin, int performTime)
 	{
 		totalSpin = skateboard.isGoofy() ? -totalSpin : totalSpin;
-		GlStateManager.rotate((totalSpin / performTime) * skateboard.getInTrickTimer(), 0, 1, 0);
+		skateboard.boardYaw = (totalSpin / performTime) * skateboard.getInTrickTimer();
+		
+		System.out.println((totalSpin / performTime) * skateboard.getInTrickTimer());
 	}
 
-	public static void flipBoard(EntitySkateboard skateboard, ModelRenderer board, float totalSpin, int performTime, Axis axis)
+	public static void flipBoard(EntitySkateboard skateboard, float totalSpin, int performTime, Axis axis)
 	{
 		totalSpin = skateboard.isGoofy() ? totalSpin : -totalSpin;
 		switch (axis)
 		{
 		case X:
-			board.rotateAngleX = (float) Math.toRadians((totalSpin / performTime) * skateboard.getInTrickTimer());
+			skateboard.boardRotationX = (totalSpin / performTime) * skateboard.getInTrickTimer(); 
 			break;
 		case Y:
-			board.rotateAngleY = (float) Math.toRadians((totalSpin / performTime) * skateboard.getInTrickTimer());
+			skateboard.boardRotationY = (totalSpin / performTime) * skateboard.getInTrickTimer();
 			break;
 		case Z:
-			board.rotateAngleZ = (float) Math.toRadians((totalSpin / performTime) * skateboard.getInTrickTimer());
+			skateboard.boardRotationZ = (totalSpin / performTime) * skateboard.getInTrickTimer();
 			break;
 		}
+		System.out.println(skateboard.boardRotationZ);
 	}
 
 	public static enum Axis

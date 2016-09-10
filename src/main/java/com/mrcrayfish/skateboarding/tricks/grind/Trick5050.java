@@ -17,7 +17,7 @@ public class Trick5050 implements Grind
 	}
 
 	@Override
-	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
+	public void updateBoard(EntitySkateboard skateboardl)
 	{
 		
 	}
@@ -29,7 +29,7 @@ public class Trick5050 implements Grind
 	}
 
 	@Override
-	public void updatePlayer(ModelPlayer player, EntitySkateboard skateboard)
+	public void updatePlayer(EntitySkateboard skateboard)
 	{
 		
 	}

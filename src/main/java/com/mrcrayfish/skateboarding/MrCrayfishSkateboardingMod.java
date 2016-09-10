@@ -19,7 +19,7 @@ import com.mrcrayfish.skateboarding.init.SkateboardingItems;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.proxy.CommonProxy;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = "required-after:RenderPlayerAPI")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, acceptedMinecraftVersions = "[1.9.4]", dependencies = "required-after:RenderPlayerAPI")
 public class MrCrayfishSkateboardingMod
 {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
@@ -32,10 +32,10 @@ public class MrCrayfishSkateboardingMod
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		proxy.preInit();
+		
 		SkateboardingItems.init();
 		SkateboardingItems.register();
-
-		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 80, 20, false);
 
 		PacketHandler.init();
 
@@ -46,6 +46,8 @@ public class MrCrayfishSkateboardingMod
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerRenders();
+		
+		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 64, 20, false);
 
 		if (event.getSide() == Side.CLIENT)
 		{

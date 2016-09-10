@@ -1,25 +1,22 @@
-*.bat
-eclipse/
-.gradle/
-gradle/
-MinecraftForge-Credits.txt
-MinecraftForge-License.txt
-gradlew
-forge-1.8-11.14.0.1281-1.8-changelog.txt
-CREDITS-fml.txt
-build.gradle
-LICENSE-fml.txt
-*.prefs
-.project
+# eclipse
+bin
+*.launch
+.settings
+.metadata
 .classpath
-bin/
-README.txt
-Ideas
-src/main/java/api/
-*.tcn
-Skateboard_2.java
-skateboard_new.png
-skateboard.png
-ModelSkateboard.java
-forge-1.8-11.14.0.1262-1.8-changelog.txt
-libs/RenderPlayerAPISource.jar
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run

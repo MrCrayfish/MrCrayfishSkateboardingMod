@@ -1,6 +1,8 @@
 package com.mrcrayfish.skateboarding.client.model;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -21,9 +23,9 @@ public class ModelPlayerOverride extends ModelPlayerBase
 	@Override
 	public void afterSetRotationAngles(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6, net.minecraft.entity.Entity paramEntity)
 	{
-		if (paramEntity.ridingEntity != null && paramEntity.ridingEntity instanceof EntitySkateboard)
+		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
-			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.ridingEntity;
+			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
 			if (!skateboard.isGoofy())
 			{
 				this.modelPlayer.bipedLeftLeg.rotateAngleX = -1F;
@@ -93,15 +95,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 				this.modelPlayer.bipedRightArm.rotationPointX = 1.3F;
 			}
 
-			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
-			{
-				Trick trick = skateboard.getCurrentTrick();
-				if (trick instanceof Grind)
-				{
-					Grind grind = (Grind) trick;
-					grind.updatePlayer(modelPlayer, skateboard);
-				}
-			}
+			
 		}
 		else
 		{
@@ -110,5 +104,25 @@ public class ModelPlayerOverride extends ModelPlayerBase
 			this.modelPlayer.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
 			this.modelPlayer.bipedRightLeg.setRotationPoint(-1.9F, 12.0F, 0.0F);
 		}
+	}
+	
+	@Override
+	public void beforeRender(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6) 
+	{
+		EntityPlayer player = (EntityPlayer) paramEntity;
+		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
+		{
+			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
+			//player.renderYawOffset = skateboard.rotationYaw;
+			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
+			{
+				Trick trick = skateboard.getCurrentTrick();
+				if (trick instanceof Grind)
+				{
+					Grind grind = (Grind) trick;
+					//grind.updatePlayer(skateboard);
+				}
+			}
+		}		
 	}
 }

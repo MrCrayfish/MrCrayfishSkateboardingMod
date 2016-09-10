@@ -11,10 +11,10 @@ import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 public class Trick360Heelflip implements Flip
 {
 	@Override
-	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
+	public void updateBoard(EntitySkateboard skateboard)
 	{
-		TrickHelper.flipBoard(skateboard, boardModel, -360F, performTime(), Axis.Z);
-		TrickHelper.spinBoard(skateboard, boardModel, -360F, performTime());
+		TrickHelper.flipBoard(skateboard, -360F, performTime(), Axis.Z);
+		TrickHelper.spinBoard(skateboard, -360F, performTime());
 	}
 
 	@Override

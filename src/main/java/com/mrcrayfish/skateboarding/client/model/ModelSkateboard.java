@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,7 +17,12 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 @SideOnly(Side.CLIENT)
 public class ModelSkateboard extends ModelBase
 {
-	ModelRenderer boardBase;
+	private float rotateAngleX;
+	private float rotateAngleZ;
+	private float prevRotateAngleX;
+	private float prevRotateAngleZ;
+	
+	public ModelRenderer boardBase;
 	ModelRenderer boardBack;
 	ModelRenderer boardFront;
 	ModelRenderer wheelFrontLeft;
@@ -113,33 +119,24 @@ public class ModelSkateboard extends ModelBase
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
 	{
-		boardBase.rotateAngleY = 0.0F;
+		
 		
 		EntitySkateboard skateboard = (EntitySkateboard) entity;
 		if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 		{
 			Trick trick = skateboard.getCurrentTrick();
-			trick.updateBoard(skateboard, boardBase);
 		}
 		else
 		{
 			boardBase.rotateAngleX = 0.0F;
+			boardBase.rotateAngleY = 0.0F;
 			boardBase.rotateAngleZ = 0.0F;
 		}
-		
-		if (skateboard.isFlipped())
-		{
-			boardBase.rotateAngleY += (float) Math.toRadians(180F);
-		}
-
-		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-		super.render(entity, f, f1, f2, f3, f4, f5);
-		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		boardBase.render(f5);
 	}
 

@@ -20,9 +20,9 @@ public class TrickNoseslide implements Grind
 	}
 
 	@Override
-	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel)
+	public void updateBoard(EntitySkateboard skateboard)
 	{
-		boardModel.rotateAngleY = (float) Math.toRadians(90);
+		skateboard.boardRotationY = 90F;
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class TrickNoseslide implements Grind
 	}
 	
 	@Override
-	public void updatePlayer(ModelPlayer player, EntitySkateboard skateboard)
+	public void updatePlayer(EntitySkateboard skateboard)
 	{
 		Minecraft.getMinecraft().thePlayer.renderYawOffset = skateboard.rotationYaw;
 	}

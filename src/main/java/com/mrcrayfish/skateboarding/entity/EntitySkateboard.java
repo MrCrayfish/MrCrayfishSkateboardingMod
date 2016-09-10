@@ -1,16 +1,5 @@
 package com.mrcrayfish.skateboarding.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.api.TrickProperties.Facing;
 import com.mrcrayfish.skateboarding.api.trick.Flip;
@@ -20,6 +9,21 @@ import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageStack;
 import com.mrcrayfish.skateboarding.util.ComboBuilder;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntitySkateboard extends Entity
 {
@@ -53,11 +57,20 @@ public class EntitySkateboard extends Entity
 	private double velocityY;
 	@SideOnly(Side.CLIENT)
 	private double velocityZ;
+	
+	public double boardYaw;
+	public double prevBoardYaw;
+	
+	public double boardRotationX;
+	public double boardRotationY;;
+	public double boardRotationZ;
+	public double prevBoardRotationX;
+	public double prevBoardRotationY;
+	public double prevBoardRotationZ;
 
 	public EntitySkateboard(World worldIn)
 	{
 		super(worldIn);
-		this.preventEntitySpawning = true;
 		this.setSize(1.0F, 0.5F);
 	}
 
@@ -65,9 +78,6 @@ public class EntitySkateboard extends Entity
 	{
 		this(worldIn);
 		this.setPosition(x, y, z);
-		this.prevPosX = x;
-		this.prevPosY = y;
-		this.prevPosZ = z;
 	}
 
 	@Override
@@ -84,12 +94,6 @@ public class EntitySkateboard extends Entity
 	}
 
 	@Override
-	public boolean isRiding()
-	{
-		return this.ridingEntity != null;
-	}
-
-	@Override
 	protected void entityInit()
 	{
 
@@ -98,19 +102,7 @@ public class EntitySkateboard extends Entity
 	@Override
 	public double getMountedYOffset()
 	{
-		return 0.5F;
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBox(Entity entityIn)
-	{
-		return entityIn.getEntityBoundingBox();
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox()
-	{
-		return this.getEntityBoundingBox();
+		return 0.5F + (0.04F * rand.nextDouble()) * (currentSpeed / maxSpeed);
 	}
 
 	@Override
@@ -125,7 +117,8 @@ public class EntitySkateboard extends Entity
 		return true;
 	}
 
-	@Override
+	
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public void func_180426_a(double p_180426_1_, double p_180426_3_, double p_180426_5_, float p_180426_7_, float p_180426_8_, int p_180426_9_, boolean p_180426_10_)
 	{
@@ -147,7 +140,20 @@ public class EntitySkateboard extends Entity
 			this.motionY = this.velocityY;
 			this.motionZ = this.velocityZ;
 		}
-	}
+	}*/
+	
+	@SideOnly(Side.CLIENT)
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
+    {
+		this.prevPosX = this.posX = x;
+		this.prevPosY = this.posY = y;
+		this.prevPosZ = this.posX = z;
+        this.rotationYaw = yaw;
+        this.rotationPitch = pitch;
+        this.motionX = this.velocityX;
+        this.motionY = this.velocityY;
+        this.motionZ = this.velocityZ;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -165,14 +171,14 @@ public class EntitySkateboard extends Entity
 	{
 		super.onUpdate();
 		combo.update(this);
-
-		/** Will only execute code if player is riding skateboard */
-		if (this.riddenByEntity instanceof EntityLivingBase)
+		
+		/* Will only execute code if player is riding skateboard */
+		if (getControllingPassenger() != null)
 		{
-			EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
-
-			/** Handles pushing */
-			if (entity.moveForward > 0 && this.isCollidedVertically && !pushed && !grinding)
+			EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();
+			
+			/* Handles pushing */
+			if (entity.moveForward > 0 && !pushed && !grinding)
 			{
 				currentSpeed += 1.0D;
 				if (currentSpeed > maxSpeed)
@@ -185,17 +191,15 @@ public class EntitySkateboard extends Entity
 			{
 				pushed = false;
 			}
-
-			/**
-			 * If skateboard is not jumping, allow turning. When player jumps
+			
+			/* If skateboard is not jumping, allow turning. When player jumps
 			 * from grinding, give exception to jump off in a direction using
-			 * allowOnce.
-			 */
-			if (!jumping | allowOnce)
+			 * allowOnce. */
+			if (!jumping || allowOnce)
 			{
-				float f = this.riddenByEntity.rotationYaw;
+				float f = entity.rotationYaw;
 
-				/** If grinding, set direction to direction of grinding. */
+				/* If grinding, set direction to direction of grinding. */
 				if (grinding)
 				{
 					f = EnumFacing.fromAngle(this.angleOnJump).rotateY().getHorizontalIndex() * 90F;
@@ -208,12 +212,21 @@ public class EntitySkateboard extends Entity
 		}
 		else
 		{
-			/** If no player riding, make the board stop */
+			/* If no player riding, make the board stop */
 			this.motionX = 0.0D;
 			this.motionZ = 0.0D;
 		}
+		
+		/* If collided horizontally, slow current speed by 3/4 */
+		if (isCollidedHorizontally)
+		{
+			this.currentSpeed *= 0.75D;
+		}
+		
+		/* Gravity? */
+		this.motionY -= 0.08D;
 
-		/** If grinding, make position of skateboard go to center of block. */
+		/* If grinding, make position of skateboard go to center of block.
 		if (grinding)
 		{
 			double[] offsets = ((Grind) getCurrentTrick()).offsetBoardPosition(this);
@@ -228,21 +241,27 @@ public class EntitySkateboard extends Entity
 			}
 		}
 
-		/** When collided with block, slow speed by 75% */
+		/** When collided with block, slow speed by 75%
 		if (this.isCollidedHorizontally)
 		{
 			this.currentSpeed *= 0.75D;
-		}
+		} */
 
 		if (jumping)
 		{
-
 			if (jumpingTimer < 10)
 				motionY = 0.5D - (double) jumpingTimer * 0.03D;
-
+			
 			if (currentTrick != null)
 			{
 				inTrickTimer++;
+				
+				prevBoardYaw = boardYaw;
+				prevBoardRotationX = boardRotationX;
+				prevBoardRotationY = boardRotationY;
+				prevBoardRotationZ = boardRotationZ;
+				
+				currentTrick.updateBoard(this);
 
 				if (currentTrick instanceof Flip)
 				{
@@ -275,40 +294,38 @@ public class EntitySkateboard extends Entity
 
 			jumpingTimer++;
 		}
-
+		
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		
 		if (grinding)
 		{
-			if (currentTrick != null)
+			if (currentTrick instanceof Grind)
 			{
-				if (currentTrick instanceof Grind)
-				{
-					inTrickTimer++;
+				inTrickTimer++;
+				
+				prevBoardYaw = boardYaw;
+				prevBoardRotationX = boardRotationX;
+				prevBoardRotationY = boardRotationY;
+				prevBoardRotationZ = boardRotationZ;
+				
+				currentTrick.updateBoard(this);
 
-					Grind grind = (Grind) currentTrick;
-					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
-					{
-						getCurrentTrick().onEnd(this);
-						resetTrick();
-						grinding = false;
-						onGround = false;
-					}
-					else
-					{
-						combo.addPoints(getCurrentTrick().points());
-					}
+				Grind grind = (Grind) currentTrick;
+				if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
+				{
+					getCurrentTrick().onEnd(this);
+					resetTrick();
+					grinding = false;
+					onGround = false;
+				}
+				else
+				{
+					combo.addPoints(getCurrentTrick().points());
 				}
 			}
 		}
-		this.motionY -= 0.08D;
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-
-		if (this.riddenByEntity != null)
-		{
-			// landedCorrectly();
-		}
-
-		/** Yaw Rotation Handling **/
+		/** Yaw Rotation Handling */
 
 		if (!grinding)
 		{
@@ -324,7 +341,7 @@ public class EntitySkateboard extends Entity
 					init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
 				}
 
-				double d12 = MathHelper.wrapAngleTo180_double(init - (double) this.rotationYaw);
+				double d12 = MathHelper.wrapDegrees(init - (double) this.rotationYaw);
 
 				if (d12 > 20.0D)
 				{
@@ -336,14 +353,15 @@ public class EntitySkateboard extends Entity
 					d12 = -20.0D;
 				}
 
+				this.prevRotationYaw = this.rotationYaw;
 				this.rotationYaw = (float) ((double) this.rotationYaw + d12);
 				this.setRotation(this.rotationYaw, this.rotationPitch);
 			}
 			else
 			{
-				if (this.riddenByEntity instanceof EntityLivingBase)
+				/*if (this.getControllingPassenger() instanceof EntityLivingBase)
 				{
-					EntityLivingBase entity = (EntityLivingBase) this.riddenByEntity;
+					EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();
 					this.rotationYaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw) - 90F;
 
 					if (prevFacing != EnumFacing.fromAngle(this.rotationYaw))
@@ -351,13 +369,14 @@ public class EntitySkateboard extends Entity
 						this.rotation += 90;
 						this.prevFacing = EnumFacing.fromAngle(this.rotationYaw);
 					}
-				}
+				}*/
 			}
 		}
 		else
 		{
 			this.setRotation(EnumFacing.fromAngle(this.angleOnJump).getHorizontalIndex() * 90, this.rotationPitch);
 		}
+		
 
 		this.motionY *= 0.9800000190734863D;
 		if (!grinding)
@@ -371,11 +390,33 @@ public class EntitySkateboard extends Entity
 		life++;
 		if (life >= 10000)
 		{
-			this.setDead();
+			//this.setDead();
 		}
 	}
-
+	
 	@Override
+	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) 
+	{
+		player.startRiding(this, false);
+		return EnumActionResult.SUCCESS;
+	}
+	
+	/*@Override
+	public void updateRidden() 
+	{
+		if(getControllingPassenger() != null)
+		{
+			((EntityLivingBase) getControllingPassenger()).setRenderYawOffset(rotationYaw + (this.isGoofy() ? -90F : 90F));
+		}
+	}*/
+	
+	@Override
+	public void updatePassenger(Entity passenger) 
+	{
+		super.updatePassenger(passenger);
+	}
+
+	/*@Override
 	public void updateRiderPosition()
 	{
 		if (this.riddenByEntity != null)
@@ -404,7 +445,7 @@ public class EntitySkateboard extends Entity
 
 			return true;
 		}
-	}
+	}*/
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tagCompund)
@@ -416,6 +457,11 @@ public class EntitySkateboard extends Entity
 	protected void writeEntityToNBT(NBTTagCompound tagCompound)
 	{
 
+	}
+	
+	public void push() 
+	{
+		this.currentSpeed += 1;
 	}
 
 	public void handleLanding()
@@ -446,12 +492,13 @@ public class EntitySkateboard extends Entity
 
 	public void performStack()
 	{
-		if (!worldObj.isRemote && riddenByEntity != null)
+		Entity riding = getControllingPassenger();
+		if (!worldObj.isRemote && riding != null)
 		{
-			riddenByEntity.attackEntityFrom(MrCrayfishSkateboardingMod.skateboardDamage, 2);
-			if (riddenByEntity instanceof EntityLivingBase)
+			riding.attackEntityFrom(MrCrayfishSkateboardingMod.skateboardDamage, 2);
+			if (riding instanceof EntityLivingBase)
 			{
-				((EntityLivingBase) riddenByEntity).mountEntity((Entity) null);
+				riding.dismountRidingEntity();
 			}
 		}
 	}
@@ -510,10 +557,19 @@ public class EntitySkateboard extends Entity
 		rotation = 0;
 		currentTrick = null;
 		inTrickTimer = 0;
+		boardYaw = 0F;
+		prevBoardYaw = 0F;
+		boardRotationX = 0F;
+		boardRotationY = 0F;
+		boardRotationZ = 0F;
+		prevBoardRotationX = 0F;
+		prevBoardRotationY = 0F;
+		prevBoardRotationZ = 0F;
 	}
 
 	public void jump()
 	{
+		System.out.println("Jumping");
 		if (grinding)
 		{
 			jumping = false;
@@ -526,6 +582,7 @@ public class EntitySkateboard extends Entity
 		onGround = false;
 		angleOnJump = this.rotationYaw;
 		prevFacing = EnumFacing.fromAngle(angleOnJump);
+		System.out.println(rotationYaw);
 	}
 
 	private float interpolateRotation(float start, float end)
@@ -628,5 +685,15 @@ public class EntitySkateboard extends Entity
 	public void setFlipped()
 	{
 		this.flipped ^= true;
+	}
+	
+	@Override
+	public Entity getControllingPassenger() 
+	{
+		if(getPassengers().size() > 0)
+		{
+			return getPassengers().get(0);
+		}
+		return null;
 	}
 }

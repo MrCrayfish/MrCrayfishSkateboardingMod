@@ -36,10 +36,10 @@ public class MessagePush implements IMessage, IMessageHandler<MessagePush, IMess
 	@Override
 	public IMessage onMessage(MessagePush message, MessageContext ctx)
 	{
-		System.out.println("Pushing");
+		//System.out.println("Pushing");
 		World world = ctx.getServerHandler().playerEntity.worldObj;
 		EntitySkateboard skateboard = (EntitySkateboard) world.getEntityByID(message.entityId);
-		skateboard.push();
+		//skateboard.push();
 		return null;
 	}
 }

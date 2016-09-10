@@ -13,7 +13,7 @@ public interface Trick
 	
 	public void onEnd(EntitySkateboard skateboard);
 	
-	public void updateBoard(EntitySkateboard skateboard, ModelRenderer boardModel);
+	public void updateBoard(EntitySkateboard skateboard);
 	
 	public double points();
 	

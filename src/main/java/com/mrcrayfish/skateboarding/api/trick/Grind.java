@@ -7,7 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 
 public interface Grind extends Trick
 {
-	public void updatePlayer(ModelPlayer player, EntitySkateboard skateboard);
+	public void updatePlayer(EntitySkateboard skateboard);
 	
 	public double[] offsetBoardPosition(EntitySkateboard skateboard);
 }
