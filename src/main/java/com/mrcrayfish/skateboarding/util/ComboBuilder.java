@@ -21,6 +21,7 @@ public class ComboBuilder
 
 	public void addTrick(Trick trick, double rotation)
 	{
+		System.out.println("Rotation:" + rotation);
 		if (!inCombo)
 		{
 			reset();
@@ -33,7 +34,7 @@ public class ComboBuilder
 		addTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
 
 		String pre = "";
-		rotation += 45;
+		rotation += 90;
 		int rotCount = (int) ((rotation) / 180);
 		System.out.println(rotation);
 		System.out.println(rotCount);
@@ -41,7 +42,7 @@ public class ComboBuilder
 		{
 			pre += rotCount * 180 + " ";
 		}
-		performedTricks.add(pre + trick.getName());
+		performedTricks.add(pre + trick.getName(rotCount * 180));
 
 		recentlyAdded = true;
 	}
@@ -51,7 +52,7 @@ public class ComboBuilder
 		int count = 0;
 		for (String name : performedTricks)
 		{
-			if (name.equals(trick.getName()))
+			if (name.equals(trick.getName(0)))
 			{
 				count++;
 			}

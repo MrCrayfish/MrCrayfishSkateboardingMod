@@ -12,7 +12,7 @@ import com.mrcrayfish.skateboarding.util.GrindHelper;
 public class TrickTailslide implements Grind
 {
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Tailslide";
 	}

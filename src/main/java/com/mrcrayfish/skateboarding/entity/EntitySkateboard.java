@@ -343,13 +343,7 @@ public class EntitySkateboard extends Entity
 				double newX = this.prevPosX - this.posX;
 				double newZ = this.prevPosZ - this.posZ;
 	
-				if (newX * newX + newZ * newZ > 0.001D)
-				{
-					init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
-					System.out.println(init);
-				}
-				
-				
+				init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
 	
 				double d12 = MathHelper.wrapDegrees(init - (double) this.rotationYaw);
 	
@@ -464,7 +458,7 @@ public class EntitySkateboard extends Entity
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
 			}
 		}
-		print();
+		//print();
 	}
 
 	public int getDifferenceWithFix(int initAngle, int newAngle)

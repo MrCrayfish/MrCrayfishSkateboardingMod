@@ -18,7 +18,7 @@ public class Trick360Heelflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Laser Flip";
 	}

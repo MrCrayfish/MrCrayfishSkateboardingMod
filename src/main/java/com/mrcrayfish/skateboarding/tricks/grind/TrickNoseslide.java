@@ -14,7 +14,7 @@ import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 public class TrickNoseslide implements Grind
 {
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Noseslide";
 	}

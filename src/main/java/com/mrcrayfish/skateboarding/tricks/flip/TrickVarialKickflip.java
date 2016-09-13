@@ -19,7 +19,7 @@ public class TrickVarialKickflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Varial Kickflip";
 	}

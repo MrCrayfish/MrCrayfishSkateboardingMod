@@ -11,7 +11,7 @@ public class Trick5050 implements Grind
 {
 	
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "5050";
 	}

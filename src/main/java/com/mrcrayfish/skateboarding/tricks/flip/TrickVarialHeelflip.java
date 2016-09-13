@@ -19,7 +19,7 @@ public class TrickVarialHeelflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Varial Heelflip";
 	}

@@ -7,7 +7,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public interface Trick
 {
-	public String getName();
+	public String getName(int rotation);
 	
 	public void onStart(EntitySkateboard skateboard);
 	

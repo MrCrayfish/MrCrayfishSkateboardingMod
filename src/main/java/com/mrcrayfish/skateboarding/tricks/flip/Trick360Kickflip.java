@@ -19,7 +19,7 @@ public class Trick360Kickflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "360 Flip";
 	}

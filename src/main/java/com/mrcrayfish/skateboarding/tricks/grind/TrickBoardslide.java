@@ -14,7 +14,7 @@ public class TrickBoardslide implements Grind
 {
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Boardslide";
 	}

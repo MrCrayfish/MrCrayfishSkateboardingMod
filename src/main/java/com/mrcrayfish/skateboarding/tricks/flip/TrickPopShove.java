@@ -17,7 +17,7 @@ public class TrickPopShove implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Pop Shove-it";
 	}

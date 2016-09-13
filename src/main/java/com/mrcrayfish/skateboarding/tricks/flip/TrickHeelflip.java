@@ -17,7 +17,7 @@ public class TrickHeelflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Heelflip";
 	}

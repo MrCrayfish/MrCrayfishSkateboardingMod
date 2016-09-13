@@ -17,7 +17,7 @@ public class TrickKickflip implements Flip
 	}
 
 	@Override
-	public String getName()
+	public String getName(int rotation)
 	{
 		return "Kickflip";
 	}
