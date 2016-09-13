@@ -29,7 +29,6 @@ public class SkateboardInput {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		System.out.println("Key evernt");
 		Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		if (entity != null && entity instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
@@ -43,8 +42,7 @@ public class SkateboardInput {
 					skateboard.jump();
 					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
 				}
-				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
-				{
+				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown()) {
 					PacketHandler.INSTANCE.sendToServer(new MessagePush(skateboard.getEntityId()));
 				}
 			} else {

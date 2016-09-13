@@ -26,29 +26,30 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 	{
 		GlStateManager.pushMatrix();
 		{
-			if (skateboard.isInTrick() && !skateboard.isGrinding())
-			{
+			if (skateboard.isInTrick() && !skateboard.isGrinding()) {
 				y = -0.3;
 			}
 			
-			if (skateboard.getControllingPassenger() != null)
-			{
-				if (skateboard.getControllingPassenger() instanceof EntityPlayer)
-				{
+			if (skateboard.getControllingPassenger() != null) {
+				if (skateboard.getControllingPassenger() instanceof EntityPlayer) {
+					
 					EntityPlayer player = (EntityPlayer) skateboard.getControllingPassenger();
-					player.renderYawOffset = (skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks) + 90F;
-					if(skateboard.isGrinding())
-					{
-						if(skateboard.getCurrentTrick() instanceof Grind)
-						{
+					player.prevRenderYawOffset = skateboard.prevRotationYaw + 90F;
+					player.renderYawOffset = skateboard.rotationYaw + 90F;
+					
+					if(skateboard.isGrinding()) {
+						if(skateboard.getCurrentTrick() instanceof Grind) {
 							Grind grind = (Grind) skateboard.getCurrentTrick();
 							grind.updatePlayer(skateboard);
 						}
 					}
-					
 				}
 			}
 			GlStateManager.translate(x, y + 0.18, z);
+			if(skateboard.rotationYaw != skateboard.prevRotationYaw)
+			{
+				//System.out.println(skateboard.prevRotationYaw + " " + skateboard.rotationYaw);
+			}
 			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
 			GlStateManager.rotate(-90F, 0, 1, 0);
 			this.bindEntityTexture(skateboard);

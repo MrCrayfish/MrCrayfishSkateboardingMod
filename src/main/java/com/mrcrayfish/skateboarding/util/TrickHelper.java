@@ -11,8 +11,6 @@ public class TrickHelper
 	{
 		totalSpin = skateboard.isGoofy() ? -totalSpin : totalSpin;
 		skateboard.boardYaw = (totalSpin / performTime) * skateboard.getInTrickTimer();
-		
-		System.out.println((totalSpin / performTime) * skateboard.getInTrickTimer());
 	}
 
 	public static void flipBoard(EntitySkateboard skateboard, float totalSpin, int performTime, Axis axis)
@@ -30,7 +28,6 @@ public class TrickHelper
 			skateboard.boardRotationZ = (totalSpin / performTime) * skateboard.getInTrickTimer();
 			break;
 		}
-		System.out.println(skateboard.boardRotationZ);
 	}
 
 	public static enum Axis

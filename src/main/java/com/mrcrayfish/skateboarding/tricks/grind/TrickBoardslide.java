@@ -22,7 +22,7 @@ public class TrickBoardslide implements Grind
 	@Override
 	public void updateBoard(EntitySkateboard skateboard)
 	{
-		skateboard.boardRotationY = 90D;
+		skateboard.boardRotationY = -90D;
 	}
 	
 	@Override
@@ -34,8 +34,8 @@ public class TrickBoardslide implements Grind
 	@Override
 	public void updatePlayer(EntitySkateboard skateboard)
 	{
-		Minecraft.getMinecraft().thePlayer.prevRenderYawOffset = 90F;
-		Minecraft.getMinecraft().thePlayer.renderYawOffset = 90F;
+		Minecraft.getMinecraft().thePlayer.prevRenderYawOffset -= 90F;
+		Minecraft.getMinecraft().thePlayer.renderYawOffset -= 90F;
 	}
 
 	@Override

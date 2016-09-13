@@ -34,7 +34,8 @@ public class TrickDarkslide implements Grind
 	@Override
 	public void updatePlayer(EntitySkateboard skateboard)
 	{
-		Minecraft.getMinecraft().thePlayer.renderYawOffset = (float) (skateboard.rotationYaw + skateboard.boardRotationX);
+		Minecraft.getMinecraft().thePlayer.prevRenderYawOffset -= 90F;
+		Minecraft.getMinecraft().thePlayer.renderYawOffset -= 90F;
 	}
 
 	@Override
