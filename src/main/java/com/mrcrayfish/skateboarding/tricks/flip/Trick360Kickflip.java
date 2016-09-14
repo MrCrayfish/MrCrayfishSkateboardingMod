@@ -27,7 +27,7 @@ public class Trick360Kickflip implements Flip
 	@Override
 	public int performTime()
 	{
-		return 12;
+		return 10;
 	}
 
 	@Override
