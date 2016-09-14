@@ -24,10 +24,10 @@ public class ComboOverlay
 {
 	private static final ModelResourceLocation RESOURCE = new ModelResourceLocation("csm:textures/gui/overlay.png");
 	
-	private static final Color PUMP_FULL = new Color(0, 131, 183, 140);
-	private static final Color PUMP_ONE = new Color(183, 33, 0, 140);
-	private static final Color PUMP_TWO = new Color(183, 168, 0, 140);
-	private static final Color PUMP_THREE = new Color(48, 183, 0, 140);
+	private static final Color PUMP_FULL = new Color(0, 131, 183, 180);
+	private static final Color PUMP_ONE = new Color(183, 33, 0, 180);
+	private static final Color PUMP_TWO = new Color(183, 168, 0, 180);
+	private static final Color PUMP_THREE = new Color(48, 183, 0, 180);
 	
 	@SubscribeEvent
 	public void onTick(TickEvent.RenderTickEvent event)
@@ -53,6 +53,7 @@ public class ComboOverlay
 				int height = (mc.displayHeight / 4);
 				
 				mc.getTextureManager().bindTexture(RESOURCE);
+				GlStateManager.enableBlend();
 
 				// Pumping
 				if(SkateboardInput.pumping)
@@ -78,7 +79,7 @@ public class ComboOverlay
 				this.drawRectWithTexture(10, 10, 0, 0, 0, 106, 15, 106, 15);
 				
 				// Juice
-				this.drawRectWithTexture(15, 14, 0, 0, 15, combo.getTime(), 7, combo.getTime(), 7);
+				this.drawRectWithTexture(15, 14, 0, 0, 15, Math.min(96, combo.getTime()), 7, Math.min(96, combo.getTime()), 7);
 				
 				ChatFormatting format = ChatFormatting.RESET;
 				if(!combo.isInCombo())
@@ -122,8 +123,6 @@ public class ComboOverlay
 	public void drawRect(int x, int y, int width, int height, Color color)
     {
 		GlStateManager.disableTexture2D();
-		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
 		GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 0.5F);
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer worldrenderer = tessellator.getBuffer();	
@@ -134,7 +133,6 @@ public class ComboOverlay
         worldrenderer.pos((double)(x + 0), (double)(y + 0), (double)0).endVertex();
         tessellator.draw();
         GlStateManager.color(1.0F, 1.0F, 1.0F);
-        GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
         
     }

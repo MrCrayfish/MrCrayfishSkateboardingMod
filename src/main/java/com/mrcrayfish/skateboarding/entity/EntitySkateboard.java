@@ -258,8 +258,8 @@ public class EntitySkateboard extends Entity
 					this.rotationYaw = entity.rotationYaw - 90F;
 				}
 				
-				if (jumpingTimer < 10)
-					motionY = 0.5D - (double) jumpingTimer * 0.03D;
+				//if (jumpingTimer < 10)
+					//motionY = 0.5D - (double) jumpingTimer * 0.03D;
 				
 				if (currentTrick != null)
 				{
@@ -277,23 +277,23 @@ public class EntitySkateboard extends Entity
 							getCurrentTrick().onEnd(this);
 							resetTrick();
 						}
-						else if (this.onGround && flip.performTime() > inTrickTimer)
-						{
-							jumping = false;
-							jumpingTimer = 0;
-							onGround = true;
-							resetTrick();
-							performStack();
-						}
 					}
 				}
 	
-				if (this.onGround && !grinding)
+				if (onGround && !grinding)
 				{
-					System.out.println("On Landed");
+					System.out.println("Landed");
 					jumping = false;
 					jumpingTimer = 0;
-					resetTrick();
+					if(currentTrick != null)
+					{
+						if (currentTrick instanceof Flip)
+						{
+							System.out.println("Is a flip");
+							resetTrick();
+							PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
+						}
+					}
 					handleLanding();
 				}
 	
@@ -359,7 +359,7 @@ public class EntitySkateboard extends Entity
 				this.rotationYaw = (float) ((double) this.rotationYaw + d12);
 			}
 	
-			this.motionY *= 0.9800000190734863D;
+			//this.motionY *= 0.9800000190734863D;
 			if (!grinding)
 			{
 				this.currentSpeed *= 0.99D;
@@ -379,7 +379,11 @@ public class EntitySkateboard extends Entity
 	@Override
 	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) 
 	{
-		player.startRiding(this, false);
+		if(player.isSneaking()) {
+			this.setDead();
+		} else {
+			player.startRiding(this, false);
+		}
 		return EnumActionResult.SUCCESS;
 	}
 	
@@ -539,9 +543,8 @@ public class EntitySkateboard extends Entity
 		boardRotationZ = 0F;
 	}
 
-	public void jump()
+	public void jump(double height)
 	{
-		System.out.println("Jumping");
 		if (grinding)
 		{
 			jumping = false;
@@ -553,24 +556,7 @@ public class EntitySkateboard extends Entity
 		jumping = true;
 		onGround = false;
 		angleOnJump = this.rotationYaw;
-		//print();
-	}
-
-	private float interpolateRotation(float start, float end)
-	{
-		float f3;
-
-		for (f3 = end - start; f3 < -180.0F; f3 += 360.0F)
-		{
-			;
-		}
-
-		while (f3 >= 180.0F)
-		{
-			f3 -= 360.0F;
-		}
-
-		return start + 0.1F * f3;
+		motionY = Math.sqrt((height + 1) * 0.22);
 	}
 
 	public boolean isPushed()
@@ -687,7 +673,6 @@ public class EntitySkateboard extends Entity
 		System.out.println("Switch: " + switch_);
 		System.out.println("Flipped: " + flipped);
 		System.out.println("Angle On Jump: " + angleOnJump);
-		System.out.println("Face On Jump: " + faceOnJump);
 		System.out.println("Angle On Trick: " + angleOnTrick);
 		System.out.println("Rotation: " + rotation);
 		System.out.println("Board Yaw: " + boardYaw);
