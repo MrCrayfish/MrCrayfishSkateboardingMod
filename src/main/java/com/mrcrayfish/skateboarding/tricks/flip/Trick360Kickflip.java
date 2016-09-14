@@ -9,7 +9,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.util.TrickHelper;
 import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
-public class Trick360Kickflip implements Flip
+public class Trick360Kickflip extends Flip
 {
 	@Override
 	public void updateBoard(EntitySkateboard skateboard)
@@ -22,12 +22,6 @@ public class Trick360Kickflip implements Flip
 	public String getName(int rotation)
 	{
 		return "360 Flip";
-	}
-
-	@Override
-	public int performTime()
-	{
-		return 10;
 	}
 
 	@Override

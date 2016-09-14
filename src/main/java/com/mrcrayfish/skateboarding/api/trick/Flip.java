@@ -4,7 +4,10 @@ import net.minecraft.client.model.ModelRenderer;
 
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
-public interface Flip extends Trick
+public abstract class Flip implements Trick 
 {
-	public int performTime();
+	public final int performTime() 
+	{
+		return difficulty().getPerformTime();
+	}
 }
