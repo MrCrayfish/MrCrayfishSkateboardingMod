@@ -39,25 +39,32 @@ public class SkateboardInput {
 		if (entity != null && entity instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
 
+			// Switch Regular to Goofy
 			if (Minecraft.getMinecraft().gameSettings.keyBindDrop.isKeyDown()) {
 				skateboard.setGoofy(!skateboard.isGoofy());
 			}
 
-			if (!skateboard.isJumping()) {
-				if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown()) {
-					pumping = true;
-				}
-				if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && pumping) {
-					skateboard.jump();
+			// Pumping
+			if (Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed()) {
+				pumping = true;
+			}
+			if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && pumping) {
+				if(!skateboard.isJumping()) {
+					skateboard.jump(pumpingTimer / 20.0);
 					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
-					pumping = false;
-					pumpingTimer = 0;
 				}
+				pumping = false;
+				pumpingTimer = 0;
+			}
+			
+			// Pushing
+			if(!skateboard.isJumping()) {
 				if (Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown()) {
 					PacketHandler.INSTANCE.sendToServer(new MessagePush(skateboard.getEntityId()));
 				}
 			}
 			
+			// Trick Combinations
 			GameSettings settings = Minecraft.getMinecraft().gameSettings;
 			if (keys.size() < 4) {
 				if (settings.keyBindForward.isPressed()) {

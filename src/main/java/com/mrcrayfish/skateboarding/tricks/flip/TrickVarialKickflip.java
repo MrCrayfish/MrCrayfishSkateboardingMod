@@ -27,7 +27,7 @@ public class TrickVarialKickflip implements Flip
 	@Override
 	public int performTime()
 	{
-		return 10;
+		return 8;
 	}
 
 	@Override

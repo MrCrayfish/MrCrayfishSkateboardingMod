@@ -25,7 +25,7 @@ public class TrickHeelflip implements Flip
 	@Override
 	public int performTime()
 	{
-		return 8;
+		return 6;
 	}
 
 	@Override
