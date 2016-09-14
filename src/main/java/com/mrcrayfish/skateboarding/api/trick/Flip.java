@@ -6,7 +6,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public abstract class Flip implements Trick 
 {
-	public final int performTime() 
+	public int performTime() 
 	{
 		return difficulty().getPerformTime();
 	}
