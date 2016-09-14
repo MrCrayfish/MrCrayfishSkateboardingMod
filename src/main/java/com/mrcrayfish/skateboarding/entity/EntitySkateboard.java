@@ -48,7 +48,6 @@ public class EntitySkateboard extends Entity
 	private boolean flipped = false;
 
 	public float angleOnJump;
-	private EnumFacing faceOnJump;
 	private float angleOnTrick;
 	private int rotation;
 
@@ -521,29 +520,6 @@ public class EntitySkateboard extends Entity
 		{
 			currentTrick.onStart(this);
 		}
-	}
-
-	public Facing getFacing()
-	{
-		int initFacing = EnumFacing.fromAngle(this.angleOnJump + 90F).getHorizontalIndex() * 90;
-		int newFacing = EnumFacing.fromAngle(this.rotationYaw + 90F).getHorizontalIndex() * 90;
-		int difference = getDifferenceWithFix(initFacing, newFacing);
-		switch (difference)
-		{
-		case 90:
-			return Facing.FRONT;
-		case -90:
-			return Facing.BACK;
-		case 180:
-			return Facing.SWITCH;
-		case -180:
-			return Facing.SWITCH;
-		case 270:
-			return Facing.BACK;
-		case -270:
-			return Facing.FRONT;
-		}
-		return Facing.SAME;
 	}
 
 	public void resetTrick()
