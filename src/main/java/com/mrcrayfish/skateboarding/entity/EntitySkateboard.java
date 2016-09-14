@@ -490,10 +490,17 @@ public class EntitySkateboard extends Entity
 	public void startTrick(Trick trick)
 	{
 		currentTrick = trick;
+		
 		if (trick instanceof Flip)
 		{
+			if(!isJumping()) 
+			{
+				currentTrick = null;
+				return;
+			}
 			onGround = false;
 		}
+		
 		if (trick instanceof Grind)
 		{
 			if (GrindHelper.canGrind(worldObj, posX, posY, posZ))
@@ -509,7 +516,11 @@ public class EntitySkateboard extends Entity
 				currentTrick = null;
 			}
 		}
-		trick.onStart(this);
+		
+		if(currentTrick != null)
+		{
+			currentTrick.onStart(this);
+		}
 	}
 
 	public Facing getFacing()
