@@ -10,6 +10,7 @@ import com.mrcrayfish.skateboarding.event.SkateboardInput;
 import com.mrcrayfish.skateboarding.util.ComboBuilder;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -49,8 +50,9 @@ public class ComboOverlay
 			{
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Minecraft mc = Minecraft.getMinecraft();
-				int width = (mc.displayWidth / 4);
-				int height = (mc.displayHeight / 4);
+				ScaledResolution scaledresolution = new ScaledResolution(mc);
+				int width = scaledresolution.getScaledWidth() / 2;
+				int height = scaledresolution.getScaledHeight() / 2;
 				
 				mc.getTextureManager().bindTexture(RESOURCE);
 				GlStateManager.enableBlend();
