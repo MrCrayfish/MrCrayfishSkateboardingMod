@@ -109,20 +109,30 @@ public class ModelPlayerOverride extends ModelPlayerBase
 	@Override
 	public void beforeRender(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6) 
 	{
+				
+	}
+	
+	@Override
+	public void render(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6) {
+		float rotation = 0F;
 		EntityPlayer player = (EntityPlayer) paramEntity;
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
-			//player.renderYawOffset = skateboard.rotationYaw;
 			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)
 			{
 				Trick trick = skateboard.getCurrentTrick();
 				if (trick instanceof Grind)
 				{
 					Grind grind = (Grind) trick;
-					//grind.updatePlayer(skateboard);
+					double[] offset = grind.getBoardOffsetPosition(skateboard);
+					GlStateManager.translate(-offset[0], offset[1], offset[2]);
+					rotation = grind.getBodyRotation(skateboard);
+					GlStateManager.rotate(rotation, 0, 1, 0);
+					rotation -= grind.getHeadRotation(skateboard);
 				}
 			}
-		}		
+		}
+		super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, -rotation, paramFloat5, paramFloat6);
 	}
 }

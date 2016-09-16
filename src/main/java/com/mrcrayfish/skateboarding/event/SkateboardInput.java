@@ -33,7 +33,6 @@ public class SkateboardInput {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		System.out.println("Event Pressed: " + Keyboard.getEventCharacter());
 		char c = Keyboard.getEventCharacter();
 		Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
 		if (entity != null && entity instanceof EntitySkateboard) {
@@ -51,7 +50,7 @@ public class SkateboardInput {
 			if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && pumping) {
 				if(!skateboard.isJumping()) {
 					skateboard.jump(pumpingTimer / 20.0);
-					PacketHandler.INSTANCE.sendToServer(new MessageJump(skateboard.getEntityId()));
+					PacketHandler.INSTANCE.sendToServer(new MessageJump(pumpingTimer / 20.0));
 				}
 				pumping = false;
 				pumpingTimer = 0;

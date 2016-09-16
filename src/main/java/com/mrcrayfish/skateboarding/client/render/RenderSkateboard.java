@@ -30,6 +30,12 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 				y = -0.3;
 			}
 			
+			GlStateManager.translate(x, y + 0.18, z);
+			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
+			GlStateManager.rotate(-90F, 0, 1, 0);
+			this.bindEntityTexture(skateboard);
+			GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+			
 			if (skateboard.getControllingPassenger() != null) {
 				if (skateboard.getControllingPassenger() instanceof EntityPlayer) {
 					
@@ -40,30 +46,23 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 					if(skateboard.isGrinding()) {
 						if(skateboard.getCurrentTrick() instanceof Grind) {
 							Grind grind = (Grind) skateboard.getCurrentTrick();
-							grind.updatePlayer(skateboard);
+							double[] offset = grind.getBoardOffsetPosition(skateboard);
+							GlStateManager.translate(offset[0], offset[1], offset[2]);
 						}
 					}
 				}
 			}
-			GlStateManager.translate(x, y + 0.18, z);
-			if(skateboard.rotationYaw != skateboard.prevRotationYaw)
-			{
-				//System.out.println(skateboard.prevRotationYaw + " " + skateboard.rotationYaw);
-			}
-			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
-			GlStateManager.rotate(-90F, 0, 1, 0);
-			this.bindEntityTexture(skateboard);
-			GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-			
+
 			modelSkateboard.setRotationAngles(0F, 0F, 0F, 0F, 0F, 0F, skateboard);
 			
+			// Board Rotation (Global)
 			GlStateManager.rotate((float) (skateboard.prevBoardYaw + (skateboard.boardYaw - skateboard.prevBoardYaw) * partialTicks), 0, 1, 0);
 			
-			modelSkateboard.boardBase.rotateAngleY = 0F;
-			modelSkateboard.boardBase.rotateAngleY += (float) Math.toRadians(skateboard.prevBoardRotationY + (skateboard.boardRotationY - skateboard.prevBoardRotationY) * partialTicks);
-			if(skateboard.isFlipped()) modelSkateboard.boardBase.rotateAngleY += Math.toRadians(180F);
-			
+			// Board Rotation (Local)
 			modelSkateboard.boardBase.rotateAngleX = (float) Math.toRadians(skateboard.prevBoardRotationX + (skateboard.boardRotationX - skateboard.prevBoardRotationX) * partialTicks);
+			modelSkateboard.boardBase.rotateAngleY = 0F;
+			if(skateboard.isFlipped()) modelSkateboard.boardBase.rotateAngleY += Math.toRadians(180F);
+			modelSkateboard.boardBase.rotateAngleY += (float) Math.toRadians(skateboard.prevBoardRotationY + (skateboard.boardRotationY - skateboard.prevBoardRotationY) * partialTicks);
 			modelSkateboard.boardBase.rotateAngleZ = (float) Math.toRadians(skateboard.prevBoardRotationZ + (skateboard.boardRotationZ - skateboard.prevBoardRotationZ) * partialTicks);
 			
 			modelSkateboard.render(skateboard, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);

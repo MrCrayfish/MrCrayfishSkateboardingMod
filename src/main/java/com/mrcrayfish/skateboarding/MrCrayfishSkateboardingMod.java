@@ -47,7 +47,7 @@ public class MrCrayfishSkateboardingMod
 	{
 		proxy.registerRenders();
 		
-		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 64, 20, false);
+		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 64, 1, false);
 
 		if (event.getSide() == Side.CLIENT)
 		{

@@ -7,7 +7,9 @@ import net.minecraft.client.model.ModelRenderer;
 
 public interface Grind extends Trick
 {
-	public void updatePlayer(EntitySkateboard skateboard);
+	public float getHeadRotation(EntitySkateboard skateboard);
 	
-	public double[] offsetBoardPosition(EntitySkateboard skateboard);
+	public float getBodyRotation(EntitySkateboard skateboard);
+	
+	public double[] getBoardOffsetPosition(EntitySkateboard skateboard);
 }

@@ -3,6 +3,7 @@ package com.mrcrayfish.skateboarding.tricks.grind;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 
 import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
@@ -22,19 +23,25 @@ public class TrickNoseslide implements Grind
 	@Override
 	public void updateBoard(EntitySkateboard skateboard)
 	{
-		skateboard.boardRotationY = 90F;
+		skateboard.boardRotationY = -90F;
 	}
 	
 	@Override
-	public double[] offsetBoardPosition(EntitySkateboard skateboard)
+	public double[] getBoardOffsetPosition(EntitySkateboard skateboard)
 	{
-		return GrindHelper.setOffset(skateboard, 0.0, 0.0, -0.49);
+		return new double[] { 0.49 , 0.0, 0.0 };
 	}
 	
 	@Override
-	public void updatePlayer(EntitySkateboard skateboard)
+	public float getHeadRotation(EntitySkateboard skateboard) 
 	{
-		Minecraft.getMinecraft().thePlayer.renderYawOffset = skateboard.rotationYaw;
+		return 0F;
+	}
+	
+	@Override
+	public float getBodyRotation(EntitySkateboard skateboard)
+	{
+		return -90F;
 	}
 
 	@Override
