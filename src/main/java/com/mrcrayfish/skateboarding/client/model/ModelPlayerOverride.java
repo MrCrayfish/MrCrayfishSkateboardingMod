@@ -126,7 +126,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 				{
 					Grind grind = (Grind) trick;
 					double[] offset = grind.getBoardOffsetPosition(skateboard);
-					GlStateManager.translate(-offset[0], offset[1], offset[2]);
+					GlStateManager.translate(-offset[0], -offset[1], offset[2]);
 					rotation = grind.getBodyRotation(skateboard);
 					GlStateManager.rotate(rotation, 0, 1, 0);
 					rotation -= grind.getHeadRotation(skateboard);

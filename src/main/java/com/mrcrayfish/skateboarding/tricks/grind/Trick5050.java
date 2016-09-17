@@ -25,7 +25,7 @@ public class Trick5050 implements Grind
 	@Override
 	public double[] getBoardOffsetPosition(EntitySkateboard skateboard)
 	{
-		return new double[] { 0, 0, 0 };
+		return new double[] { 0, -0.02, 0 };
 	}
 	
 	@Override

@@ -29,7 +29,7 @@ public class TrickDarkslide implements Grind
 	@Override
 	public double[] getBoardOffsetPosition(EntitySkateboard skateboard)
 	{
-		return new double[] { 0, 0, 0 };
+		return new double[] { 0, -0.18, 0 };
 	}
 	
 	@Override

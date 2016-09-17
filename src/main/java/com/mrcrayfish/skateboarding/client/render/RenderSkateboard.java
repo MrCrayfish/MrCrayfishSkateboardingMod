@@ -47,7 +47,7 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 						if(skateboard.getCurrentTrick() instanceof Grind) {
 							Grind grind = (Grind) skateboard.getCurrentTrick();
 							double[] offset = grind.getBoardOffsetPosition(skateboard);
-							GlStateManager.translate(offset[0], offset[1], offset[2]);
+							GlStateManager.translate(offset[0], -offset[1], offset[2]);
 						}
 					}
 				}
