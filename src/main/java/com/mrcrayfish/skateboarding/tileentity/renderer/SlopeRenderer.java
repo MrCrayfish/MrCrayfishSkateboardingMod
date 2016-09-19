@@ -62,6 +62,14 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 				buffer.pos(0, 0, 1).tex(1, 0.5).endVertex();
 				buffer.pos(0, -0.5,1).tex(1, 1).endVertex();
 				tessellator.draw();
+				
+				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING), 2);
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				buffer.pos(0, -0.5, 1).tex(1, 0.5).endVertex();
+				buffer.pos(0, 0, 1).tex(1, 0).endVertex();
+				buffer.pos(0, 0, 0).tex(0, 0).endVertex();
+				buffer.pos(0, -0.5, 0).tex(0, 0.5).endVertex();
+				tessellator.draw();
 			}
 			else
 			{
@@ -98,10 +106,10 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 			
 			getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING), 2);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			buffer.pos(1, 0, 0).tex(0, 0.5).endVertex();
+			buffer.pos(1, -0.5, 0).tex(0, 1).endVertex();
 			buffer.pos(1, 0.5, 0).tex(0, 0).endVertex();
 			buffer.pos(1, 0.5, 1).tex(1, 0).endVertex();
-			buffer.pos(1, 0, 1).tex(1, 0.5).endVertex();
+			buffer.pos(1, -0.5, 1).tex(1, 1).endVertex();
 			tessellator.draw();
 			
 			Minecraft.getMinecraft().getTextureManager().bindTexture(METAL_TEXTURE);

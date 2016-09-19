@@ -71,7 +71,6 @@ public class EntitySkateboard extends Entity
 	{
 		super(worldIn);
 		this.setSize(0.5F, 0.25F);
-		this.stepHeight = 0.25F;
 	}
 
 	public EntitySkateboard(World worldIn, double x, double y, double z)
