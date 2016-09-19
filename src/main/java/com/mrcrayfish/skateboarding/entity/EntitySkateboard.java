@@ -1,26 +1,25 @@
 package com.mrcrayfish.skateboarding.entity;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
-import com.mrcrayfish.skateboarding.api.TrickProperties.Facing;
 import com.mrcrayfish.skateboarding.api.trick.Flip;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
+import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageStack;
 import com.mrcrayfish.skateboarding.util.ComboBuilder;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -71,7 +70,8 @@ public class EntitySkateboard extends Entity
 	public EntitySkateboard(World worldIn)
 	{
 		super(worldIn);
-		this.setSize(1.0F, 0.5F);
+		this.setSize(0.5F, 0.25F);
+		this.stepHeight = 0.25F;
 	}
 
 	public EntitySkateboard(World worldIn, double x, double y, double z)
@@ -359,7 +359,6 @@ public class EntitySkateboard extends Entity
 				this.rotationYaw = (float) ((double) this.rotationYaw + d12);
 			}
 	
-			//this.motionY *= 0.9800000190734863D;
 			if (!grinding)
 			{
 				this.currentSpeed *= 0.99D;
@@ -455,7 +454,7 @@ public class EntitySkateboard extends Entity
 		if (worldObj.isRemote && currentSpeed > 4)
 		{
 			int difference = (int) (Math.abs(angleOnJump - rotationYaw) % 180);
-			System.out.println("Angle Change in jump: " + difference);
+			//TODO: Handle 180 here
 			if(difference > 60 && difference < 120)
 			{
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
@@ -496,9 +495,10 @@ public class EntitySkateboard extends Entity
 		
 		if (trick instanceof Flip)
 		{
+			Flip flip = (Flip) trick;
 			if(!isJumping()) 
 			{
-				currentTrick = null;
+				resetTrick();
 				return;
 			}
 			onGround = false;
@@ -654,6 +654,18 @@ public class EntitySkateboard extends Entity
 		return null;
 	}
 	
+	public boolean isOnSlope() 
+	{
+		return (worldObj.getBlockState(new BlockPos(posX - 0.25, posY, posZ - 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX + 0.25, posY, posZ - 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX - 0.25, posY, posZ + 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX + 0.25, posY, posZ + 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX + 0.25, posY - 0.9, posZ - 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX + 0.25, posY - 0.9, posZ - 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX - 0.25, posY - 0.9, posZ + 0.25)).getBlock() instanceof BlockSlope) ||
+			   (worldObj.getBlockState(new BlockPos(posX + 0.25, posY - 0.9, posZ + 0.25)).getBlock() instanceof BlockSlope);
+	}
+
 	public void print() 
 	{
 		EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();

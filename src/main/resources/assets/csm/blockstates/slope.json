@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=north,stacked=false": { "model": "csm:slope" },
+		"facing=east,stacked=false":  { "model": "csm:slope" },
+		"facing=south,stacked=false": { "model": "csm:slope" },
+		"facing=west,stacked=false":  { "model": "csm:slope" },
+		"facing=north,stacked=true": { "model": "csm:slope" },
+		"facing=east,stacked=true":  { "model": "csm:slope" },
+		"facing=south,stacked=true": { "model": "csm:slope" },
+		"facing=west,stacked=true":  { "model": "csm:slope" }
+    }
+}
