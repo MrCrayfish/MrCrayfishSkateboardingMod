@@ -69,7 +69,8 @@ public class EntitySkateboard extends Entity
 	public double prevBoardRotationZ;
 	
 	public boolean needsCameraUpdate;
-	public float prevCameraYaw;
+	public boolean canCameraIncrement;
+	public float cameraIncrement;
 	public float cameraYaw;
 
 	public EntitySkateboard(World worldIn)
@@ -184,7 +185,6 @@ public class EntitySkateboard extends Entity
 			prevBoardRotationX = boardRotationX;
 			prevBoardRotationY = boardRotationY;
 			prevBoardRotationZ = boardRotationZ;
-			prevCameraYaw = cameraYaw;
 			
 			/* Will only execute code if player is riding skateboard */
 			if (getControllingPassenger() != null)
@@ -209,7 +209,7 @@ public class EntitySkateboard extends Entity
 				/* If skateboard is not jumping, allow turning. When player jumps
 				 * from grinding, give exception to jump off in a direction using
 				 * allowOnce. */
-				if (!jumping || allowOnce)
+				if ((!jumping || allowOnce) && !needsCameraUpdate)
 				{
 					float f = entity.rotationYaw;
 	
@@ -223,6 +223,16 @@ public class EntitySkateboard extends Entity
 					this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 					this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
 					allowOnce = false;
+				}
+				
+				if(needsCameraUpdate)
+				{
+					canCameraIncrement = true;
+					cameraYaw -= cameraIncrement;
+					if(Math.floor(cameraYaw) == 0F) 
+					{
+						needsCameraUpdate = false;
+					}
 				}
 			}
 			else
@@ -467,21 +477,15 @@ public class EntitySkateboard extends Entity
 			}
 			else
 			{
-				System.out.println("Mod: " + difference);
-				System.out.println("Divided: " + (int) (Math.abs(angleOnJump - rotationYaw) / 180) % 2);
-				System.out.println("180's: " + Math.abs(angleOnJump - rotationYaw) / 180);
+				int dir = angleOnJump < rotationYaw ? 1 : -1;
 				float fakie = (Math.abs(angleOnJump - rotationYaw) / 180) % 2;
-				System.out.println(fakie);
-				System.out.println("Fakie?: " + (fakie > 0.66 && fakie < 1.33));
 				if(fakie > 0.66 && fakie < 1.33)
 				{
+					this.rotationYaw += 180F * dir;
+					this.prevRotationYaw = this.rotationYaw;
 					this.setSwitch_(!isSwitch_());
 					this.setFlipped();
-					EntityPlayer player = (EntityPlayer) getControllingPassenger();
-					rotationYaw += 180F;
-					prevRotationYaw = rotationYaw;
-					Minecraft.getMinecraft().gameSettings.smoothCamera = true;
-					player.rotationYaw += 180F;
+					this.setCameraUpdate(180F * dir);
 				}
 			}
 		}
@@ -668,6 +672,13 @@ public class EntitySkateboard extends Entity
 	public void setFlipped()
 	{
 		this.flipped ^= true;
+	}
+	
+	public void setCameraUpdate(float amount) 
+	{
+		this.needsCameraUpdate = true;
+		this.cameraIncrement = amount / 4F;
+		this.cameraYaw = amount;
 	}
 	
 	@Override

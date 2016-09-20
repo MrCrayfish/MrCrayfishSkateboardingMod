@@ -73,6 +73,15 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 					player.prevRenderYawOffset = skateboard.prevRotationYaw + 90F;
 					player.renderYawOffset = skateboard.rotationYaw + 90F;
 					
+					if(skateboard.needsCameraUpdate) 
+					{
+						if(skateboard.canCameraIncrement)
+						{
+							player.rotationYaw += skateboard.cameraIncrement;
+							skateboard.canCameraIncrement = false;
+						}
+					}
+					
 					if(skateboard.isGrinding()) {
 						if(skateboard.getCurrentTrick() instanceof Grind) {
 							Grind grind = (Grind) skateboard.getCurrentTrick();
