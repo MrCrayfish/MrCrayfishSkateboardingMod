@@ -78,7 +78,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 				this.modelPlayer.bipedRightLeg.rotationPointZ = 2.0F;
 				this.modelPlayer.bipedRightLeg.rotationPointX = 0.5F;
 
-				this.modelPlayer.bipedBody.rotateAngleY = (float) Math.toRadians(109);
+				this.modelPlayer.bipedBody.rotateAngleY = (float) Math.toRadians(-71);
 
 				this.modelPlayer.bipedLeftArm.rotateAngleX = 1F;
 				this.modelPlayer.bipedLeftArm.rotateAngleY = (float) Math.toRadians(106);
@@ -116,7 +116,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 	
 	@Override
 	public void render(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6) {
-		float rotation = 0F;
+		
 		EntityPlayer player = (EntityPlayer) paramEntity;
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
@@ -131,15 +131,18 @@ public class ModelPlayerOverride extends ModelPlayerBase
 				Trick trick = skateboard.getCurrentTrick();
 				if (trick instanceof Grind)
 				{
+					float rotation = 0F;
 					Grind grind = (Grind) trick;
 					double[] offset = grind.getBoardOffsetPosition(skateboard);
 					GlStateManager.translate(-offset[0], -offset[1], offset[2]);
 					rotation = grind.getBodyRotation(skateboard);
 					GlStateManager.rotate(rotation, 0, 1, 0);
 					rotation -= grind.getHeadRotation(skateboard);
+					super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, -rotation, paramFloat5, paramFloat6);
+					return;
 				}
 			}
 		}
-		super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, -rotation, paramFloat5, paramFloat6);
+		super.render(paramEntity, paramFloat1, paramFloat2, paramFloat3, paramFloat4, paramFloat5, paramFloat6);
 	}
 }

@@ -9,13 +9,13 @@ public class TrickHelper
 {
 	public static void spinBoard(EntitySkateboard skateboard, float totalSpin, int performTime)
 	{
-		totalSpin = skateboard.isGoofy() || (!skateboard.isGoofy() && skateboard.isSwitch_()) ? -totalSpin : totalSpin;
+		totalSpin = (skateboard.isGoofy() && !skateboard.isSwitch_()) || (!skateboard.isGoofy() && skateboard.isSwitch_()) ? -totalSpin : totalSpin;
 		skateboard.boardYaw = (totalSpin / performTime) * skateboard.getInTrickTimer();
 	}
 
 	public static void flipBoard(EntitySkateboard skateboard, float totalSpin, int performTime, Axis axis)
 	{
-		totalSpin = skateboard.isGoofy() || (!skateboard.isGoofy() && skateboard.isSwitch_()) ? totalSpin : -totalSpin;
+		totalSpin = (skateboard.isGoofy() && !skateboard.isSwitch_()) || (!skateboard.isGoofy() && skateboard.isSwitch_()) ? totalSpin : -totalSpin;
 		switch (axis)
 		{
 		case X:
