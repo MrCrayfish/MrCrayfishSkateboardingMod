@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
@@ -19,10 +20,9 @@ public class ComboBuilder
 	private boolean inCombo;
 	private boolean recentlyAdded;
 
-	public void addTrick(Trick trick, double rotation)
+	public void addTrick(Trick trick, double rotation, boolean direction)
 	{
-		System.out.println("Rotation:" + rotation);
-		if (!inCombo)
+		if (!inCombo) 
 		{
 			reset();
 			inCombo = true;
@@ -35,9 +35,17 @@ public class ComboBuilder
 
 		String pre = "";
 		int rotCount = (int) ((rotation + 90) / 180);
-		if (rotCount > 0 && !trick.hasMultipleNames())
+		if (rotCount > 0)
 		{
-			pre += rotCount * 180 + " ";
+			if(!(trick instanceof Grind))
+			{
+				pre += direction ? "BS " : "FS ";
+			}
+			
+			if(!trick.hasMultipleNames())
+			{
+				pre += rotCount * 180 + " ";
+			}
 		}
 		performedTricks.add(pre + trick.getName(rotCount * 180));
 

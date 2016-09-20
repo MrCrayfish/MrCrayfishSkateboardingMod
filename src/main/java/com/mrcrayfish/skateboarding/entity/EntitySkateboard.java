@@ -289,7 +289,11 @@ public class EntitySkateboard extends Entity
 						if (inTrickTimer > flip.performTime())
 						{
 							if (worldObj.isRemote)
-								combo.addTrick(getCurrentTrick(), Math.abs(angleOnJump - rotationYaw));
+							{
+								boolean direction = angleOnJump < rotationYaw;
+								if((!isGoofy() && isSwitch_()) || (isGoofy() && !isSwitch_())) direction ^= true;
+								combo.addTrick(getCurrentTrick(), Math.abs(angleOnJump - rotationYaw), direction);
+							}
 							getCurrentTrick().onEnd(this);
 							resetTrick();
 						}
@@ -535,7 +539,7 @@ public class EntitySkateboard extends Entity
 			if (GrindHelper.canGrind(worldObj, posX, posY, posZ))
 			{
 				handleLanding();
-				combo.addTrick(trick, 0);
+				combo.addTrick(trick, 0, true);
 				jumping = false;
 				jumpingTimer = 0;
 				grinding = true;
