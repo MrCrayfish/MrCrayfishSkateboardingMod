@@ -28,7 +28,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
-			if (!skateboard.isGoofy())
+			if ((!skateboard.isGoofy() && !skateboard.isSwitch_()) || (skateboard.isGoofy() && skateboard.isSwitch_()))
 			{
 				this.modelPlayer.bipedLeftLeg.rotateAngleX = -1F;
 				this.modelPlayer.bipedLeftLeg.rotateAngleY = 1.3F;

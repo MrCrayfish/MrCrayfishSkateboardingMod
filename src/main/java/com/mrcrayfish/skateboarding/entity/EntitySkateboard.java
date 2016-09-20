@@ -11,6 +11,7 @@ import com.mrcrayfish.skateboarding.util.ComboBuilder;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -61,16 +62,21 @@ public class EntitySkateboard extends Entity
 	public double prevBoardYaw;
 	
 	public double boardRotationX;
-	public double boardRotationY;;
+	public double boardRotationY;
 	public double boardRotationZ;
 	public double prevBoardRotationX;
 	public double prevBoardRotationY;
 	public double prevBoardRotationZ;
+	
+	public boolean needsCameraUpdate;
+	public float prevCameraYaw;
+	public float cameraYaw;
 
 	public EntitySkateboard(World worldIn)
 	{
 		super(worldIn);
 		this.setSize(0.5F, 0.25F);
+		this.stepHeight = 0.5F;
 	}
 
 	public EntitySkateboard(World worldIn, double x, double y, double z)
@@ -178,6 +184,7 @@ public class EntitySkateboard extends Entity
 			prevBoardRotationX = boardRotationX;
 			prevBoardRotationY = boardRotationY;
 			prevBoardRotationZ = boardRotationZ;
+			prevCameraYaw = cameraYaw;
 			
 			/* Will only execute code if player is riding skateboard */
 			if (getControllingPassenger() != null)
@@ -450,13 +457,32 @@ public class EntitySkateboard extends Entity
 
 	public void handleLanding()
 	{
-		if (worldObj.isRemote && currentSpeed > 4)
+		if (worldObj.isRemote)
 		{
+			System.out.println("Is this fucking called?");
 			int difference = (int) (Math.abs(angleOnJump - rotationYaw) % 180);
-			//TODO: Handle 180 here
-			if(difference > 60 && difference < 120)
+			if(currentSpeed > 4 && difference > 60 && difference < 120)
 			{
 				PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
+			}
+			else
+			{
+				System.out.println("Mod: " + difference);
+				System.out.println("Divided: " + (int) (Math.abs(angleOnJump - rotationYaw) / 180) % 2);
+				System.out.println("180's: " + Math.abs(angleOnJump - rotationYaw) / 180);
+				float fakie = (Math.abs(angleOnJump - rotationYaw) / 180) % 2;
+				System.out.println(fakie);
+				System.out.println("Fakie?: " + (fakie > 0.66 && fakie < 1.33));
+				if(fakie > 0.66 && fakie < 1.33)
+				{
+					this.setSwitch_(!isSwitch_());
+					this.setFlipped();
+					EntityPlayer player = (EntityPlayer) getControllingPassenger();
+					rotationYaw += 180F;
+					prevRotationYaw = rotationYaw;
+					Minecraft.getMinecraft().gameSettings.smoothCamera = true;
+					player.rotationYaw += 180F;
+				}
 			}
 		}
 		//print();
@@ -507,6 +533,7 @@ public class EntitySkateboard extends Entity
 		{
 			if (GrindHelper.canGrind(worldObj, posX, posY, posZ))
 			{
+				handleLanding();
 				combo.addTrick(trick, 0);
 				jumping = false;
 				jumpingTimer = 0;
