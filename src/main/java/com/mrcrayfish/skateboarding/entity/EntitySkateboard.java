@@ -77,7 +77,7 @@ public class EntitySkateboard extends Entity
 	{
 		super(worldIn);
 		this.setSize(0.5F, 0.25F);
-		this.stepHeight = 0.5F;
+		this.stepHeight = 0.3F;
 	}
 
 	public EntitySkateboard(World worldIn, double x, double y, double z)
@@ -176,8 +176,10 @@ public class EntitySkateboard extends Entity
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if(worldObj.isRemote)
-		{
+		
+		//TODO: Limit server to only update movement.
+		//if(worldObj.isRemote)
+		//{
 			combo.update(this);
 			
 			prevRotationYaw = rotationYaw;
@@ -381,7 +383,7 @@ public class EntitySkateboard extends Entity
 			{
 				this.currentSpeed *= 0.99D;
 			}
-		}
+		//}
 	}
 
 	public void onUpdateServer()
