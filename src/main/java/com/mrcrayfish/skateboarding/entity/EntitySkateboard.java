@@ -170,8 +170,6 @@ public class EntitySkateboard extends Entity
 		this.velocityZ = this.motionZ = z;
 	}*/
 
-	private int life;
-
 	@Override
 	public void onUpdate()
 	{
@@ -384,15 +382,6 @@ public class EntitySkateboard extends Entity
 				this.currentSpeed *= 0.99D;
 			}
 		//}
-	}
-
-	public void onUpdateServer()
-	{
-		life++;
-		if (life >= 10000)
-		{
-			//this.setDead();
-		}
 	}
 	
 	@Override

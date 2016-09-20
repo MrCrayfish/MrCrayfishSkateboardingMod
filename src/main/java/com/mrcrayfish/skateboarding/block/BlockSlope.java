@@ -2,10 +2,12 @@ package com.mrcrayfish.skateboarding.block;
 
 import java.util.List;
 
+import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -22,13 +24,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockSlope extends BlockDirectional implements ITileEntityProvider
+public class BlockSlope extends BlockObject implements ITileEntityProvider
 {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
-	
+
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0);
-	
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5625, 1.0);
 	
 	private static final AxisAlignedBB NORTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
@@ -100,6 +100,8 @@ public class BlockSlope extends BlockDirectional implements ITileEntityProvider
 		super(materialIn);
 		this.setUnlocalizedName("slope");
 		this.setRegistryName("slope");
+		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
 	}
 	
 	@Override
@@ -203,13 +205,6 @@ public class BlockSlope extends BlockDirectional implements ITileEntityProvider
 				break;
 			}
 		}
-	}
-
-	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	{
-		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
-		return state.withProperty(FACING, placer.getHorizontalFacing());
 	}
 
 	@Override

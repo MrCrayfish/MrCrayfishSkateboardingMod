@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding.init;
 
 import com.mrcrayfish.skateboarding.Reference;
+import com.mrcrayfish.skateboarding.block.BlockRail;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.item.ItemSlope;
 
@@ -15,15 +16,18 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class SkateboardingBlocks
 {
 	public static Block slope;
+	public static Block rail;
 	
 	public static void init()
 	{
 		slope = new BlockSlope(Material.WOOD);
+		rail = new BlockRail(Material.ANVIL);
 	}
 	
 	public static void register()
 	{
 		registerBlock(slope, new ItemSlope(slope));
+		registerBlock(rail);
 	}
 	
 	public static void registerBlock(Block block) 
@@ -41,6 +45,7 @@ public class SkateboardingBlocks
 	public static void registerRenders()
 	{
 		registerRender(slope);
+		registerRender(rail);
 	}
 	
 	private static void registerRender(Block block)
