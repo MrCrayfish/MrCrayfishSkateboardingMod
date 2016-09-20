@@ -12,7 +12,7 @@ import com.mrcrayfish.skateboarding.util.GrindHelper;
 import com.mrcrayfish.skateboarding.util.TrickHelper;
 import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
-public class TrickNoseslide implements Grind
+public class TrickNoseslide extends Grind
 {
 	@Override
 	public String getName(int rotation)

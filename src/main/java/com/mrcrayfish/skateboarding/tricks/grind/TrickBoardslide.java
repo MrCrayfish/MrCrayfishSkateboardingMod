@@ -11,7 +11,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.util.TrickHelper;
 import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
-public class TrickBoardslide implements Grind
+public class TrickBoardslide extends Grind
 {
 
 	@Override

@@ -11,7 +11,7 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.util.TrickHelper;
 import com.mrcrayfish.skateboarding.util.TrickHelper.Axis;
 
-public class TrickDarkslide implements Grind
+public class TrickDarkslide extends Grind
 {
 	@Override
 	public String getName(int rotation)

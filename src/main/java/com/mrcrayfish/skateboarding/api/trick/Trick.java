@@ -5,17 +5,22 @@ import net.minecraft.client.model.ModelRenderer;
 import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
-public interface Trick
+public abstract class Trick
 {
-	public String getName(int rotation);
+	public abstract String getName(int rotation);
 	
-	public void onStart(EntitySkateboard skateboard);
+	public boolean hasMultipleNames() 
+	{
+		return false;
+	}
 	
-	public void onEnd(EntitySkateboard skateboard);
+	public abstract void onStart(EntitySkateboard skateboard);
 	
-	public void updateBoard(EntitySkateboard skateboard);
+	public abstract void onEnd(EntitySkateboard skateboard);
 	
-	public double points();
+	public abstract void updateBoard(EntitySkateboard skateboard);
 	
-	public Difficulty difficulty();
+	public abstract double points();
+	
+	public abstract Difficulty difficulty();
 }

@@ -7,7 +7,7 @@ import com.mrcrayfish.skateboarding.api.Difficulty;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
-public class Trick5050 implements Grind
+public class Trick5050 extends Grind
 {
 	
 	@Override

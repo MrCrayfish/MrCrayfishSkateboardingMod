@@ -34,11 +34,8 @@ public class ComboBuilder
 		addTime((int) decrease(trick.difficulty().getExtraTime(), count, 50));
 
 		String pre = "";
-		rotation += 90;
-		int rotCount = (int) ((rotation) / 180);
-		System.out.println(rotation);
-		System.out.println(rotCount);
-		if (rotCount > 0)
+		int rotCount = (int) ((rotation + 90) / 180);
+		if (rotCount > 0 && !trick.hasMultipleNames())
 		{
 			pre += rotCount * 180 + " ";
 		}

@@ -298,14 +298,12 @@ public class EntitySkateboard extends Entity
 	
 				if (onGround && !grinding)
 				{
-					System.out.println("Landed");
 					jumping = false;
 					jumpingTimer = 0;
 					if(currentTrick != null)
 					{
 						if (currentTrick instanceof Flip)
 						{
-							System.out.println("Is a flip");
 							resetTrick();
 							PacketHandler.INSTANCE.sendToServer(new MessageStack(this.getEntityId()));
 						}
@@ -469,7 +467,6 @@ public class EntitySkateboard extends Entity
 	{
 		if (worldObj.isRemote)
 		{
-			System.out.println("Is this fucking called?");
 			int difference = (int) (Math.abs(angleOnJump - rotationYaw) % 180);
 			if(currentSpeed > 4 && difference > 60 && difference < 120)
 			{

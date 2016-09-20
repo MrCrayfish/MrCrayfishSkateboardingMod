@@ -11,15 +11,29 @@ import com.mrcrayfish.skateboarding.util.TrickHelper;
 public class TrickPopShove extends Flip
 {
 	@Override
+	public String getName(int rotation)
+	{
+		if(rotation == 180)
+		{
+			return "Bigspin";
+		}
+		else if(rotation > 180)
+		{
+			return rotation + " Pop Shove-it";
+		}
+		return "Pop Shove-it";
+	}
+	
+	@Override
+	public boolean hasMultipleNames() 
+	{
+		return true;
+	}
+	
+	@Override
 	public void updateBoard(EntitySkateboard skateboard)
 	{
 		TrickHelper.spinBoard(skateboard, 180F, performTime());
-	}
-
-	@Override
-	public String getName(int rotation)
-	{
-		return "Pop Shove-it";
 	}
 
 	@Override
