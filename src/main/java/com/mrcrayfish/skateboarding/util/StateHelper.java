@@ -3,74 +3,94 @@ package com.mrcrayfish.skateboarding.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class StateHelper
 {
-	public static Block getBlock(IBlockAccess world, BlockPos pos, EnumFacing facing, Direction dir)
+	public static Block getRelativeBlock(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
-		BlockPos target = getBlockPosRelativeTo(world, pos, facing, dir);
+		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
 		return world.getBlockState(target).getBlock();
 	}
 	
-	public static Direction getRotation(IBlockAccess world, BlockPos pos, EnumFacing facing, Direction dir)
+	public static RelativeFacing getRelativeFacing(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
-		BlockPos target = getBlockPosRelativeTo(world, pos, facing, dir);
-		EnumFacing other = (EnumFacing) world.getBlockState(target).getValue(BlockHorizontal.FACING);
-		Direction dir_2 = getDirectionRelativeTo(facing, other);
-		return dir_2;
+		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
+		IBlockState state = world.getBlockState(pos);
+		if(state.getProperties().containsKey(BlockHorizontal.FACING))
+		{
+			EnumFacing otherFacing = (EnumFacing) world.getBlockState(target).getValue(BlockHorizontal.FACING);
+			return getDirectionRelativeTo(facing, otherFacing);
+		}
+		return RelativeFacing.NONE;
 	}
 	
-	public static boolean isAirBlock(IBlockAccess world, BlockPos pos, EnumFacing facing, Direction dir)
+	public static boolean isAirBlock(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing dir)
 	{
 		BlockPos target = getBlockPosRelativeTo(world, pos, facing, dir);
 		return world.getBlockState(target).getBlock() instanceof BlockAir;
 	}
 	
-	private static BlockPos getBlockPosRelativeTo(IBlockAccess world, BlockPos pos, EnumFacing facing, Direction dir)
+	private static BlockPos getBlockPosRelativeTo(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
-		switch (dir)
+		switch (relativeFacing)
 		{
 		case LEFT:
-			return pos.offset(facing.rotateY());
-		case RIGHT:
 			return pos.offset(facing.rotateYCCW());
-		case UP:
+		case RIGHT:
+			return pos.offset(facing.rotateY());
+		case SAME:
 			return pos.offset(facing);
-		case DOWN:
+		case OPPOSITE:
 			return pos.offset(facing.getOpposite());
-		default:
+		case UP:
+			return pos.offset(EnumFacing.UP);
+		case DOWN:
+			return pos.offset(EnumFacing.DOWN);
+		case NONE:
 			return pos;
 		}
+		return pos;
 	}
 
-	private static Direction getDirectionRelativeTo(EnumFacing thisBlock, EnumFacing otherBlock)
+	private static RelativeFacing getDirectionRelativeTo(EnumFacing thisBlock, EnumFacing otherBlock)
 	{
+		if(otherBlock.getAxis() == Axis.Y)
+		{
+			if(otherBlock == EnumFacing.UP)
+			{
+				return RelativeFacing.UP;
+			}
+			return RelativeFacing.DOWN;
+		}
+		
 		int num = thisBlock.getHorizontalIndex() - otherBlock.getHorizontalIndex();
 		switch (num)
 		{
 		case -3:
-			return Direction.LEFT;
+			return RelativeFacing.LEFT;
 		case -2:
-			return Direction.UP;
+			return RelativeFacing.SAME;
 		case -1:
-			return Direction.RIGHT;
+			return RelativeFacing.RIGHT;
 		case 0:
-			return Direction.DOWN;
+			return RelativeFacing.OPPOSITE;
 		case 1:
-			return Direction.LEFT;
+			return RelativeFacing.LEFT;
 		case 2:
-			return Direction.UP;
+			return RelativeFacing.SAME;
 		case 3:
-			return Direction.RIGHT;
+			return RelativeFacing.RIGHT;
 		}
-		return Direction.NONE;
+		return RelativeFacing.NONE;
 	}
 
-	public static enum Direction
+	public static enum RelativeFacing
 	{
-		UP, DOWN, LEFT, RIGHT, NONE;
+		SAME, OPPOSITE, LEFT, RIGHT, UP, DOWN, NONE;
 	}
 }

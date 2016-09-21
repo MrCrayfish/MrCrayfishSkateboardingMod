@@ -5,7 +5,7 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper;
-import com.mrcrayfish.skateboarding.util.StateHelper.Direction;
+import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
 
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -61,20 +61,20 @@ public class BlockRail extends BlockObject
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) 
 	{
 		EnumFacing facing = state.getValue(FACING);
-		if(StateHelper.getBlock(worldIn, pos, facing, Direction.LEFT) == this)
+		if(StateHelper.getRelativeBlock(worldIn, pos, facing, RelativeFacing.LEFT) == this)
 		{
-			Direction direction = StateHelper.getRotation(worldIn, pos, facing, Direction.LEFT);
-			if(direction == Direction.DOWN || direction == Direction.UP)
-			{
-				state = state.withProperty(RIGHT, true);
-			}
-		}
-		if(StateHelper.getBlock(worldIn, pos, facing, Direction.RIGHT) == this)
-		{
-			Direction direction = StateHelper.getRotation(worldIn, pos, facing, Direction.RIGHT);
-			if(direction == Direction.DOWN || direction == Direction.UP)
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(worldIn, pos, facing, RelativeFacing.LEFT);
+			if(relativeFacing == RelativeFacing.OPPOSITE || relativeFacing == RelativeFacing.SAME)
 			{
 				state = state.withProperty(LEFT, true);
+			}
+		}
+		if(StateHelper.getRelativeBlock(worldIn, pos, facing, RelativeFacing.RIGHT) == this)
+		{
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(worldIn, pos, facing, RelativeFacing.RIGHT);
+			if(relativeFacing == RelativeFacing.OPPOSITE || relativeFacing == RelativeFacing.SAME)
+			{
+				state = state.withProperty(RIGHT, true);
 			}
 		}
 		return state;
