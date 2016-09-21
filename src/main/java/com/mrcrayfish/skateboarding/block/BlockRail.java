@@ -51,7 +51,7 @@ public class BlockRail extends BlockObject
 	}
 	
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) 
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) 
 	{
 		EnumFacing facing = state.getValue(FACING);
 		return BOUNDING_BOXES[facing.getHorizontalIndex() % 2];
