@@ -22,6 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSlope extends BlockObject implements ITileEntityProvider
@@ -94,6 +95,8 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider
 	private static final AxisAlignedBB WEST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
 	private static final AxisAlignedBB WEST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
 	private static final AxisAlignedBB WEST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
+	
+	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0);
 	 
 	public BlockSlope(Material materialIn) 
 	{
@@ -205,6 +208,15 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider
 				break;
 			}
 		}
+	}
+	
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) 
+	{
+		if(!state.getValue(STACKED))
+		{
+			return BOUNDING_BOX;
+		}
+		return FULL_BLOCK_AABB;
 	}
 
 	@Override

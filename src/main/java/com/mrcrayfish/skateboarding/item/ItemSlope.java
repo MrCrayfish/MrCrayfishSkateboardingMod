@@ -23,23 +23,16 @@ public class ItemSlope extends ItemBlock
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) 
 	{
-		if(!world.isRemote)
+		if(side == EnumFacing.UP)
 		{
-			if(side == EnumFacing.UP)
+			IBlockState state = world.getBlockState(pos);
+			Block block = state.getBlock();
+			if(block instanceof BlockSlope) 
 			{
-				IBlockState state = world.getBlockState(pos);
-				Block block = state.getBlock();
-				if(block instanceof BlockSlope) 
+				if(!state.getValue(BlockSlope.STACKED))
 				{
-					if(!state.getValue(BlockSlope.STACKED))
-					{
-						world.setBlockState(pos, block.getDefaultState().withProperty(BlockSlope.FACING, state.getValue(BlockSlope.FACING)).withProperty(BlockSlope.STACKED, true));
-						return EnumActionResult.SUCCESS;
-					}
-					else
-					{
-						return EnumActionResult.FAIL;
-					}
+					world.setBlockState(pos, block.getDefaultState().withProperty(BlockSlope.FACING, state.getValue(BlockSlope.FACING)).withProperty(BlockSlope.STACKED, true));
+					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
