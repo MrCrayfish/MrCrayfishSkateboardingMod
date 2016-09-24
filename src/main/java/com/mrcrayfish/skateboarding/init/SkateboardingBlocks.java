@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.init;
 
 import com.mrcrayfish.skateboarding.Reference;
 import com.mrcrayfish.skateboarding.block.BlockCornerSlope;
+import com.mrcrayfish.skateboarding.block.BlockHandRail;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.item.ItemCornerSlope;
@@ -21,12 +22,14 @@ public class SkateboardingBlocks
 	public static Block slope;
 	public static Block corner_slope;
 	public static Block stair;
+	public static Block handrail;
 	
 	public static void init()
 	{
 		slope = new BlockSlope(Material.WOOD);
 		corner_slope = new BlockCornerSlope(Material.ROCK);
 		stair = new BlockStair(Material.ROCK);
+		handrail = new BlockHandRail(Material.ANVIL);
 	}
 	
 	public static void register()
@@ -34,6 +37,7 @@ public class SkateboardingBlocks
 		registerBlock(slope, new ItemSlope(slope));
 		registerBlock(corner_slope, new ItemCornerSlope(corner_slope));
 		registerBlock(stair, new ItemStair(stair));
+		registerBlock(handrail);
 	}
 	
 	public static void registerBlock(Block block) 
@@ -53,6 +57,7 @@ public class SkateboardingBlocks
 		registerRender(slope);
 		registerRender(corner_slope);
 		registerRender(stair);
+		registerRender(handrail);
 	}
 	
 	private static void registerRender(Block block)
