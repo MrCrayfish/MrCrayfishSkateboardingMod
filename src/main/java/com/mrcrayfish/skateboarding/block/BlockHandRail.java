@@ -3,6 +3,7 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
+import com.mrcrayfish.skateboarding.block.properties.Grindable;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockHandRail extends BlockObject 
+public class BlockHandRail extends BlockObject implements Grindable
 {
 	public static final PropertyBool LEFT = PropertyBool.create("left");
 	public static final PropertyBool RIGHT = PropertyBool.create("right");
@@ -82,5 +83,11 @@ public class BlockHandRail extends BlockObject
 	protected BlockStateContainer createBlockState()
 	{
 		return new BlockStateContainer(this, new IProperty[] { FACING, LEFT, RIGHT });
+	}
+
+	@Override
+	public boolean canGrind(World world, IBlockState state, BlockPos pos, double posX, double posY, double posZ) 
+	{
+		return true;
 	}
 }
