@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=north,stacked=false": { "model": "csm:stair"                    },
+		"facing=east,stacked=false":  { "model": "csm:stair",         "y": 90   },
+		"facing=south,stacked=false": { "model": "csm:stair",         "y": 180  },
+		"facing=west,stacked=false":  { "model": "csm:stair",         "y": 270  },
+		"facing=north,stacked=true":  { "model": "csm:stair_stacked"            },
+		"facing=east,stacked=true":   { "model": "csm:stair_stacked", "y": 90   },
+		"facing=south,stacked=true":  { "model": "csm:stair_stacked", "y": 180  },
+		"facing=west,stacked=true":   { "model": "csm:stair_stacked", "y": 270  }
+    }
+}
