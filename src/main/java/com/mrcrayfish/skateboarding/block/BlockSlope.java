@@ -108,18 +108,6 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider
 	}
 	
 	@Override
-	public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
-
-	@Override
-    public boolean isFullCube(IBlockState state)
-    {
-        return false;
-    }
-	
-	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) 
 	{
 		if(state.getValue(STACKED)) 

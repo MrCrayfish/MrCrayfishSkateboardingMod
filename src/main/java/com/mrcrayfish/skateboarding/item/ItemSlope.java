@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding.item;
 
 import com.mrcrayfish.skateboarding.block.BlockSlope;
+import com.mrcrayfish.skateboarding.block.BlockSlope;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,22 +22,21 @@ public class ItemSlope extends ItemBlock
 	}
 	
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) 
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(side == EnumFacing.UP)
+		if(facing == EnumFacing.UP)
 		{
-			IBlockState state = world.getBlockState(pos);
+			IBlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
 			if(block instanceof BlockSlope) 
 			{
 				if(!state.getValue(BlockSlope.STACKED))
 				{
-					world.setBlockState(pos, block.getDefaultState().withProperty(BlockSlope.FACING, state.getValue(BlockSlope.FACING)).withProperty(BlockSlope.STACKED, true));
+					worldIn.setBlockState(pos, block.getDefaultState().withProperty(BlockSlope.FACING, state.getValue(BlockSlope.FACING)).withProperty(BlockSlope.STACKED, true));
 					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
-
 }

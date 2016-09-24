@@ -22,27 +22,21 @@ public class ItemCornerSlope extends ItemBlock
 	}
 	
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) 
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		System.out.println("Called");
-		if(side == EnumFacing.UP)
+		if(facing == EnumFacing.UP)
 		{
-			IBlockState state = world.getBlockState(pos);
+			IBlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
 			if(block instanceof BlockCornerSlope) 
 			{
 				if(!state.getValue(BlockCornerSlope.STACKED))
 				{
-					world.setBlockState(pos, block.getDefaultState().withProperty(BlockCornerSlope.FACING, state.getValue(BlockCornerSlope.FACING)).withProperty(BlockCornerSlope.STACKED, true));
+					worldIn.setBlockState(pos, block.getDefaultState().withProperty(BlockCornerSlope.FACING, state.getValue(BlockCornerSlope.FACING)).withProperty(BlockCornerSlope.STACKED, true));
 					return EnumActionResult.SUCCESS;
-				}
-				else
-				{
-					return EnumActionResult.PASS;
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
-
 }

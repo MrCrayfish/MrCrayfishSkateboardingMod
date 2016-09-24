@@ -107,19 +107,7 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
 	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
 
-	@Override
-    public boolean isFullCube(IBlockState state)
-    {
-        return false;
-    }
-	
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) 
 	{
