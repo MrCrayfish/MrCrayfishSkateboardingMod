@@ -3,6 +3,7 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
+import com.mrcrayfish.skateboarding.block.properties.Grindable;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
@@ -25,7 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockSlope extends BlockObject implements ITileEntityProvider
+public class BlockSlope extends BlockObject implements ITileEntityProvider, Grindable
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
 
@@ -237,4 +238,32 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider
 		return new TileEntitySlope();
 	}
 
+	@Override
+	public boolean canGrind(World world, IBlockState state, BlockPos pos, double posX, double posY, double posZ)
+	{
+		EnumFacing facing = state.getValue(FACING);
+		if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
+		{
+			if(posX < 0.25)
+			{
+				return world.isAirBlock(pos.offset(EnumFacing.WEST));
+			}
+			if(posX > 0.75) 
+			{
+				return world.isAirBlock(pos.offset(EnumFacing.EAST));
+			}
+		}
+		else
+		{
+			if(posZ < 0.25)
+			{
+				return world.isAirBlock(pos.offset(EnumFacing.NORTH));
+			}
+			if(posZ > 0.75) 
+			{
+				return world.isAirBlock(pos.offset(EnumFacing.SOUTH));
+			}
+		}
+		return false;
+	}
 }
