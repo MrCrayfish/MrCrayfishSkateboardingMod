@@ -8,7 +8,9 @@ import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.renderer.CornerSlopeRenderer;
 import com.mrcrayfish.skateboarding.tileentity.renderer.SlopeRenderer;
 
 import api.player.model.ModelPlayerAPI;
@@ -36,6 +38,7 @@ public class ClientProxy extends CommonProxy
 		SkateboardingBlocks.registerRenders();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlope.class, new SlopeRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCornerSlope.class, new CornerSlopeRenderer());
 
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
 

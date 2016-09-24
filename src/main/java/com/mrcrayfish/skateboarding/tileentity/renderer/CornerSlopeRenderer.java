@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.tileentity.renderer;
 import org.lwjgl.opengl.GL11;
 
 import com.mrcrayfish.skateboarding.block.BlockSlope;
-import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,14 +18,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import scala.languageFeature.postfixOps;
 
-public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
+public class CornerSlopeRenderer extends TileEntitySpecialRenderer<TileEntityCornerSlope> 
+{
 	private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("textures/blocks/stone_slab_top.png");
 	private static final ResourceLocation WOOD_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay_stained_red.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntitySlope te, double x, double y, double z, float partialTicks, int destroyStage) 
+	public void renderTileEntityAt(TileEntityCornerSlope te, double x, double y, double z, float partialTicks, int destroyStage) 
 	{
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		int meta = te.getBlockType().getMetaFromState(state);
@@ -58,12 +58,12 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateY(), 1);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				buffer.pos(1, -0.5, 1).tex(0, 1).endVertex();
-				buffer.pos(1, 0.5, 1).tex(0, 0).endVertex();
+				buffer.pos(1, 0, 1).tex(0, 0.5).endVertex();
 				buffer.pos(0, 0, 1).tex(1, 0.5).endVertex();
 				buffer.pos(0, -0.5,1).tex(1, 1).endVertex();
 				tessellator.draw();
 				
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).getOpposite(), 2);
+				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING), 2);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				buffer.pos(0, -0.5, 1).tex(1, 0.5).endVertex();
 				buffer.pos(0, 0, 1).tex(1, 0).endVertex();
@@ -79,20 +79,13 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 				buffer.pos(1, 0.5, 0).tex(1, 0.5).endVertex();
 				buffer.pos(1, 0, 0).tex(1, 1).endVertex();
 				tessellator.draw();
-				
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateY(), 1);
-				buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(1, 0, 1).tex(1, 1).endVertex();
-				buffer.pos(1, 0.5, 1).tex(1, 0.5).endVertex();
-				buffer.pos(0, 0, 1).tex(0, 1).endVertex();
-				tessellator.draw();
 			}
 			
 			getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 0);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			buffer.pos(0, 0, 0).tex(1, 1).endVertex();
 			buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-			buffer.pos(1, 0.5, 1).tex(0, 0).endVertex();
+			buffer.pos(1, 0, 1).tex(0, 0).endVertex();
 			buffer.pos(1, 0.5, 0).tex(0, 1).endVertex();
 			tessellator.draw();
 			
@@ -108,7 +101,7 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			buffer.pos(1, -0.5, 0).tex(0, 1).endVertex();
 			buffer.pos(1, 0.5, 0).tex(0, 0).endVertex();
-			buffer.pos(1, 0.5, 1).tex(1, 0).endVertex();
+			buffer.pos(1, 0, 1).tex(1, 0.5).endVertex();
 			buffer.pos(1, -0.5, 1).tex(1, 1).endVertex();
 			tessellator.draw();
 			
@@ -123,8 +116,22 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> {
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				buffer.pos(0, 0, 0).tex(1, 1).endVertex();
 				buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-				buffer.pos(0.25, 0.125, 1).tex(0.75, 0).endVertex();
+				buffer.pos(0.25, 0.125, 0.75).tex(0.75, 0.25).endVertex();
 				buffer.pos(0.25, 0.125, 0).tex(0.75, 1).endVertex();
+				tessellator.draw();
+			}
+			
+			if(!(te.getWorld().getBlockState(te.getPos().offset(state.getValue(BlockSlope.FACING).getOpposite())).getBlock() instanceof BlockSlope) 
+			&& !(te.getWorld().getBlockState(te.getPos().offset(state.getValue(BlockSlope.FACING).getOpposite()).down()).getBlock() instanceof BlockSlope)
+			&& meta / 4 != 1)
+			{
+				GlStateManager.translate(0, 0.0001, 0);
+				getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 0);
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				buffer.pos(0, 0, 1).tex(1, 1).endVertex();
+				buffer.pos(1, 0, 1).tex(1, 0).endVertex();
+				buffer.pos(1, 0.125, 0.75).tex(0.75, 0).endVertex();
+				buffer.pos(0.25, 0.125, 0.75).tex(0.75, 0.75).endVertex();
 				tessellator.draw();
 			}
 		}

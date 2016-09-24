@@ -1,5 +1,16 @@
 package com.mrcrayfish.skateboarding;
 
+import com.mrcrayfish.skateboarding.api.TrickRegistry;
+import com.mrcrayfish.skateboarding.client.ComboOverlay;
+import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.event.SkateboardInput;
+import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
+import com.mrcrayfish.skateboarding.init.SkateboardingItems;
+import com.mrcrayfish.skateboarding.network.PacketHandler;
+import com.mrcrayfish.skateboarding.proxy.CommonProxy;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -11,16 +22,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-
-import com.mrcrayfish.skateboarding.api.TrickRegistry;
-import com.mrcrayfish.skateboarding.client.ComboOverlay;
-import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.event.SkateboardInput;
-import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
-import com.mrcrayfish.skateboarding.init.SkateboardingItems;
-import com.mrcrayfish.skateboarding.network.PacketHandler;
-import com.mrcrayfish.skateboarding.proxy.CommonProxy;
-import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, acceptedMinecraftVersions = "[1.9.4]", dependencies = "required-after:RenderPlayerAPI")
 public class MrCrayfishSkateboardingMod
@@ -56,6 +57,7 @@ public class MrCrayfishSkateboardingMod
 		EntityRegistry.registerModEntity(EntitySkateboard.class, "csmSkateboard", 0, this, 64, 1, false);
 		
 		GameRegistry.registerTileEntity(TileEntitySlope.class, Reference.MOD_ID + "TileEntitySlope");
+		GameRegistry.registerTileEntity(TileEntityCornerSlope.class, Reference.MOD_ID + "TileEntityCornerSlope");
 
 		if (event.getSide() == Side.CLIENT)
 		{
