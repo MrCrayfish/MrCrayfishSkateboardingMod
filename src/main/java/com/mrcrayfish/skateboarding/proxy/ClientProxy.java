@@ -10,8 +10,10 @@ import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
 import com.mrcrayfish.skateboarding.tileentity.renderer.CornerSlopeRenderer;
 import com.mrcrayfish.skateboarding.tileentity.renderer.SlopeRenderer;
+import com.mrcrayfish.skateboarding.tileentity.renderer.StairRenderer;
 
 import api.player.model.ModelPlayerAPI;
 import net.minecraft.client.Minecraft;
@@ -39,6 +41,7 @@ public class ClientProxy extends CommonProxy
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlope.class, new SlopeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCornerSlope.class, new CornerSlopeRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStair.class, new StairRenderer());
 
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
 

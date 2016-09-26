@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
-import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
 import com.mrcrayfish.skateboarding.util.StateHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
 
@@ -22,19 +22,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import scala.languageFeature.postfixOps;
 
-public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> 
+public class StairRenderer extends TileEntitySpecialRenderer<TileEntityStair> 
 {
-	private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("textures/blocks/stone_slab_top.png");
-	private static final ResourceLocation WOOD_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay_stained_red.png");
-	private static final ResourceLocation RAIL_TEXTURE = new ResourceLocation("textures/blocks/anvil_base.png");
-
+	private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("textures/blocks/anvil_base.png");
+	
 	@Override
-	public void renderTileEntityAt(TileEntitySlope te, double x, double y, double z, float partialTicks, int destroyStage) 
+	public void renderTileEntityAt(TileEntityStair te, double x, double y, double z, float partialTicks, int destroyStage) 
 	{
+		if(!te.rail) return;
+		
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		int meta = te.getBlockType().getMetaFromState(state);
+		
 		GlStateManager.pushMatrix();
 		{
 			GlStateManager.translate(x, y, z);
@@ -42,120 +42,34 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 			GlStateManager.rotate((meta % 4) * -90F - 90F, 0, 1, 0);
 			GlStateManager.translate(-0.5, 0, -0.5);
 			GlStateManager.translate(0, (int) (meta / 4) * 0.5, 0);
+			
 			GlStateManager.disableLighting();
 			
 			Tessellator tessellator = Tessellator.getInstance();
 			VertexBuffer buffer = tessellator.getBuffer();
-			GlStateManager.color(1.0F, 1.0F, 1.0F);
-			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(WOOD_TEXTURE);
-			
-			// Sides
-			if((meta / 4) > 0)
-			{
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateYCCW(), 1);
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(0, -0.5, 0).tex(1, 1).endVertex();
-				buffer.pos(0, 0, 0).tex(1, 0.5).endVertex();
-				buffer.pos(1, 0.5, 0).tex(0, 0).endVertex();
-				buffer.pos(1, -0.5, 0).tex(0, 1).endVertex();
-				tessellator.draw();
-				
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateY(), 1);
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(1, -0.5, 1).tex(0, 1).endVertex();
-				buffer.pos(1, 0.5, 1).tex(0, 0).endVertex();
-				buffer.pos(0, 0, 1).tex(1, 0.5).endVertex();
-				buffer.pos(0, -0.5,1).tex(1, 1).endVertex();
-				tessellator.draw();
-				
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).getOpposite(), 2);
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(0, -0.5, 1).tex(1, 0.5).endVertex();
-				buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-				buffer.pos(0, 0, 0).tex(0, 0).endVertex();
-				buffer.pos(0, -0.5, 0).tex(0, 0.5).endVertex();
-				tessellator.draw();
-			}
-			else
-			{
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateYCCW(), 1);
-				buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(0, 0, 0).tex(0, 1).endVertex();
-				buffer.pos(1, 0.5, 0).tex(1, 0.5).endVertex();
-				buffer.pos(1, 0, 0).tex(1, 1).endVertex();
-				tessellator.draw();
-				
-				getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING).rotateY(), 1);
-				buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(1, 0, 1).tex(1, 1).endVertex();
-				buffer.pos(1, 0.5, 1).tex(1, 0.5).endVertex();
-				buffer.pos(0, 0, 1).tex(0, 1).endVertex();
-				tessellator.draw();
-			}
-			
-			getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 0);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			buffer.pos(0, 0, 0).tex(1, 1).endVertex();
-			buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-			buffer.pos(1, 0.5, 1).tex(0, 0).endVertex();
-			buffer.pos(1, 0.5, 0).tex(0, 1).endVertex();
-			tessellator.draw();
-			
-			getLighting(te.getWorld(), te.getPos(), EnumFacing.DOWN, 3);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			buffer.pos(1, 0, 0).tex(0, 1).endVertex();
-			buffer.pos(1, 0, 1).tex(0, 0).endVertex();
-			buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-			buffer.pos(0, 0, 0).tex(1, 1).endVertex();
-			tessellator.draw();
-			
-			getLighting(te.getWorld(), te.getPos(), state.getValue(BlockSlope.FACING), 2);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			buffer.pos(1, -0.5, 0).tex(0, 1).endVertex();
-			buffer.pos(1, 0.5, 0).tex(0, 0).endVertex();
-			buffer.pos(1, 0.5, 1).tex(1, 0).endVertex();
-			buffer.pos(1, -0.5, 1).tex(1, 1).endVertex();
-			tessellator.draw();
 			
 			Minecraft.getMinecraft().getTextureManager().bindTexture(METAL_TEXTURE);
 			
-			if(!(te.getWorld().getBlockState(te.getPos().offset(state.getValue(BlockSlope.FACING).getOpposite())).getBlock() instanceof BlockSlope) 
-			&& !(te.getWorld().getBlockState(te.getPos().offset(state.getValue(BlockSlope.FACING).getOpposite()).down()).getBlock() instanceof BlockSlope)
-			&& meta / 4 != 1)
+			drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, 6.4, 4, 7.2, 1.6, 15, 1.6);
+			//drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, 11.2, 8, 7.2, 1.6, 13, 1.6);
+			
+			getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 1);
+			drawAngledCuboid(tessellator, buffer, 0, 14, 7, 16, 2, 2, 8);
+			
+			getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 1);
+			drawAngledCuboid(tessellator, buffer, 0, 7, 7.5, 16, 1, 1, 8);
+			
+			if(StateHelper.getRelativeBlock(te.getWorld(), te.getPos().up(), state.getValue(BlockHorizontal.FACING), RelativeFacing.SAME) == SkateboardingBlocks.handrail)
 			{
-				GlStateManager.translate(0, 0.0001, 0);
-				getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 0);
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				buffer.pos(0, 0, 0).tex(1, 1).endVertex();
-				buffer.pos(0, 0, 1).tex(1, 0).endVertex();
-				buffer.pos(0.25, 0.125, 1).tex(0.75, 0).endVertex();
-				buffer.pos(0.25, 0.125, 0).tex(0.75, 1).endVertex();
-				tessellator.draw();
+				drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, 16, 15, 7.5, 4, 1, 1);
 			}
 			
-			if(te.rail)
+			if(StateHelper.getRelativeBlock(te.getWorld(), te.getPos(), state.getValue(BlockHorizontal.FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
 			{
-				Minecraft.getMinecraft().getTextureManager().bindTexture(RAIL_TEXTURE);
-				
-				drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, 6.4, 3, 7.2, 1.6, 15, 1.6);
-				
-				getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 1);
-				drawAngledCuboid(tessellator, buffer, 0, 14, 7, 16, 2, 2, 8);
-				
-				getLighting(te.getWorld(), te.getPos(), EnumFacing.UP, 1);
-				drawAngledCuboid(tessellator, buffer, 0, 7, 7.5, 16, 1, 1, 8);
-				
-				if(StateHelper.getRelativeBlock(te.getWorld(), te.getPos().up(), state.getValue(BlockHorizontal.FACING), RelativeFacing.SAME) == SkateboardingBlocks.handrail)
-				{
-					drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, 16, 15, 7.5, 4, 1, 1);
-				}
-				
-				if(StateHelper.getRelativeBlock(te.getWorld(), te.getPos(), state.getValue(BlockHorizontal.FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
-				{
-					drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, -4, 7, 7.5, 4, 1, 1);
-				}
+				drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, -4, 7, 7.5, 4, 1, 1);
 			}
+			
+			GlStateManager.enableLighting();
 		}
 		GlStateManager.popMatrix();
 	}
@@ -282,7 +196,7 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 		buffer.pos(posX + width, posY + height + heightOffset, posZ).tex(width, 0).endVertex();
 		tessellator.draw();
 	}
-
+	
 	public void getLighting(World world, BlockPos pos, EnumFacing facing, int modify) 
 	{
 		pos = pos.offset(facing);

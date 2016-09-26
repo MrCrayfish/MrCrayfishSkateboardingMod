@@ -10,6 +10,7 @@ import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.proxy.CommonProxy;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -58,6 +59,7 @@ public class MrCrayfishSkateboardingMod
 		
 		GameRegistry.registerTileEntity(TileEntitySlope.class, Reference.MOD_ID + "TileEntitySlope");
 		GameRegistry.registerTileEntity(TileEntityCornerSlope.class, Reference.MOD_ID + "TileEntityCornerSlope");
+		GameRegistry.registerTileEntity(TileEntityStair.class, Reference.MOD_ID + "TileEntityStair");
 
 		if (event.getSide() == Side.CLIENT)
 		{

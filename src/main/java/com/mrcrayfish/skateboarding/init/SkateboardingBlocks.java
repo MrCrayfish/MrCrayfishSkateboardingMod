@@ -6,6 +6,7 @@ import com.mrcrayfish.skateboarding.block.BlockHandRail;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.item.ItemCornerSlope;
+import com.mrcrayfish.skateboarding.item.ItemHandrail;
 import com.mrcrayfish.skateboarding.item.ItemSlope;
 import com.mrcrayfish.skateboarding.item.ItemStair;
 
@@ -37,7 +38,7 @@ public class SkateboardingBlocks
 		registerBlock(slope, new ItemSlope(slope));
 		registerBlock(corner_slope, new ItemCornerSlope(corner_slope));
 		registerBlock(stair, new ItemStair(stair));
-		registerBlock(handrail);
+		registerBlock(handrail, new ItemHandrail(handrail));
 	}
 	
 	public static void registerBlock(Block block) 
