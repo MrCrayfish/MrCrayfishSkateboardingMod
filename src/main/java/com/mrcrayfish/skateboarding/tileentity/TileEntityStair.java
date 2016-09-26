@@ -20,4 +20,19 @@ public class TileEntityStair extends TileEntity
 		compound.setBoolean("rail", rail);
 		return super.writeToNBT(compound);
 	}
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) 
+	{
+		super.handleUpdateTag(tag);
+		rail = tag.getBoolean("rail");
+	}
+	
+	@Override
+	public NBTTagCompound getUpdateTag() 
+	{
+		NBTTagCompound tag = super.getUpdateTag();
+		tag.setBoolean("rail", rail);
+		return tag;
+	}
 }
