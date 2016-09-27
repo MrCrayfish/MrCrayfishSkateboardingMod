@@ -1,2 +1,7 @@
 itemGroup.skateTab=MrCrayfish's Skateboarding Mod
 item.skateboard.name=Skateboard
+
+tile.slope.name=Slope
+tile.corner_slope.name=Slope (Corner)
+tile.stair.name=Stairs
+tile.handrail.name=Handrail
