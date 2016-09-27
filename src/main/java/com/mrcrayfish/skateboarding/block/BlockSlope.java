@@ -5,6 +5,7 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.properties.Grindable;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
 import net.minecraft.block.BlockDirectional;
@@ -97,6 +98,70 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	private static final AxisAlignedBB WEST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
 	private static final AxisAlignedBB WEST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
 	
+	private static final AxisAlignedBB RAIL_NORTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	
+	private static final AxisAlignedBB RAIL_EAST_ONE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_TWO = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_THREE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SIX = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	
+	private static final AxisAlignedBB RAIL_SOUTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	
+	private static final AxisAlignedBB RAIL_WEST_ONE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_TWO = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_THREE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SIX = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+
+	private static final AxisAlignedBB RAIL_NORTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	
+	private static final AxisAlignedBB RAIL_EAST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	
+	private static final AxisAlignedBB RAIL_SOUTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	
+	private static final AxisAlignedBB RAIL_WEST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0);
 	 
 	public BlockSlope(Material materialIn) 
@@ -111,6 +176,13 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) 
 	{
+		boolean hasRail = false;
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity instanceof TileEntitySlope)
+		{
+			TileEntitySlope slope = (TileEntitySlope) tileEntity;
+			hasRail = slope.rail;
+		}
 		if(state.getValue(STACKED)) 
 		{
 			super.addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_STACKED);
@@ -124,6 +196,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN_STACKED);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN_STACKED);
+				}
 				break;
 			case EAST:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE_STACKED);
@@ -133,6 +215,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN_STACKED);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN_STACKED);
+				}
 				break;
 			case SOUTH:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE_STACKED);
@@ -142,6 +234,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN_STACKED);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN_STACKED);
+				}
 				break;
 			default:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE_STACKED);
@@ -151,6 +253,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX_STACKED);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN_STACKED);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX_STACKED);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN_STACKED);
+				}
 				break;
 			}
 		} 
@@ -167,6 +279,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN);
+				}
 				break;
 			case EAST:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE);
@@ -176,6 +298,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN);
+				}
 				break;
 			case SOUTH:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE);
@@ -185,6 +317,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN);
+				}
 				break;
 			default:
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE);
@@ -194,6 +336,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX);
 				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN);
+				if(hasRail) 
+				{
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX);
+					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN);
+				}
 				break;
 			}
 		}
@@ -241,7 +393,13 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	@Override
 	public boolean canGrind(World world, IBlockState state, BlockPos pos, double posX, double posY, double posZ)
 	{
-		EnumFacing facing = state.getValue(FACING);
+		TileEntitySlope stair = (TileEntitySlope) world.getTileEntity(pos);
+		if(stair.rail)
+		{
+			return true;
+		}
+		return false;
+		/*EnumFacing facing = state.getValue(FACING);
 		if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
 		{
 			if(posX < 0.25)
@@ -263,7 +421,13 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			{
 				return world.isAirBlock(pos.offset(EnumFacing.SOUTH));
 			}
-		}
-		return false;
+		}*/
+	}
+	
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) 
+	{
+		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+		System.out.println("Called");
 	}
 }
