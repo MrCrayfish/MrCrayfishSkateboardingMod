@@ -27,7 +27,7 @@ import scala.languageFeature.postfixOps;
 public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> 
 {
 	private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("textures/blocks/stone_slab_top.png");
-	private static final ResourceLocation WOOD_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay_stained_red.png");
+	private static final ResourceLocation CLAY_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay.png");
 	private static final ResourceLocation RAIL_TEXTURE = new ResourceLocation("textures/blocks/anvil_base.png");
 
 	@Override
@@ -48,7 +48,7 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 			VertexBuffer buffer = tessellator.getBuffer();
 			GlStateManager.color(1.0F, 1.0F, 1.0F);
 			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(WOOD_TEXTURE);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(CLAY_TEXTURE);
 			
 			// Sides
 			if((meta / 4) > 0)

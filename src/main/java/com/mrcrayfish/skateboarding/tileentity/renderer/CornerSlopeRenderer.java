@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class CornerSlopeRenderer extends TileEntitySpecialRenderer<TileEntityCornerSlope> 
 {
 	private static final ResourceLocation METAL_TEXTURE = new ResourceLocation("textures/blocks/stone_slab_top.png");
-	private static final ResourceLocation WOOD_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay_stained_red.png");
+	private static final ResourceLocation CLAY_TEXTURE = new ResourceLocation("textures/blocks/hardened_clay.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntityCornerSlope te, double x, double y, double z, float partialTicks, int destroyStage) 
@@ -42,7 +42,7 @@ public class CornerSlopeRenderer extends TileEntitySpecialRenderer<TileEntityCor
 			VertexBuffer buffer = tessellator.getBuffer();
 			GlStateManager.color(1.0F, 1.0F, 1.0F);
 			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(WOOD_TEXTURE);
+			Minecraft.getMinecraft().getTextureManager().bindTexture(CLAY_TEXTURE);
 			
 			// Sides
 			if((meta / 4) > 0)
