@@ -396,32 +396,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		TileEntitySlope stair = (TileEntitySlope) world.getTileEntity(pos);
 		if(stair.rail)
 		{
-			return true;
+			if(state.getValue(STACKED))
+			{
+				return posY >= 1.5;
+			}
+			else
+			{
+				return posY >= 1.0;
+			}
 		}
 		return false;
-		/*EnumFacing facing = state.getValue(FACING);
-		if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH)
-		{
-			if(posX < 0.25)
-			{
-				return world.isAirBlock(pos.offset(EnumFacing.WEST));
-			}
-			if(posX > 0.75) 
-			{
-				return world.isAirBlock(pos.offset(EnumFacing.EAST));
-			}
-		}
-		else
-		{
-			if(posZ < 0.25)
-			{
-				return world.isAirBlock(pos.offset(EnumFacing.NORTH));
-			}
-			if(posZ > 0.75) 
-			{
-				return world.isAirBlock(pos.offset(EnumFacing.SOUTH));
-			}
-		}*/
 	}
 	
 	@Override

@@ -14,10 +14,54 @@ public class GrindHelper
 {
 	public static boolean canGrind(World world, double posX, double posY, double posZ)
 	{
-		BlockPos pos = new BlockPos(posX, posY - 1, posZ);
+		BlockPos pos = new BlockPos(posX, posY, posZ);
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		return block == Blocks.IRON_BARS || (block instanceof Grindable && ((Grindable) block).canGrind(world, state, pos, posX, posY, posZ));
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 0.5, posZ);
+		state = world.getBlockState(pos);
+		block = state.getBlock();
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 1.0, posZ);
+		state = world.getBlockState(pos);
+		block = state.getBlock();
+		if(block == Blocks.IRON_BARS)
+		{
+			return true;
+		}
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 1.5, posZ);
+		state = world.getBlockState(pos);
+		block = state.getBlock();
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 2.0, posZ);
+		state = world.getBlockState(pos);
+		block = state.getBlock();
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 2.5, posZ);
+		state = world.getBlockState(pos);
+		block = state.getBlock();
+		return block instanceof Grindable && ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
 	}
 
 	public static double[] setOffset(EntitySkateboard skateboard, double x, double y, double z)

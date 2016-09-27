@@ -88,6 +88,6 @@ public class BlockHandRail extends BlockObject implements Grindable
 	@Override
 	public boolean canGrind(World world, IBlockState state, BlockPos pos, double posX, double posY, double posZ) 
 	{
-		return true;
+		return posY >= 1.0;
 	}
 }

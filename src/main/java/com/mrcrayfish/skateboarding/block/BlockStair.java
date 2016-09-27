@@ -265,11 +265,11 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 			System.out.println(posY);
 			if(state.getValue(STACKED))
 			{
-				return posY >= 0.5;
+				return posY >= 1.5;
 			}
 			else
 			{
-				return posY >= 0.0;
+				return posY >= 1.0;
 			}
 		}
 		return false;
