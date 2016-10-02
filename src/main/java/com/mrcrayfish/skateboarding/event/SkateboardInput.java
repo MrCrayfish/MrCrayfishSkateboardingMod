@@ -104,16 +104,22 @@ public class SkateboardInput {
 	}
 
 	@SubscribeEvent
-	public void onTick(ClientTickEvent event) {
-		if(pumping && pumpingTimer < 60) {
+	public void onTick(ClientTickEvent event) 
+	{
+		if(pumping && pumpingTimer < 60) 
+		{
 			pumpingTimer++;
 		}
-		if (keys.size() > 0 && timeLeft == 0) {
+		
+		if (keys.size() > 0 && timeLeft == 0) 
+		{
 			Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
-			if (entity != null && entity instanceof EntitySkateboard) {
+			if (entity != null && entity instanceof EntitySkateboard) 
+			{
 				EntitySkateboard skateboard = (EntitySkateboard) entity;
 				Trick trick = TrickMap.getTrick(keys.toArray(new Key[0]));
-				if (trick != null && !skateboard.isInTrick()) {
+				if (trick != null && !skateboard.isInTrick()) 
+				{
 					skateboard.startTrick(trick);
 					//PacketHandler.INSTANCE.sendToServer(new MessageTrick(skateboard.getEntityId(), TrickRegistry.getTrickId(trick)));
 					
@@ -122,7 +128,8 @@ public class SkateboardInput {
 			keys.clear();
 		}
 
-		if (timeLeft > 0) {
+		if (timeLeft > 0) 
+		{
 			timeLeft--;
 		}
 	}

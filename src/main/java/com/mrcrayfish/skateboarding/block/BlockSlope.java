@@ -406,11 +406,4 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		}
 		return false;
 	}
-	
-	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) 
-	{
-		super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
-		System.out.println("Called");
-	}
 }

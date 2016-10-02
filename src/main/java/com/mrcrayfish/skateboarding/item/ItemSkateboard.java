@@ -1,5 +1,6 @@
 package com.mrcrayfish.skateboarding.item;
 
+import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,13 @@ import net.minecraft.world.World;
 
 public class ItemSkateboard extends Item
 {
+	public ItemSkateboard() 
+	{
+		this.setUnlocalizedName("skateboard");
+		this.setRegistryName("skateboard");
+		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
+	}
+	
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
