@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockRail extends BlockObject
+public class BlockFlatBar extends BlockObject
 {
 	public static final PropertyBool LEFT = PropertyBool.create("left");
 	public static final PropertyBool RIGHT = PropertyBool.create("right");
@@ -34,11 +34,11 @@ public class BlockRail extends BlockObject
 	private static final AxisAlignedBB[] COLLISION_BOXES = { COLLISION_BOX_ONE, COLLISION_BOX_TWO };
 	
 	
-	public BlockRail(Material materialIn) 
+	public BlockFlatBar(Material materialIn) 
 	{
 		super(materialIn);
-		this.setUnlocalizedName("rail");
-		this.setRegistryName("rail");
+		this.setUnlocalizedName("flat_bar");
+		this.setRegistryName("flat_bar");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LEFT, false).withProperty(RIGHT, false));
 	}

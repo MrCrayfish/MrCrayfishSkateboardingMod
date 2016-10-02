@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.init;
 import com.mrcrayfish.skateboarding.Reference;
 import com.mrcrayfish.skateboarding.block.BlockCornerSlope;
 import com.mrcrayfish.skateboarding.block.BlockHandRail;
-import com.mrcrayfish.skateboarding.block.BlockRail;
+import com.mrcrayfish.skateboarding.block.BlockFlatBar;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.item.ItemCornerSlope;
@@ -25,7 +25,7 @@ public class SkateboardingBlocks
 	public static Block corner_slope;
 	public static Block stair;
 	public static Block handrail;
-	public static Block rail;
+	public static Block flat_bar;
 	
 	public static void init()
 	{
@@ -33,7 +33,7 @@ public class SkateboardingBlocks
 		corner_slope = new BlockCornerSlope(Material.ROCK);
 		stair = new BlockStair(Material.ROCK);
 		handrail = new BlockHandRail(Material.ANVIL);
-		rail = new BlockRail(Material.ANVIL);
+		flat_bar = new BlockFlatBar(Material.ANVIL);
 	}
 	
 	public static void register()
@@ -42,7 +42,7 @@ public class SkateboardingBlocks
 		registerBlock(corner_slope, new ItemCornerSlope(corner_slope));
 		registerBlock(stair, new ItemStair(stair));
 		registerBlock(handrail, new ItemHandrail(handrail));
-		registerBlock(rail);
+		registerBlock(flat_bar);
 	}
 	
 	public static void registerBlock(Block block) 
@@ -63,7 +63,7 @@ public class SkateboardingBlocks
 		registerRender(corner_slope);
 		registerRender(stair);
 		registerRender(handrail);
-		registerRender(rail);
+		registerRender(flat_bar);
 	}
 	
 	private static void registerRender(Block block)

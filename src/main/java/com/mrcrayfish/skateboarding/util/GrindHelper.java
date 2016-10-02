@@ -69,7 +69,7 @@ public class GrindHelper
 		
 		pos = new BlockPos(posX, posY - 0.75, posZ);
 		block = world.getBlockState(pos).getBlock();
-		return block == Blocks.IRON_BARS || block == SkateboardingBlocks.rail;
+		return block == Blocks.IRON_BARS || block == SkateboardingBlocks.flat_bar;
 	}
 
 	public static double[] setOffset(EntitySkateboard skateboard, double x, double y, double z)

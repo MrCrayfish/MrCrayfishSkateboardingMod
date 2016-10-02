@@ -5,3 +5,4 @@ tile.slope.name=Slope
 tile.corner_slope.name=Slope (Corner)
 tile.stair.name=Stairs
 tile.handrail.name=Handrail
+tile.flat_bar.name=Flat Bar
