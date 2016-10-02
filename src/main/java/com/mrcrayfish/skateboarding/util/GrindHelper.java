@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.util;
 
 import com.mrcrayfish.skateboarding.block.properties.Grindable;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -61,7 +62,14 @@ public class GrindHelper
 		pos = new BlockPos(posX, posY - 2.5, posZ);
 		state = world.getBlockState(pos);
 		block = state.getBlock();
-		return block instanceof Grindable && ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		if(block instanceof Grindable)
+		{
+			return ((Grindable) block).canGrind(world, state, pos, posX - (int) posX, posY - pos.getY(), posZ - (int) posZ);
+		}
+		
+		pos = new BlockPos(posX, posY - 0.75, posZ);
+		block = world.getBlockState(pos).getBlock();
+		return block == Blocks.IRON_BARS || block == SkateboardingBlocks.rail;
 	}
 
 	public static double[] setOffset(EntitySkateboard skateboard, double x, double y, double z)

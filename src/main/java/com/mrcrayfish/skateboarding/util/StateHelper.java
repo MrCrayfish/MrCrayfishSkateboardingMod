@@ -93,4 +93,5 @@ public class StateHelper
 	{
 		SAME, OPPOSITE, LEFT, RIGHT, UP, DOWN, NONE;
 	}
+	
 }

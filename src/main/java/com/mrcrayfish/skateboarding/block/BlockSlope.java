@@ -351,7 +351,6 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		}
 	}
 	
-	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) 
 	{
 		if(!state.getValue(STACKED))

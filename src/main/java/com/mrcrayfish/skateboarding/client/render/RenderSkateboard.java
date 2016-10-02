@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class RenderSkateboard extends Render<EntitySkateboard>
 {
-	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/crayfish.png");
+	private static final ResourceLocation minecartTextures = new ResourceLocation("csm:textures/entity/mojang.png");
 	private ModelSkateboard modelSkateboard = new ModelSkateboard();
 
 	public RenderSkateboard(RenderManager renderManager)
