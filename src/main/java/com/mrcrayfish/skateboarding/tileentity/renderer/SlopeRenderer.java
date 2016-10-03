@@ -166,6 +166,8 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 					drawCuboid(te.getWorld(), te.getPos(), tessellator, buffer, -4, 7, 7.5, 4, 1, 1);
 				}
 			}
+			
+			GlStateManager.enableLighting();
 		}
 		GlStateManager.popMatrix();
 	}

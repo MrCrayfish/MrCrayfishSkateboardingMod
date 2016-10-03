@@ -134,6 +134,8 @@ public class CornerSlopeRenderer extends TileEntitySpecialRenderer<TileEntityCor
 				buffer.pos(0.25, 0.125, 0.75).tex(0.75, 0.75).endVertex();
 				tessellator.draw();
 			}
+			
+			GlStateManager.enableLighting();
 		}
 		GlStateManager.popMatrix();
 	}
