@@ -5,23 +5,22 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.properties.Grindable;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
-import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -171,6 +170,24 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setRegistryName("slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+	}
+	
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
+	{
+		if(heldItem != null)
+		{
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof TileEntityTextureable)
+			{
+				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
+				{
+					heldItem.stackSize--;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	@Override

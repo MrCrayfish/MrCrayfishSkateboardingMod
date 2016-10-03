@@ -5,6 +5,7 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
 import net.minecraft.block.BlockDirectional;
@@ -18,8 +19,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -106,6 +110,24 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		this.setRegistryName("corner_slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+	}
+	
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
+	{
+		if(heldItem != null)
+		{
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof TileEntityTextureable)
+			{
+				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
+				{
+					heldItem.stackSize--;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

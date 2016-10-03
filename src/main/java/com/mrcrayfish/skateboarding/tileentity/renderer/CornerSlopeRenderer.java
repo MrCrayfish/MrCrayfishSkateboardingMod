@@ -42,7 +42,14 @@ public class CornerSlopeRenderer extends TileEntitySpecialRenderer<TileEntityCor
 			VertexBuffer buffer = tessellator.getBuffer();
 			GlStateManager.color(1.0F, 1.0F, 1.0F);
 			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(CLAY_TEXTURE);
+			if(te.hasTexture())
+			{
+				Minecraft.getMinecraft().getTextureManager().bindTexture(te.getTexture());
+			}
+			else
+			{
+				Minecraft.getMinecraft().getTextureManager().bindTexture(CLAY_TEXTURE);
+			}
 			
 			// Sides
 			if((meta / 4) > 0)
