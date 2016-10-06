@@ -174,108 +174,113 @@ public class EntitySkateboard extends Entity
 	public void onUpdate()
 	{
 		super.onUpdate();
+
+		prevRotationYaw = rotationYaw;
 		
-		//TODO: Limit server to only update movement.
-		//if(worldObj.isRemote)
-		//{
+		if(worldObj.isRemote)
+		{
 			combo.update(this);
-			
-			prevRotationYaw = rotationYaw;
 			prevBoardYaw = boardYaw;
 			prevBoardRotationX = boardRotationX;
 			prevBoardRotationY = boardRotationY;
 			prevBoardRotationZ = boardRotationZ;
+		}
+		
+		/* Will only execute code if player is riding skateboard */
+		Entity entity = getControllingPassenger();
+		if (entity instanceof EntityLivingBase)
+		{
+			EntityLivingBase entityLiving = (EntityLivingBase) entity;
 			
-			/* Will only execute code if player is riding skateboard */
-			if (getControllingPassenger() != null)
+			/* Handles pushing */
+			if (entityLiving.moveForward > 0 && !pushed && !grinding)
 			{
-				EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();
-				
-				/* Handles pushing */
-				if (entity.moveForward > 0 && !pushed && !grinding)
+				if (currentSpeed <= maxSpeed - 1.0)
 				{
-					if (currentSpeed <= maxSpeed - 1.0)
-					{
-						currentSpeed += 1.0D;
-					}
-					pushed = true;
+					currentSpeed += 1.0D;
 				}
-				else if (entity.moveForward == 0.0)
-				{
-					pushed = false;
-				}
-				
-				/* If skateboard is not jumping, allow turning. When player jumps
-				 * from grinding, give exception to jump off in a direction using
-				 * allowOnce. */
-				if ((!jumping || allowOnce) && !needsCameraUpdate)
-				{
-					float f = entity.rotationYaw;
-	
-					/* If grinding, set direction to direction of grinding. */
-					if (grinding)
-					{
-						//TODO:: If easy mode?
-						//f = EnumFacing.fromAngle(this.angleOnJump).rotateY().getHorizontalIndex() * 90F;
-					}
-	
-					this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
-					this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
-					allowOnce = false;
-				}
-				
-				if(needsCameraUpdate)
-				{
-					canCameraIncrement = true;
-					cameraYaw -= cameraIncrement;
-					if(Math.floor(cameraYaw) == 0F) 
-					{
-						needsCameraUpdate = false;
-					}
-				}
+				pushed = true;
 			}
-			else
+			else if (entityLiving.moveForward == 0.0)
 			{
-				/* If no player riding, make the board stop */
-				this.motionX = 0.0D;
-				this.motionZ = 0.0D;
+				pushed = false;
 			}
 			
-			/* If collided horizontally, slow current speed by 75% */
-			if (isCollidedHorizontally)
+			/* If skateboard is not jumping, allow turning. When player jumps
+			 * from grinding, give exception to jump off in a direction using
+			 * allowOnce. */
+			if ((!jumping || allowOnce) && !needsCameraUpdate)
 			{
-				this.currentSpeed *= 0.75D;
+				float f = entity.rotationYaw;
+
+				/* If grinding, set direction to direction of grinding. */
+				if (grinding)
+				{
+					//TODO:: If easy mode?
+					//f = EnumFacing.fromAngle(this.angleOnJump).rotateY().getHorizontalIndex() * 90F;
+				}
+
+				this.motionX = -Math.sin((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
+				this.motionZ = Math.cos((double) (f * (float) Math.PI / 180.0F)) * currentSpeed / 16D;
+				this.rotationYaw = entity.rotationYaw - 90F;
+				allowOnce = false;
 			}
 			
-			/* Gravity? */
-			this.motionY -= 0.08D;
-	
-			/* If grinding, make position of skateboard go to center of block.
-			if (grinding)
+			if(needsCameraUpdate && worldObj.isRemote)
 			{
-				double[] offsets = ((Grind) getCurrentTrick()).offsetBoardPosition(this);
-				EnumFacing face = EnumFacing.fromAngle(this.angleOnJump).rotateY();
-				if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
+				canCameraIncrement = true;
+				cameraYaw -= cameraIncrement;
+				if(Math.floor(cameraYaw) == 0F) 
 				{
-					this.setPosition(Math.floor(this.posX) + 0.5 + offsets[0], Math.floor(this.posY) + offsets[1], this.posZ + offsets[2]);
+					needsCameraUpdate = false;
 				}
-				if (face == EnumFacing.EAST | face == EnumFacing.WEST)
-				{
-					this.setPosition(this.posX + offsets[0], Math.floor(this.posY) + offsets[1], Math.floor(this.posZ) + 0.5 + offsets[2]);
-				}
-			}*/
-	
-			if (jumping)
+			}
+		}
+		else
+		{
+			/* If no player riding, make the board stop */
+			this.motionX = 0.0D;
+			this.motionZ = 0.0D;
+		}
+		
+		/* If collided horizontally, slow current speed by 75% */
+		if (isCollidedHorizontally)
+		{
+			this.currentSpeed *= 0.75D;
+		}
+		
+		/* Gravity? */
+		this.motionY -= 0.08D;
+
+		/* If grinding, make position of skateboard go to center of block.
+		if (grinding)
+		{
+			double[] offsets = ((Grind) getCurrentTrick()).offsetBoardPosition(this);
+			EnumFacing face = EnumFacing.fromAngle(this.angleOnJump).rotateY();
+			if (face == EnumFacing.NORTH | face == EnumFacing.SOUTH)
 			{
-				if (this.getControllingPassenger() instanceof EntityLivingBase)
-				{
-					EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();
-					this.rotationYaw = entity.rotationYaw - 90F;
-				}
-				
-				//if (jumpingTimer < 10)
-					//motionY = 0.5D - (double) jumpingTimer * 0.03D;
-				
+				this.setPosition(Math.floor(this.posX) + 0.5 + offsets[0], Math.floor(this.posY) + offsets[1], this.posZ + offsets[2]);
+			}
+			if (face == EnumFacing.EAST | face == EnumFacing.WEST)
+			{
+				this.setPosition(this.posX + offsets[0], Math.floor(this.posY) + offsets[1], Math.floor(this.posZ) + 0.5 + offsets[2]);
+			}
+		}*/
+		
+
+
+		if (jumping)
+		{
+			if (entity instanceof EntityLivingBase)
+			{
+				EntityLivingBase entityLiving = (EntityLivingBase) entity;
+				this.rotationYaw = entity.rotationYaw - 90F;
+			}
+			
+			//if (jumpingTimer < 10)
+				//motionY = 0.5D - (double) jumpingTimer * 0.03D;
+			if(worldObj.isRemote)
+			{
 				if (currentTrick != null)
 				{
 					inTrickTimer++;
@@ -316,70 +321,47 @@ public class EntitySkateboard extends Entity
 	
 				jumpingTimer++;
 			}
-			
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			
-			if (grinding)
+		}
+		
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		
+		if (grinding && worldObj.isRemote)
+		{
+			if (currentTrick instanceof Grind)
 			{
-				if (currentTrick instanceof Grind)
+				inTrickTimer++;
+				
+				prevBoardYaw = boardYaw;
+				prevBoardRotationX = boardRotationX;
+				prevBoardRotationY = boardRotationY;
+				prevBoardRotationZ = boardRotationZ;
+				
+				currentTrick.updateBoard(this);
+
+				Grind grind = (Grind) currentTrick;
+				if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
 				{
-					inTrickTimer++;
-					
-					prevBoardYaw = boardYaw;
-					prevBoardRotationX = boardRotationX;
-					prevBoardRotationY = boardRotationY;
-					prevBoardRotationZ = boardRotationZ;
-					
-					currentTrick.updateBoard(this);
-	
-					Grind grind = (Grind) currentTrick;
-					if (!GrindHelper.canGrind(worldObj, this.posX, this.posY, this.posZ))
-					{
-						getCurrentTrick().onEnd(this);
-						resetTrick();
-						grinding = false;
-						onGround = false;
-					}
-					else
-					{
-						combo.addPoints(getCurrentTrick().points());
-					}
-					
-					worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, posX, posY, posZ, 0, 0, 0, 0);
+					getCurrentTrick().onEnd(this);
+					resetTrick();
+					grinding = false;
+					onGround = false;
+				}
+				else
+				{
+					combo.addPoints(getCurrentTrick().points());
 				}
 				
-				//TODO: If easy mode
-				//this.rotationYaw = (int) (angleOnJump + (rotationYaw - angleOnJump) + 45) / 90 * 90;
+				worldObj.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, posX, posY, posZ, 0, 0, 0, 0);
 			}
 			
-			if(!jumping)
-			{
-				this.rotationPitch = 0.0F;
-				double init = (double) this.rotationYaw;
-				double newX = this.prevPosX - this.posX;
-				double newZ = this.prevPosZ - this.posZ;
-	
-				init = (double) ((float) (Math.atan2(newZ, newX) * 180.0D / Math.PI));
-	
-				double d12 = MathHelper.wrapDegrees(init - (double) this.rotationYaw);
-	
-				if (d12 > 20.0D)
-				{
-					d12 = 20.0D;
-				}
-	
-				if (d12 < -20.0D)
-				{
-					d12 = -20.0D;
-				}
-				
-				this.rotationYaw = (float) ((double) this.rotationYaw + d12);
-			}
-	
-			if (!grinding)
-			{
-				this.currentSpeed *= 0.99D;
-			}
+			//TODO: If easy mode
+			//this.rotationYaw = (int) (angleOnJump + (rotationYaw - angleOnJump) + 45) / 90 * 90;
+		}
+
+		if (!grinding)
+		{
+			this.currentSpeed *= 0.99D;
+		}
 		//}
 	}
 	
@@ -576,7 +558,8 @@ public class EntitySkateboard extends Entity
 		resetTrick();
 		jumping = true;
 		onGround = false;
-		angleOnJump = this.rotationYaw;
+		angleOnJump = rotationYaw;
+		prevRotationYaw = rotationYaw;
 		motionY = Math.sqrt((height + 1) * 0.22);
 	}
 
