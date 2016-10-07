@@ -123,7 +123,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
 			if(skateboard.isOnAngledBlock()) 
 			{
-				GlStateManager.translate(0, 0.125, 0);
+				GlStateManager.translate(0, -skateboard.getAngledBlock().getYOffset(skateboard.isGrinding()), 0);
 			}
 			
 			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)

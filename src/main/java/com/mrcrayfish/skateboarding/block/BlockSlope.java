@@ -430,4 +430,10 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	{
 		return 22.5F;
 	}
+	
+	@Override
+	public double getYOffset(boolean grinding) 
+	{
+		return -0.125;
+	}
 }

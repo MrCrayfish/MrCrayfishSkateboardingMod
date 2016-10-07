@@ -267,4 +267,10 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		return 22.5F;
 	}
 
+	@Override
+	public double getYOffset(boolean grinding) 
+	{
+		return -0.125;
+	}
+
 }

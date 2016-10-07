@@ -280,4 +280,10 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 	{
 		return 22.5F;
 	}
+	
+	@Override
+	public double getYOffset(boolean grinding) 
+	{
+		return grinding ? -0.125 : 0.0;
+	}
 }

@@ -52,7 +52,7 @@ public class EntitySkateboard extends Entity
 	
 	private boolean onAngledBlock = false;
 	private IBlockState angledBlockState;
-	private float angledBlockAngle = 0F;
+	private Angled angledBlock;
 
 	public float angleOnJump;
 	private float angleOnTrick;
@@ -696,9 +696,9 @@ public class EntitySkateboard extends Entity
 		return angledBlockState;
 	}
 	
-	public float getAngledBlockAngle() 
+	public Angled getAngledBlock() 
 	{
-		return angledBlockAngle;
+		return angledBlock;
 	}
 	
 	public void updateAngledBlock()
@@ -708,7 +708,7 @@ public class EntitySkateboard extends Entity
 		{
 			this.onAngledBlock = true;
 			this.angledBlockState = inside;
-			this.angledBlockAngle = ((Angled) inside.getBlock()).getAngle();
+			this.angledBlock = (Angled) inside.getBlock();
 			return;
 		}
 		
@@ -717,7 +717,7 @@ public class EntitySkateboard extends Entity
 		{
 			this.onAngledBlock = true;
 			this.angledBlockState = below;
-			this.angledBlockAngle = ((Angled) below.getBlock()).getAngle();
+			this.angledBlock = (Angled) below.getBlock();
 			return;
 		}
 		
@@ -728,14 +728,14 @@ public class EntitySkateboard extends Entity
 			{
 				this.onAngledBlock = true;
 				this.angledBlockState = underground;
-				this.angledBlockAngle = ((Angled) underground.getBlock()).getAngle();
+				this.angledBlock = (Angled) underground.getBlock();
 				return;
 			}
 		}
 		
 		this.onAngledBlock = false;
 		this.angledBlockState = null;
-		this.angledBlockAngle = 0F;
+		this.angledBlock = null;
 	}
 	
 	public void setCameraUpdate(float amount) 

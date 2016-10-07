@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.client.render;
 
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
+import com.mrcrayfish.skateboarding.block.properties.Angled;
 import com.mrcrayfish.skateboarding.client.model.ModelSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
@@ -45,23 +46,24 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 			IBlockState state = skateboard.getAngledBlockState();
 			if(state != null)
 			{
+				Angled angled = (Angled) state.getBlock();
 				EnumFacing facing = state.getValue(BlockSlope.FACING);
 				switch(facing) 
 				{
 				case NORTH:
-					GlStateManager.rotate(skateboard.getAngledBlockAngle(), 1, 0, 0);
+					GlStateManager.rotate(angled.getAngle(), 1, 0, 0);
 					break;
 				case EAST:
-					GlStateManager.rotate(skateboard.getAngledBlockAngle(), 0, 0, 1);
+					GlStateManager.rotate(angled.getAngle(), 0, 0, 1);
 					break;
 				case SOUTH:
-					GlStateManager.rotate(-skateboard.getAngledBlockAngle(), 1, 0, 0);
+					GlStateManager.rotate(-angled.getAngle(), 1, 0, 0);
 					break;
 				default:
-					GlStateManager.rotate(-skateboard.getAngledBlockAngle(), 0, 0, 1);
+					GlStateManager.rotate(-angled.getAngle(), 0, 0, 1);
 					break;
 				}
-				GlStateManager.translate(0, -0.125, 0);
+				GlStateManager.translate(0, angled.getYOffset(skateboard.isGrinding()), 0);
 			}
 			
 			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
