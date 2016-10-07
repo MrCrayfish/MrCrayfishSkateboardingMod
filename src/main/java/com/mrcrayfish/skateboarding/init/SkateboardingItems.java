@@ -15,12 +15,12 @@ public class SkateboardingItems
 
 	public static void init()
 	{
-		skateboard = new ItemSkateboard().setUnlocalizedName("skateboard").setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
+		skateboard = new ItemSkateboard();
 	}
 
 	public static void register()
 	{
-		GameRegistry.registerItem(skateboard, skateboard.getUnlocalizedName().substring(5));
+		GameRegistry.registerItem(skateboard);
 	}
 
 	public static void registerRenders()

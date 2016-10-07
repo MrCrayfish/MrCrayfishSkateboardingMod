@@ -1,3 +1,6 @@
 {
+	"textures": {
+		"particle": "blocks/hardened_clay"
+    },
     "elements": []
 }

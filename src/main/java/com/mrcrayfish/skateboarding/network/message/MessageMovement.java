@@ -1,7 +1,9 @@
 package com.mrcrayfish.skateboarding.network.message;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -9,34 +11,35 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
+import com.mrcrayfish.skateboarding.network.PacketHandler;
 
 public class MessageMovement implements IMessage, IMessageHandler<MessageMovement, IMessage> {
 
 	private int entityId;
-	private double posX, posY, posZ;
-	private float rotationYaw;
+	private double motionX, motionY, motionZ;
 
 	public MessageMovement() {
 
 	}
 
-	public MessageMovement(int entityId, double posX, double posY, double posZ, float rotationYaw) {
+	public MessageMovement(int entityId, double motionX, double motionY, double motionZ) {
 		this.entityId = entityId;
-		this.posX = posX;
-		this.posY = posY;
-		this.posZ = posZ;
-		this.rotationYaw = rotationYaw;
+		this.motionX = motionX;
+		this.motionY = motionY;
+		this.motionZ = motionZ;
 	}
 
 	@Override
 	public IMessage onMessage(MessageMovement message, MessageContext ctx) {
-		World world = MrCrayfishSkateboardingMod.proxy.getClientWorld();
-		Entity entity = world.getEntityByID(message.entityId);
-		if(entity instanceof EntitySkateboard)
-		{
-			EntitySkateboard skateboard = (EntitySkateboard)entity;
-			skateboard.setPosition(message.posX, message.posY, message.posZ);
-			skateboard.setAngles(message.rotationYaw, skateboard.rotationPitch);
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		Entity riding = player.getRidingEntity();
+		if(riding != null && riding.getEntityId() == message.entityId) return null;
+		Entity target = player.worldObj.getEntityByID(message.entityId);
+		if(target instanceof EntitySkateboard) {
+			EntitySkateboard skateboard = (EntitySkateboard)target;
+			skateboard.motionX = message.motionX;
+			skateboard.motionY = message.motionY;
+			skateboard.motionZ = message.motionZ;
 		}
 		return null;
 	}
@@ -44,19 +47,17 @@ public class MessageMovement implements IMessage, IMessageHandler<MessageMovemen
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.posX = buf.readDouble();
-		this.posY = buf.readDouble();
-		this.posZ = buf.readDouble();
-		this.rotationYaw = buf.readFloat();
+		this.motionX = buf.readDouble();
+		this.motionY = buf.readDouble();
+		this.motionZ = buf.readDouble();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeDouble(this.posX);
-		buf.writeDouble(this.posY);
-		buf.writeDouble(this.posZ);
-		buf.writeFloat(this.rotationYaw);
+		buf.writeDouble(this.motionX);
+		buf.writeDouble(this.motionY);
+		buf.writeDouble(this.motionZ);
 	}
 
 }

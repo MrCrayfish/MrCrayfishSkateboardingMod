@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.tileentity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntitySlope extends TileEntityTextureable 
+public class TileEntityStair extends TileEntity 
 {
 	public boolean rail = false;
 	
@@ -19,6 +19,13 @@ public class TileEntitySlope extends TileEntityTextureable
 	{
 		compound.setBoolean("rail", rail);
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) 
+	{
+		super.handleUpdateTag(tag);
+		rail = tag.getBoolean("rail");
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package com.mrcrayfish.skateboarding.item;
 
 import com.mrcrayfish.skateboarding.block.BlockSlope;
+import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 
 import net.minecraft.block.Block;
@@ -14,9 +15,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemSlope extends ItemBlock 
+public class ItemStair extends ItemBlock 
 {
-	public ItemSlope(Block block) 
+	public ItemStair(Block block) 
 	{
 		super(block);
 	}
@@ -28,11 +29,11 @@ public class ItemSlope extends ItemBlock
 		{
 			IBlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
-			if(block instanceof BlockSlope) 
+			if(block instanceof BlockStair) 
 			{
-				if(!state.getValue(BlockSlope.STACKED))
+				if(!state.getValue(BlockStair.STACKED))
 				{
-					worldIn.setBlockState(pos, block.getDefaultState().withProperty(BlockSlope.FACING, state.getValue(BlockSlope.FACING)).withProperty(BlockSlope.STACKED, true));
+					worldIn.setBlockState(pos, block.getDefaultState().withProperty(BlockStair.FACING, state.getValue(BlockStair.FACING)).withProperty(BlockStair.STACKED, true));
 					return EnumActionResult.SUCCESS;
 				}
 			}

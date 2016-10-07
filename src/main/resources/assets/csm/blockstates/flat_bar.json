@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "facing=north,left=false,right=false": { "model": "csm:flat_bar_single"           },
+        "facing=north,left=true,right=false":  { "model": "csm:flat_bar_end",    "y": 180 },
+        "facing=north,left=false,right=true":  { "model": "csm:flat_bar_end"              },
+        "facing=north,left=true,right=true":   { "model": "csm:flat_bar_middle"           },
+        "facing=east,left=false,right=false":  { "model": "csm:flat_bar_single", "y": 90  },
+        "facing=east,left=true,right=false":   { "model": "csm:flat_bar_end",    "y": 270 },
+        "facing=east,left=false,right=true":   { "model": "csm:flat_bar_end",    "y": 90  },
+        "facing=east,left=true,right=true":    { "model": "csm:flat_bar_middle", "y": 90  },
+        "facing=south,left=false,right=false": { "model": "csm:flat_bar_single"           },
+        "facing=south,left=true,right=false":  { "model": "csm:flat_bar_end"              },
+        "facing=south,left=false,right=true":  { "model": "csm:flat_bar_end",    "y": 180 },
+        "facing=south,left=true,right=true":   { "model": "csm:flat_bar_middle"           },
+        "facing=west,left=false,right=false":  { "model": "csm:flat_bar_single", "y": 90  },
+        "facing=west,left=true,right=false":   { "model": "csm:flat_bar_end",    "y": 90  },
+        "facing=west,left=false,right=true":   { "model": "csm:flat_bar_end",    "y": 270 },
+        "facing=west,left=true,right=true":    { "model": "csm:flat_bar_middle", "y": 90  }
+    }
+}
