@@ -7,6 +7,7 @@ import com.mrcrayfish.skateboarding.api.trick.Trick;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.network.PacketHandler;
 import com.mrcrayfish.skateboarding.network.message.MessageStack;
+import com.mrcrayfish.skateboarding.network.message.MessageUpdatePos;
 import com.mrcrayfish.skateboarding.util.ComboBuilder;
 import com.mrcrayfish.skateboarding.util.GrindHelper;
 
@@ -22,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -241,8 +243,9 @@ public class EntitySkateboard extends Entity
 		else
 		{
 			/* If no player riding, make the board stop */
-			this.motionX = 0.0D;
-			this.motionZ = 0.0D;
+			this.currentSpeed = 0;
+			this.motionX = 0;
+			this.motionZ = 0;
 		}
 		
 		/* If collided horizontally, slow current speed by 75% */
@@ -374,6 +377,7 @@ public class EntitySkateboard extends Entity
 			this.setDead();
 		} else {
 			player.startRiding(this, false);
+			prevRotationYaw = rotationYaw = player.rotationYaw - 90F;
 		}
 		return EnumActionResult.SUCCESS;
 	}
@@ -572,15 +576,26 @@ public class EntitySkateboard extends Entity
 		{
 		case X:
 			this.motionX = 0;
-			this.setLocationAndAngles(Math.floor(posX) + 0.5, posY, posZ, rotationYaw, rotationPitch);
+			this.lastTickPosX = this.prevPosX = this.posX = Math.floor(posX) + 0.5;
+			PacketHandler.INSTANCE.sendToServer(new MessageUpdatePos(getEntityId(), Math.floor(posX) + 0.5, posY, posZ));
 			break;
 		case Z:
 			this.motionZ = 0;
-			this.setLocationAndAngles(posX, posY, Math.floor(posZ) + 0.5, rotationYaw, rotationPitch);
+			this.lastTickPosZ = this.prevPosZ = this.posZ = Math.floor(posZ) + 0.5;
+			PacketHandler.INSTANCE.sendToServer(new MessageUpdatePos(getEntityId(), posX, posY, Math.floor(posZ) + 0.5));
 			break;
 		default:
 			break;
 		}
+		this.updateBoundingBox(posX, posY, posZ);
+		this.updatePassenger(getControllingPassenger());
+	}
+	
+	public void updateBoundingBox(double x, double y, double z)
+	{
+		float f = this.width / 2.0F;
+        float f1 = this.height;
+        this.setEntityBoundingBox(new AxisAlignedBB(x - (double) f, y, z - (double)f, x + (double)f, y + (double)f1, z + (double)f));
 	}
 
 	public boolean isPushed()

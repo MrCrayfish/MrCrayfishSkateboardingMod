@@ -13,29 +13,18 @@ import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 public class MessageUpdatePos implements IMessage, IMessageHandler<MessageUpdatePos, IMessage>
 {
 	private int entityId;
-	private double posX = 0.0;
-	private double posY = 0.0;
-	private double posZ = 0.0;
-	private double motionX = 0.0;
-	private double motionY = 0.0;
-	private double motionZ = 0.0;
-	private float rotationYaw = 0.0F;
+	private double posX;
+	private double posY;
+	private double posZ;
 
-	public MessageUpdatePos()
-	{
+	public MessageUpdatePos() {}
 
-	}
-
-	public MessageUpdatePos(int entityId, double posX, double posY, double posZ, double motionX, double motionY, double motionZ, float rotationYaw)
+	public MessageUpdatePos(int entityId, double posX, double posY, double posZ)
 	{
 		this.entityId = entityId;
 		this.posX = posX;
 		this.posY = posY;
 		this.posZ = posZ;
-		this.motionX = motionX;
-		this.motionY = motionY;
-		this.motionZ = motionZ;
-		this.rotationYaw = rotationYaw;
 	}
 
 	@Override
@@ -45,10 +34,6 @@ public class MessageUpdatePos implements IMessage, IMessageHandler<MessageUpdate
 		buf.writeDouble(posX);
 		buf.writeDouble(posY);
 		buf.writeDouble(posZ);
-		buf.writeDouble(motionX);
-		buf.writeDouble(motionY);
-		buf.writeDouble(motionZ);
-		buf.writeFloat(rotationYaw);
 	}
 
 	@Override
@@ -58,26 +43,18 @@ public class MessageUpdatePos implements IMessage, IMessageHandler<MessageUpdate
 		this.posX = buf.readDouble();
 		this.posY = buf.readDouble();
 		this.posZ = buf.readDouble();
-		this.motionX = buf.readDouble();
-		this.motionY = buf.readDouble();
-		this.motionZ = buf.readDouble();
-		this.rotationYaw = buf.readFloat();
 	}
 
 	@Override
 	public IMessage onMessage(MessageUpdatePos message, MessageContext ctx)
 	{
-		// System.out.println("Got packet!");
 		World world = ctx.getServerHandler().playerEntity.worldObj;
 		Entity entity = world.getEntityByID(message.entityId);
 		if (entity instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) entity;
 			skateboard.setPosition(message.posX, message.posY, message.posZ);
-			skateboard.motionX = message.motionX;
-			skateboard.motionY = message.motionY;
-			skateboard.motionZ = message.motionZ;
-			skateboard.rotationYaw = message.rotationYaw;
+			skateboard.updatePassenger(skateboard.getControllingPassenger());
 		}
 		return null;
 	}
