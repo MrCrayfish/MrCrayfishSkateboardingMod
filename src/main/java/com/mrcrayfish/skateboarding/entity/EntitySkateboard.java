@@ -18,6 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -465,19 +467,6 @@ public class EntitySkateboard extends Entity
 		//print();
 	}
 
-	public int getDifferenceWithFix(int initAngle, int newAngle)
-	{
-		if (initAngle == 0 && newAngle == 270)
-		{
-			return 90;
-		}
-		if (initAngle == 270 && newAngle == 0)
-		{
-			return -90;
-		}
-		return initAngle - newAngle;
-	}
-
 	public void performStack()
 	{
 		Entity riding = getControllingPassenger();
@@ -516,6 +505,9 @@ public class EntitySkateboard extends Entity
 				jumpingTimer = 0;
 				grinding = true;
 				onGround = false;
+				float newYaw = (float) Math.floor((rotationYaw + 45F) / 90F) * 90F;
+				turnToDirection(newYaw);
+				moveToDirectionCenter(newYaw);
 			}
 			else
 			{
@@ -561,6 +553,34 @@ public class EntitySkateboard extends Entity
 		angleOnJump = rotationYaw;
 		prevRotationYaw = rotationYaw;
 		motionY = Math.sqrt((height + 1) * 0.22);
+	}
+	
+	public void turnToDirection(float newYaw) 
+	{
+		Entity entity = getControllingPassenger();
+		float startYaw = entity.rotationYaw - 90F;
+		rotationYaw = newYaw;
+		prevRotationYaw = newYaw;
+		this.setCameraUpdate(newYaw - startYaw);	
+	}
+	
+	public void moveToDirectionCenter(float yaw)
+	{
+		EnumFacing facing = EnumFacing.fromAngle(yaw);
+		Axis axis = facing.getAxis();
+		switch(axis)
+		{
+		case X:
+			this.motionX = 0;
+			this.setLocationAndAngles(Math.floor(posX) + 0.5, posY, posZ, rotationYaw, rotationPitch);
+			break;
+		case Z:
+			this.motionZ = 0;
+			this.setLocationAndAngles(posX, posY, Math.floor(posZ) + 0.5, rotationYaw, rotationPitch);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public boolean isPushed()
