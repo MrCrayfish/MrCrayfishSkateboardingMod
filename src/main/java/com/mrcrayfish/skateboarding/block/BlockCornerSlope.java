@@ -3,6 +3,7 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
+import com.mrcrayfish.skateboarding.block.properties.Angled;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
@@ -30,7 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
+public class BlockCornerSlope extends BlockObject implements ITileEntityProvider, Angled
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
 
@@ -258,6 +259,12 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
 		return new TileEntityCornerSlope();
+	}
+
+	@Override
+	public float getAngle() 
+	{
+		return 22.5F;
 	}
 
 }

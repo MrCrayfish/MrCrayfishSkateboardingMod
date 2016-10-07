@@ -121,7 +121,7 @@ public class ModelPlayerOverride extends ModelPlayerBase
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
-			if(skateboard.isOnSlope()) 
+			if(skateboard.isOnAngledBlock()) 
 			{
 				GlStateManager.translate(0, 0.125, 0);
 			}

@@ -3,8 +3,8 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
+import com.mrcrayfish.skateboarding.block.properties.Angled;
 import com.mrcrayfish.skateboarding.block.properties.Grindable;
-import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
 import com.mrcrayfish.skateboarding.util.CollisionHelper;
 
@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockStair extends BlockObject implements ITileEntityProvider, Grindable
+public class BlockStair extends BlockObject implements ITileEntityProvider, Grindable, Angled
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
 	
@@ -273,5 +273,11 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public float getAngle() 
+	{
+		return 22.5F;
 	}
 }
