@@ -1,6 +1,10 @@
 package com.mrcrayfish.skateboarding.tileentity;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +22,14 @@ public class TileEntityTextureable extends TileEntity
 		{
 			EnumDyeColor colour = EnumDyeColor.byDyeDamage(stack.getMetadata());
 			texture = new ResourceLocation("textures/blocks/hardened_clay_stained_" + colour.getName() + ".png");
+			return true;
+		}
+		if(stack != null && stack.getItem() instanceof ItemBlock)
+		{
+			Block block = ((ItemBlock) stack.getItem()).block;
+			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(block.getStateFromMeta(stack.getMetadata()));
+			System.out.println(model.getParticleTexture().getIconName().replace(":", ":textures/"));
+			texture = new ResourceLocation(model.getParticleTexture().getIconName().replace(":", ":textures/") + ".png");
 			return true;
 		}
 		return false;
