@@ -20,7 +20,7 @@ public class StateHelper
 	public static RelativeFacing getRelativeFacing(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
 		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
-		IBlockState state = world.getBlockState(pos);
+		IBlockState state = world.getBlockState(target);
 		if(state.getProperties().containsKey(BlockHorizontal.FACING))
 		{
 			EnumFacing otherFacing = (EnumFacing) world.getBlockState(target).getValue(BlockHorizontal.FACING);
