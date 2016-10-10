@@ -1,5 +1,8 @@
 package com.mrcrayfish.skateboarding.client.model.block;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -7,18 +10,33 @@ import net.minecraftforge.client.model.IModel;
 
 public class CustomLoader implements ICustomModelLoader
 {
-	public static final ModelSlope SLOPE_MODEL = new ModelSlope();
+	private static final ImmutableMap<String, IModel> blockModels;
+	
+	static 
+	{
+		ImmutableMap.Builder<String, IModel> builder = new Builder<String, IModel>();
+		builder.put("slope", new ModelSlope());
+		builder.put("corner_slope", new ModelSlope());
+		builder.put("stair", new ModelStair());
+		blockModels = builder.build();
+	}
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) 
 	{
 		if(modelLocation.getResourceDomain().equals("csm"))
 		{
-			if("models/item/slope".equals(modelLocation.getResourcePath()))
+			for(String name : blockModels.keySet())
 			{
-				return true;
+				if(name.equals(modelLocation.getResourcePath()))
+				{
+					return true;
+				}
+				if(("models/item/" + name).equals(modelLocation.getResourcePath()))
+				{
+					return true;
+				}
 			}
-			return "slope".equals(modelLocation.getResourcePath());
 		}
 		return false;
 	}
@@ -26,7 +44,7 @@ public class CustomLoader implements ICustomModelLoader
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception 
 	{
-		return SLOPE_MODEL;
+		return blockModels.get(modelLocation.getResourcePath().replace("models/item/", ""));
 	}
 	
 	@Override
