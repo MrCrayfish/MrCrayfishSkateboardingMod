@@ -5,7 +5,9 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
+import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedTextureProperty;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
+import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
 import com.mrcrayfish.skateboarding.util.RotationHelper;
 
 import net.minecraft.block.ITileEntityProvider;
@@ -15,16 +17,25 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockStair extends BlockObject implements ITileEntityProvider, Grindable, Angled
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
+	
+	public static final UnlistedTextureProperty TEXTURE = new UnlistedTextureProperty();
 	
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.25, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.75, 1.0);
@@ -114,6 +125,32 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 		this.setRegistryName("stair");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) 
+    {
+        return false;
+    }
+	
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
+	{
+		if(heldItem != null)
+		{
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof TileEntityTextureable)
+			{
+				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
+				{
+					worldIn.markBlockRangeForRenderUpdate(pos, pos);
+					heldItem.stackSize--;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	@Override
@@ -245,15 +282,39 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 	}
 
 	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
+	{
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityTextureable)
+		{
+			TileEntityTextureable textureable = (TileEntityTextureable) tileEntity;
+			if(textureable.hasTexture())
+			{
+				return ((IExtendedBlockState) state).withProperty(TEXTURE, textureable.getTexture().toString());
+			}
+		}
+		return super.getExtendedState(state, world, pos);
+	}
+
+	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[] { FACING, STACKED });
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		builder.add(FACING, STACKED);
+		builder.add(TEXTURE);
+		return builder.build();
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
 		return new TileEntityStair();
+	}
+	
+	@Override
+	public BlockRenderLayer getBlockLayer() 
+	{
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
@@ -262,7 +323,6 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 		TileEntityStair stair = (TileEntityStair) world.getTileEntity(pos);
 		if(stair.rail)
 		{
-			System.out.println(posY);
 			if(state.getValue(STACKED))
 			{
 				return posY >= 1.5;

@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.tileentity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityStair extends TileEntity 
+public class TileEntityStair extends TileEntityTextureable 
 {
 	public boolean rail = false;
 	

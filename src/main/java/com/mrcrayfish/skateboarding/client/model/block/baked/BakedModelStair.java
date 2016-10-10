@@ -10,9 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.mrcrayfish.skateboarding.block.BlockSlope;
+import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.util.QuadHelper;
-import com.mrcrayfish.skateboarding.util.QuadHelper.Vertex;
 import com.mrcrayfish.skateboarding.util.TransformationBuilder;
 
 import net.minecraft.block.BlockHorizontal;
@@ -29,13 +28,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class BakedModelSlope implements IPerspectiveAwareModel 
+public class BakedModelStair implements IPerspectiveAwareModel 
 {
-	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("csm:slope");
+	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("csm:stair");
 	
 	private static final ImmutableMap<TransformType, Matrix4f> cameraTransformations;
 	
@@ -54,16 +53,13 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 	
 	private VertexFormat format;
 	private TextureAtlasSprite mainTexture;
-	private TextureAtlasSprite metalTexture;
 	
-	public BakedModelSlope(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
+	public BakedModelStair(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
 	{
 		this.format = format;
 		this.mainTexture = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/hardened_clay"));
-		this.metalTexture = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/stone_slab_top"));
 	}
-
-
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) 
 	{
@@ -80,8 +76,8 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 				helper.setFacing(facing);
 			}
 			
-			boolean stacked = extendedState.getValue(BlockSlope.STACKED);
-			String texture = extendedState.getValue(BlockSlope.TEXTURE);
+			boolean stacked = extendedState.getValue(BlockStair.STACKED);
+			String texture = extendedState.getValue(BlockStair.TEXTURE);
 			
 			TextureAtlasSprite main = getTexture(texture);
 			if(main != null)
@@ -89,54 +85,21 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 				helper.setSprite(main);
 			}
 			
-			quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(0, 0, 1, 0, 16), new Vertex(0, 0, 0, 16, 16), new Vertex(1, 0, 0, 16, 0), EnumFacing.DOWN));
-			
 			if(stacked)
 			{
-				// Top
-				quads.add(helper.createQuad(new Vertex(0, 0.5, 1, 0, 0), new Vertex(1, 1, 1, 0, 16), new Vertex(1, 1, 0, 16, 16), new Vertex(0, 0.5, 0, 16, 0), EnumFacing.UP));
-				
-				// Right
-				quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 1, 1, 0, 16), new Vertex(0, 0.5, 1, 16, 8), new Vertex(0, 0, 1, 16, 0), EnumFacing.SOUTH));
-				
-				// Left
-				quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0.5, 0, 0, 8), new Vertex(1, 1, 0, 16, 16), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
-				
-				// Back
-				quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 1, 0, 0, 16), new Vertex(1, 1, 1, 16, 16), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
-				
-				// Front
-				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 0.5, 1, 0, 8), new Vertex(0, 0.5, 0, 16, 8), new Vertex(0, 0, 0, 16, 0), EnumFacing.WEST));
+				quads.addAll(helper.createCuboid(new Vec3d(0, 0, 0), new Vec3d(1, 0.75, 1)));
+				quads.addAll(helper.createCuboid(new Vec3d(0.5, 0.75, 0), new Vec3d(1, 1, 1)));
 			}
 			else
 			{
-				// Top
-				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 16), new Vertex(1, 0.5, 0, 16, 16), new Vertex(0, 0, 0, 16, 0), EnumFacing.UP));
-				
-				// Right
-				quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 8), new Vertex(0, 0, 1, 16, 0), new Vertex(0, 0, 1, 16, 0), EnumFacing.SOUTH));
-				
-				// Left
-				quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 16, 8), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
-				
-				// Back
-				quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 0, 8), new Vertex(1, 0.5, 1, 16, 8), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
-				
-				helper.setSprite(metalTexture);
-				
-				// Metal
-				quads.add(helper.createQuad(new Vertex(0, 0.001, 1, 0, 0), new Vertex(0.25, 0.126, 1, 0, 4), new Vertex(0.25, 0.126, 0, 16, 4), new Vertex(0, 0.001, 0, 16, 0), EnumFacing.UP));
+				quads.addAll(helper.createCuboid(new Vec3d(0, 0, 0), new Vec3d(1, 0.25, 1)));
+				quads.addAll(helper.createCuboid(new Vec3d(0.5, 0.25, 0), new Vec3d(1, 0.5, 1)));
 			}
 		}
 		else
 		{
-			quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 16), new Vertex(1, 0.5, 0, 16, 16), new Vertex(0, 0, 0, 16, 0), EnumFacing.UP));
-			quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 8), new Vertex(0, 0, 1, 16, 0), new Vertex(0, 0, 1, 16, 0), EnumFacing.SOUTH));
-			quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 16, 8), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
-			quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 0, 8), new Vertex(1, 0.5, 1, 16, 8), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
-			quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(0, 0, 1, 0, 16), new Vertex(0, 0, 0, 16, 16), new Vertex(1, 0, 0, 16, 0), EnumFacing.DOWN));
-			helper.setSprite(metalTexture);
-			quads.add(helper.createQuad(new Vertex(0, 0.001, 1, 0, 0), new Vertex(0.25, 0.126, 1, 0, 4), new Vertex(0.25, 0.126, 0, 16, 4), new Vertex(0, 0.001, 0, 16, 0), EnumFacing.UP));
+			quads.addAll(helper.createCuboid(new Vec3d(0, 0, 0), new Vec3d(1, 0.25, 1)));
+			quads.addAll(helper.createCuboid(new Vec3d(0.5, 0.25, 0), new Vec3d(1, 0.5, 1)));
 		}
 		return quads;
 	}
@@ -181,7 +144,6 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 	{
 		return new ItemOverrideList(Lists.<ItemOverride>newArrayList());
 	}
-
 
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) 

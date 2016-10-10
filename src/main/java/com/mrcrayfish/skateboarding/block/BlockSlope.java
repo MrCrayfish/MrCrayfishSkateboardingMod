@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
@@ -448,6 +449,12 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	public TileEntity createNewTileEntity(World worldIn, int meta) 
 	{
 		return new TileEntitySlope();
+	}
+	
+	@Override
+	public BlockRenderLayer getBlockLayer() 
+	{
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
