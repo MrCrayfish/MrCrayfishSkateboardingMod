@@ -188,8 +188,6 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setRegistryName("slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
-		GameRegistry.register(this);
-        GameRegistry.register(new ItemSlope(this), getRegistryName());
 	}
 
 	@SideOnly(Side.CLIENT)
