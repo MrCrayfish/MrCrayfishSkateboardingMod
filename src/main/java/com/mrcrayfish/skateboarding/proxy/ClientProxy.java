@@ -4,8 +4,8 @@ import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.client.Keybinds;
-import com.mrcrayfish.skateboarding.client.model.BakedModelLoader;
-import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
+import com.mrcrayfish.skateboarding.client.model.block.CustomLoader;
+import com.mrcrayfish.skateboarding.client.model.entity.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderFactory());
 		
-		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+		ModelLoaderRegistry.registerLoader(new CustomLoader());
 	}
 	
 	@Override

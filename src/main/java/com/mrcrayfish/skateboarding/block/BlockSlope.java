@@ -5,7 +5,7 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
-import com.mrcrayfish.skateboarding.client.model.block.BakedModelSlope;
+import com.mrcrayfish.skateboarding.client.model.block.baked.BakedModelSlope;
 import com.mrcrayfish.skateboarding.item.ItemSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;

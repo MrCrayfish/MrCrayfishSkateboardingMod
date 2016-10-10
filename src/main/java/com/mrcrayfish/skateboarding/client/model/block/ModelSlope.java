@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
+import com.mrcrayfish.skateboarding.client.model.block.baked.BakedModelSlope;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -31,7 +32,7 @@ public class ModelSlope implements IModel
 	@Override
 	public Collection<ResourceLocation> getTextures() 
 	{
-		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/half_slab"));
+		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/stone_slab_top"));
 	}
 
 	@Override

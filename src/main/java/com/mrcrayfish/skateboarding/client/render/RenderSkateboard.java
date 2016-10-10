@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.client.render;
 import com.mrcrayfish.skateboarding.api.trick.Grind;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
-import com.mrcrayfish.skateboarding.client.model.ModelSkateboard;
+import com.mrcrayfish.skateboarding.client.model.entity.ModelSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 import net.minecraft.block.state.IBlockState;

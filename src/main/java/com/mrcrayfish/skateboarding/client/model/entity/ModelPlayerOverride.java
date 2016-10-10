@@ -1,4 +1,4 @@
-package com.mrcrayfish.skateboarding.client.model;
+package com.mrcrayfish.skateboarding.client.model.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -129,6 +130,11 @@ public class QuadHelper
             }
         }
     }
+	
+	public void setSprite(TextureAtlasSprite sprite) 
+	{
+		this.sprite = sprite;
+	}
 	
 	public void setFacing(EnumFacing facing) 
 	{

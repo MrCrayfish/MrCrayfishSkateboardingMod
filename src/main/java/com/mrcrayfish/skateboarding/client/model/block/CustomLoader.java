@@ -1,13 +1,11 @@
-package com.mrcrayfish.skateboarding.client.model;
-
-import com.mrcrayfish.skateboarding.client.model.block.ModelSlope;
+package com.mrcrayfish.skateboarding.client.model.block;
 
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 
-public class BakedModelLoader implements ICustomModelLoader
+public class CustomLoader implements ICustomModelLoader
 {
 	public static final ModelSlope SLOPE_MODEL = new ModelSlope();
 
