@@ -1,11 +1,13 @@
 package com.mrcrayfish.skateboarding.tileentity;
 
+import com.mrcrayfish.skateboarding.tileentity.attributes.Railable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntitySlope extends TileEntityTextureable 
+public class TileEntitySlope extends TileEntityTextureable implements Railable
 {
-	public boolean rail = false;
+	private boolean rail = false;
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) 
@@ -27,5 +29,17 @@ public class TileEntitySlope extends TileEntityTextureable
 		NBTTagCompound tag = super.getUpdateTag();
 		tag.setBoolean("rail", rail);
 		return tag;
+	}
+	
+	@Override
+	public void setRailAttached() 
+	{
+		this.rail = true;
+	}
+
+	@Override
+	public boolean isRailAttached() 
+	{
+		return rail;
 	}
 }

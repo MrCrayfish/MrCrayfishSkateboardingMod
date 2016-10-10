@@ -32,7 +32,7 @@ public class ModelSlope implements IModel
 	@Override
 	public Collection<ResourceLocation> getTextures() 
 	{
-		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/stone_slab_top"));
+		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/stone_slab_top"), new ResourceLocation("minecraft", "blocks/anvil_base"));
 	}
 
 	@Override

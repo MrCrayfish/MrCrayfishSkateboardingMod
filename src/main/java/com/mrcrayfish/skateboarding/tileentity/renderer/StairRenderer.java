@@ -30,9 +30,7 @@ public class StairRenderer extends TileEntitySpecialRenderer<TileEntityStair>
 	@Override
 	public void renderTileEntityAt(TileEntityStair te, double x, double y, double z, float partialTicks, int destroyStage) 
 	{
-		if(!te.rail) return;
-		
-		IBlockState state = te.getWorld().getBlockState(te.getPos());
+		/*IBlockState state = te.getWorld().getBlockState(te.getPos());
 		int meta = te.getBlockType().getMetaFromState(state);
 		
 		GlStateManager.pushMatrix();
@@ -71,7 +69,7 @@ public class StairRenderer extends TileEntitySpecialRenderer<TileEntityStair>
 			
 			GlStateManager.enableLighting();
 		}
-		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();*/
 	}
 	
 	public void drawCuboid(World world, BlockPos pos, Tessellator tessellator, VertexBuffer buffer, double posX, double posY, double posZ, double width, double height, double depth)

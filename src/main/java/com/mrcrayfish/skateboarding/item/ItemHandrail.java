@@ -2,6 +2,7 @@ package com.mrcrayfish.skateboarding.item;
 
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
+import com.mrcrayfish.skateboarding.tileentity.attributes.Railable;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,24 +26,14 @@ public class ItemHandrail extends ItemBlock
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		System.out.println(tileEntity);
-		if(tileEntity instanceof TileEntityStair)
+		if(tileEntity instanceof Railable)
 		{
-			TileEntityStair stair = (TileEntityStair) tileEntity;
-			if(!stair.rail)
+			Railable railable = (Railable) tileEntity;
+			if(!railable.isRailAttached())
 			{
-				stair.rail = true;
+				railable.setRailAttached();
 				stack.stackSize--;
-				return EnumActionResult.SUCCESS;
-			}
-		}
-		if(tileEntity instanceof TileEntitySlope)
-		{
-			TileEntitySlope slope = (TileEntitySlope) tileEntity;
-			if(!slope.rail)
-			{
-				slope.rail = true;
-				stack.stackSize--;
+				System.out.println("Called");
 				return EnumActionResult.SUCCESS;
 			}
 		}

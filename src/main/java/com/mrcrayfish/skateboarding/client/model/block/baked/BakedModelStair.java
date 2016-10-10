@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.util.QuadHelper;
 import com.mrcrayfish.skateboarding.util.TransformationBuilder;
@@ -53,11 +54,13 @@ public class BakedModelStair implements IPerspectiveAwareModel
 	
 	private VertexFormat format;
 	private TextureAtlasSprite mainTexture;
+	private TextureAtlasSprite railTexture;
 	
 	public BakedModelStair(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
 	{
 		this.format = format;
 		this.mainTexture = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/hardened_clay"));
+		this.railTexture = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/anvil_base"));
 	}
 	
 	@Override
@@ -77,6 +80,9 @@ public class BakedModelStair implements IPerspectiveAwareModel
 			}
 			
 			boolean stacked = extendedState.getValue(BlockStair.STACKED);
+			boolean railAttached = extendedState.getValue(BlockStair.RAIL_ATTACHED);
+			boolean railFront = extendedState.getValue(BlockStair.RAIL_FRONT);
+			boolean railBehind = extendedState.getValue(BlockStair.RAIL_BEHIND);
 			String texture = extendedState.getValue(BlockStair.TEXTURE);
 			
 			TextureAtlasSprite main = getTexture(texture);
@@ -94,6 +100,31 @@ public class BakedModelStair implements IPerspectiveAwareModel
 			{
 				quads.addAll(helper.createCuboid(new Vec3d(0, 0, 0), new Vec3d(1, 0.25, 1)));
 				quads.addAll(helper.createCuboid(new Vec3d(0.5, 0.25, 0), new Vec3d(1, 0.5, 1)));
+			}
+			
+			if(railAttached)
+			{
+				helper.setSprite(railTexture);
+				if(stacked)
+				{
+					quads.addAll(helper.createAngledCuboid(new Vec3d(0, 22 * 0.0625, 7 * 0.0625), new Vec3d(1, 24 * 0.0625, 9 * 0.0625), 8 * 0.0625));
+					quads.addAll(helper.createAngledCuboid(new Vec3d(0, 15 * 0.0625, 7.5 * 0.0625), new Vec3d(1, 16 * 0.0625, 8.5 * 0.0625), 8 * 0.0625));
+					quads.addAll(helper.createCuboid(new Vec3d(7.2 * 0.0625, 11 * 0.0625, 7.2 * 0.0625), new Vec3d(8.8 * 0.0625, 27 * 0.0625, 8.8 * 0.0625)));
+					if(railFront)
+					{
+						quads.addAll(helper.createCuboid(new Vec3d(1, 23 * 0.0625, 7.5 * 0.0625), new Vec3d(20 * 0.0625, 24 * 0.0625, 8.5 * 0.0625)));
+					}
+				}
+				else
+				{
+					quads.addAll(helper.createAngledCuboid(new Vec3d(0, 14 * 0.0625, 7 * 0.0625), new Vec3d(1, 1, 9 * 0.0625), 8 * 0.0625));
+					quads.addAll(helper.createAngledCuboid(new Vec3d(0, 7 * 0.0625, 7.5 * 0.0625), new Vec3d(1, 8 * 0.0625, 8.5 * 0.0625), 8 * 0.0625));
+					quads.addAll(helper.createCuboid(new Vec3d(7.2 * 0.0625, 3 * 0.0625, 7.2 * 0.0625), new Vec3d(8.8 * 0.0625, 19 * 0.0625, 8.8 * 0.0625)));
+					if(railBehind)
+					{
+						quads.addAll(helper.createCuboid(new Vec3d(-4 * 0.0625, 7 * 0.0625, 7.5 * 0.0625), new Vec3d(0, 8 * 0.0625, 8.5 * 0.0625)));
+					}
+				}
 			}
 		}
 		else
