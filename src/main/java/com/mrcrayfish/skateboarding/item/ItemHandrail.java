@@ -32,8 +32,8 @@ public class ItemHandrail extends ItemBlock
 			if(!railable.isRailAttached())
 			{
 				railable.setRailAttached();
+				worldIn.markBlockRangeForRenderUpdate(pos, pos);
 				stack.stackSize--;
-				System.out.println("Called");
 				return EnumActionResult.SUCCESS;
 			}
 		}
