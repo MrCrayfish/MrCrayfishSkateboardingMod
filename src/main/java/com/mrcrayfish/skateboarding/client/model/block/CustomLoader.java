@@ -12,7 +12,15 @@ public class CustomLoader implements ICustomModelLoader
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) 
 	{
-		return modelLocation.getResourceDomain().equals("csm") && "slope".equals(modelLocation.getResourcePath());
+		if(modelLocation.getResourceDomain().equals("csm"))
+		{
+			if("models/item/slope".equals(modelLocation.getResourcePath()))
+			{
+				return true;
+			}
+			return "slope".equals(modelLocation.getResourcePath());
+		}
+		return false;
 	}
 
 	@Override

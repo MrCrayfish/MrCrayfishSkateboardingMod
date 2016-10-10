@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class SkateboardingBlocks
 {
-	public static Block slope;
+	public static BlockSlope slope;
 	public static Block corner_slope;
 	public static Block stair;
 	public static Block handrail;
@@ -64,9 +64,6 @@ public class SkateboardingBlocks
 		registerRender(stair);
 		registerRender(handrail);
 		registerRender(flat_bar);
-		
-		((BlockSlope) slope).initModel();
-		((BlockSlope) slope).initItemModel();
 	}
 	
 	private static void registerRender(Block block)

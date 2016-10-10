@@ -44,6 +44,6 @@ public class ModelSlope implements IModel
 	@Override
 	public IModelState getDefaultState() 
 	{
-		return TRSRTransformation.identity();
+		return CommonTransforms.BLOCK_INVENTORY;
 	}
 }

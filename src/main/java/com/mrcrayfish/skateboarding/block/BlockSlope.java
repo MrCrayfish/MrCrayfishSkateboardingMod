@@ -189,28 +189,6 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
 	}
-
-	@SideOnly(Side.CLIENT)
-    public void initModel() 
-	{
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) 
-            {
-                return BakedModelSlope.BAKED_MODEL;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initItemModel() 
-    {
-        Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation("csm:slope"));
-        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-        final int DEFAULT_ITEM_SUBTYPE = 0;
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
-    }
     
     @Override
     @SideOnly(Side.CLIENT)
