@@ -18,6 +18,12 @@ public class BlockObject extends BlockHorizontal
 	}
 	
 	@Override
+    public boolean isBlockNormalCube(IBlockState blockState) 
+	{
+        return false;
+    }
+	
+	@Override
 	public boolean isOpaqueCube(IBlockState state)
     {
         return false;

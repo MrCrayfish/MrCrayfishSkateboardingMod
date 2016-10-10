@@ -3,7 +3,7 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
-import com.mrcrayfish.skateboarding.util.CollisionHelper;
+import com.mrcrayfish.skateboarding.util.RotationHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper;
 import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
 
@@ -25,12 +25,12 @@ public class BlockFlatBar extends BlockObject
 	public static final PropertyBool LEFT = PropertyBool.create("left");
 	public static final PropertyBool RIGHT = PropertyBool.create("right");
 	
-	private static final AxisAlignedBB BOUNDING_BOX_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.0, 0.75, 14 * 0.0625, 1.0);
-	private static final AxisAlignedBB BOUNDING_BOX_TWO = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.0, 0.75, 14 * 0.0625, 1.0);
+	private static final AxisAlignedBB BOUNDING_BOX_ONE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.0, 0.75, 14 * 0.0625, 1.0);
+	private static final AxisAlignedBB BOUNDING_BOX_TWO = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.0, 0.75, 14 * 0.0625, 1.0);
 	private static final AxisAlignedBB[] BOUNDING_BOXES = { BOUNDING_BOX_ONE, BOUNDING_BOX_TWO };
 	
-	private static final AxisAlignedBB COLLISION_BOX_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.0, 0.625, 14 * 0.0625, 1.0);
-	private static final AxisAlignedBB COLLISION_BOX_TWO = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.0, 0.625, 14 * 0.0625, 1.0);
+	private static final AxisAlignedBB COLLISION_BOX_ONE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.0, 0.625, 14 * 0.0625, 1.0);
+	private static final AxisAlignedBB COLLISION_BOX_TWO = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.0, 0.625, 14 * 0.0625, 1.0);
 	private static final AxisAlignedBB[] COLLISION_BOXES = { COLLISION_BOX_ONE, COLLISION_BOX_TWO };
 	
 	

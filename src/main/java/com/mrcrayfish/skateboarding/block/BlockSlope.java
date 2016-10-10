@@ -3,11 +3,13 @@ package com.mrcrayfish.skateboarding.block;
 import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
-import com.mrcrayfish.skateboarding.block.properties.Angled;
-import com.mrcrayfish.skateboarding.block.properties.Grindable;
+import com.mrcrayfish.skateboarding.block.attributes.Angled;
+import com.mrcrayfish.skateboarding.block.attributes.Grindable;
+import com.mrcrayfish.skateboarding.client.model.block.BakedModelSlope;
+import com.mrcrayfish.skateboarding.item.ItemSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
-import com.mrcrayfish.skateboarding.util.CollisionHelper;
+import com.mrcrayfish.skateboarding.util.RotationHelper;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -15,17 +17,26 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSlope extends BlockObject implements ITileEntityProvider, Grindable, Angled
 {
@@ -34,133 +45,133 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5625, 1.0);
 	
-	private static final AxisAlignedBB NORTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
-	private static final AxisAlignedBB NORTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
-	private static final AxisAlignedBB NORTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
-	private static final AxisAlignedBB NORTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
-	private static final AxisAlignedBB NORTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
-	private static final AxisAlignedBB NORTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
-	private static final AxisAlignedBB NORTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
+	private static final AxisAlignedBB NORTH_ONE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
+	private static final AxisAlignedBB NORTH_TWO = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
+	private static final AxisAlignedBB NORTH_THREE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
+	private static final AxisAlignedBB NORTH_FOUR = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
+	private static final AxisAlignedBB NORTH_FIVE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
+	private static final AxisAlignedBB NORTH_SIX = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
+	private static final AxisAlignedBB NORTH_SEVEN = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
 	
-	private static final AxisAlignedBB EAST_ONE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
-	private static final AxisAlignedBB EAST_TWO = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
-	private static final AxisAlignedBB EAST_THREE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
-	private static final AxisAlignedBB EAST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
-	private static final AxisAlignedBB EAST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
-	private static final AxisAlignedBB EAST_SIX = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
-	private static final AxisAlignedBB EAST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
+	private static final AxisAlignedBB EAST_ONE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
+	private static final AxisAlignedBB EAST_TWO = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
+	private static final AxisAlignedBB EAST_THREE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
+	private static final AxisAlignedBB EAST_FOUR = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
+	private static final AxisAlignedBB EAST_FIVE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
+	private static final AxisAlignedBB EAST_SIX = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
+	private static final AxisAlignedBB EAST_SEVEN = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
 	
-	private static final AxisAlignedBB SOUTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
-	private static final AxisAlignedBB SOUTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
-	private static final AxisAlignedBB SOUTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
-	private static final AxisAlignedBB SOUTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
-	private static final AxisAlignedBB SOUTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
-	private static final AxisAlignedBB SOUTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
-	private static final AxisAlignedBB SOUTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
+	private static final AxisAlignedBB SOUTH_ONE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
+	private static final AxisAlignedBB SOUTH_TWO = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
+	private static final AxisAlignedBB SOUTH_THREE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
+	private static final AxisAlignedBB SOUTH_FOUR = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
+	private static final AxisAlignedBB SOUTH_FIVE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
+	private static final AxisAlignedBB SOUTH_SIX = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
+	private static final AxisAlignedBB SOUTH_SEVEN = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
 	
-	private static final AxisAlignedBB WEST_ONE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
-	private static final AxisAlignedBB WEST_TWO = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
-	private static final AxisAlignedBB WEST_THREE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
-	private static final AxisAlignedBB WEST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
-	private static final AxisAlignedBB WEST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
-	private static final AxisAlignedBB WEST_SIX = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
-	private static final AxisAlignedBB WEST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
+	private static final AxisAlignedBB WEST_ONE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.0625, 0.0, 1.0, 0.125, 1.0);
+	private static final AxisAlignedBB WEST_TWO = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.125, 0.0, 1.0, 0.1875, 1.0);
+	private static final AxisAlignedBB WEST_THREE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.1875, 0.0, 1.0, 0.25, 1.0);
+	private static final AxisAlignedBB WEST_FOUR = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.25, 0.0, 1.0, 0.3125, 1.0);
+	private static final AxisAlignedBB WEST_FIVE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.3125, 0.0, 1.0, 0.375, 1.0);
+	private static final AxisAlignedBB WEST_SIX = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.375, 0.0, 1.0, 0.4375, 1.0);
+	private static final AxisAlignedBB WEST_SEVEN = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.4375, 0.0, 1.0, 0.5, 1.0);
 	
-	private static final AxisAlignedBB NORTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
-	private static final AxisAlignedBB NORTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
-	private static final AxisAlignedBB NORTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
-	private static final AxisAlignedBB NORTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
-	private static final AxisAlignedBB NORTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
-	private static final AxisAlignedBB NORTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
-	private static final AxisAlignedBB NORTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
+	private static final AxisAlignedBB NORTH_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
+	private static final AxisAlignedBB NORTH_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
+	private static final AxisAlignedBB NORTH_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
+	private static final AxisAlignedBB NORTH_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
+	private static final AxisAlignedBB NORTH_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
+	private static final AxisAlignedBB NORTH_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
+	private static final AxisAlignedBB NORTH_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
 	
-	private static final AxisAlignedBB EAST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
-	private static final AxisAlignedBB EAST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
-	private static final AxisAlignedBB EAST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
-	private static final AxisAlignedBB EAST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
-	private static final AxisAlignedBB EAST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
-	private static final AxisAlignedBB EAST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
-	private static final AxisAlignedBB EAST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
+	private static final AxisAlignedBB EAST_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
+	private static final AxisAlignedBB EAST_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
+	private static final AxisAlignedBB EAST_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
+	private static final AxisAlignedBB EAST_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
+	private static final AxisAlignedBB EAST_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
+	private static final AxisAlignedBB EAST_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
+	private static final AxisAlignedBB EAST_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
 	
-	private static final AxisAlignedBB SOUTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
-	private static final AxisAlignedBB SOUTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
-	private static final AxisAlignedBB SOUTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
-	private static final AxisAlignedBB SOUTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
-	private static final AxisAlignedBB SOUTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
-	private static final AxisAlignedBB SOUTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
-	private static final AxisAlignedBB SOUTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
+	private static final AxisAlignedBB SOUTH_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
+	private static final AxisAlignedBB SOUTH_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
+	private static final AxisAlignedBB SOUTH_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
+	private static final AxisAlignedBB SOUTH_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
+	private static final AxisAlignedBB SOUTH_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
+	private static final AxisAlignedBB SOUTH_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
+	private static final AxisAlignedBB SOUTH_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
 	
-	private static final AxisAlignedBB WEST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
-	private static final AxisAlignedBB WEST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
-	private static final AxisAlignedBB WEST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
-	private static final AxisAlignedBB WEST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
-	private static final AxisAlignedBB WEST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
-	private static final AxisAlignedBB WEST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
-	private static final AxisAlignedBB WEST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
+	private static final AxisAlignedBB WEST_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.5625, 0.0, 1.0, 0.625, 1.0);
+	private static final AxisAlignedBB WEST_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.625, 0.0, 1.0, 0.6875, 1.0);
+	private static final AxisAlignedBB WEST_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.6875, 0.0, 1.0, 0.75, 1.0);
+	private static final AxisAlignedBB WEST_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.75, 0.0, 1.0, 0.8125, 1.0);
+	private static final AxisAlignedBB WEST_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.8125, 0.0, 1.0, 0.875, 1.0);
+	private static final AxisAlignedBB WEST_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.875, 0.0, 1.0, 0.9375, 1.0);
+	private static final AxisAlignedBB WEST_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.9375, 0.0, 1.0, 1.0, 1.0);
 	
-	private static final AxisAlignedBB RAIL_NORTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_ONE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_TWO = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_THREE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FOUR = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FIVE = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SIX = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SEVEN = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
 	
-	private static final AxisAlignedBB RAIL_EAST_ONE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_TWO = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_THREE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_SIX = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_ONE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_TWO = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_THREE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FOUR = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FIVE = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SIX = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SEVEN = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
 	
-	private static final AxisAlignedBB RAIL_SOUTH_ONE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_TWO = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_THREE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_FOUR = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_FIVE = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_SIX = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_ONE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_TWO = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_THREE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FOUR = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FIVE = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SIX = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SEVEN = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
 	
-	private static final AxisAlignedBB RAIL_WEST_ONE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_TWO = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_THREE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_FOUR = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_FIVE = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_SIX = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_SEVEN = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_ONE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.125, 0.0, 0.375, 1.0, 1.125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_TWO = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.1875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_THREE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.25, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FOUR = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.3125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FIVE = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SIX = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.4375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SEVEN = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 1.5, 0.625);
 
-	private static final AxisAlignedBB RAIL_NORTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
-	private static final AxisAlignedBB RAIL_NORTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_NORTH_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.NORTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
 	
-	private static final AxisAlignedBB RAIL_EAST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
-	private static final AxisAlignedBB RAIL_EAST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_EAST_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.EAST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
 	
-	private static final AxisAlignedBB RAIL_SOUTH_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
-	private static final AxisAlignedBB RAIL_SOUTH_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_SOUTH_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.SOUTH, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
 	
-	private static final AxisAlignedBB RAIL_WEST_ONE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_TWO_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_THREE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_FOUR_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_FIVE_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_SIX_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
-	private static final AxisAlignedBB RAIL_WEST_SEVEN_STACKED = CollisionHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_ONE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.437, 0.0, 0.375, 1.0, 1.625, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_TWO_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.25, 0.0, 0.375, 1.0, 1.6875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_THREE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.375, 0.0, 0.375, 1.0, 1.75, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FOUR_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.5, 0.0, 0.375, 1.0, 1.8125, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_FIVE_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.625, 0.0, 0.375, 1.0, 1.875, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SIX_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.75, 0.0, 0.375, 1.0, 1.9375, 0.625);
+	private static final AxisAlignedBB RAIL_WEST_SEVEN_STACKED = RotationHelper.getBlockBounds(EnumFacing.WEST, 0.875, 0.0, 0.375, 1.0, 2.0, 0.625);
 	
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5, 1.0);
 	 
@@ -171,7 +182,38 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setRegistryName("slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+		GameRegistry.register(this);
+        GameRegistry.register(new ItemSlope(this), getRegistryName());
 	}
+
+	@SideOnly(Side.CLIENT)
+    public void initModel() 
+	{
+        StateMapperBase ignoreState = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) 
+            {
+                return BakedModelSlope.BAKED_MODEL;
+            }
+        };
+        ModelLoader.setCustomStateMapper(this, ignoreState);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void initItemModel() 
+    {
+        Item itemBlock = Item.REGISTRY.getObject(new ResourceLocation("csm:slope"));
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) 
+    {
+        return false;
+    }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 

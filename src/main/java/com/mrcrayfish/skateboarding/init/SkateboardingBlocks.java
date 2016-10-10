@@ -38,7 +38,6 @@ public class SkateboardingBlocks
 	
 	public static void register()
 	{
-		registerBlock(slope, new ItemSlope(slope));
 		registerBlock(corner_slope, new ItemCornerSlope(corner_slope));
 		registerBlock(stair, new ItemStair(stair));
 		registerBlock(handrail, new ItemHandrail(handrail));
@@ -64,6 +63,9 @@ public class SkateboardingBlocks
 		registerRender(stair);
 		registerRender(handrail);
 		registerRender(flat_bar);
+		
+		((BlockSlope) slope).initModel();
+		((BlockSlope) slope).initItemModel();
 	}
 	
 	private static void registerRender(Block block)

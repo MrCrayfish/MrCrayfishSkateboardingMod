@@ -1,10 +1,10 @@
 package com.mrcrayfish.skateboarding.util;
 
-import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 
-public class CollisionHelper
+public class RotationHelper
 {
 	public static AxisAlignedBB getBlockBounds(EnumFacing facing, double x1, double y1, double z1, double x2, double y2, double z2)
 	{

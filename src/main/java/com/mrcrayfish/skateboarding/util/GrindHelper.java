@@ -1,6 +1,6 @@
 package com.mrcrayfish.skateboarding.util;
 
-import com.mrcrayfish.skateboarding.block.properties.Grindable;
+import com.mrcrayfish.skateboarding.block.attributes.Grindable;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 

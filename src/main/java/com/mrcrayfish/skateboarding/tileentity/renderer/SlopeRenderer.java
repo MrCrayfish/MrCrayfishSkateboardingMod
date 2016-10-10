@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import scala.languageFeature.postfixOps;
 
 public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope> 
@@ -33,7 +35,7 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 	@Override
 	public void renderTileEntityAt(TileEntitySlope te, double x, double y, double z, float partialTicks, int destroyStage) 
 	{
-		IBlockState state = te.getWorld().getBlockState(te.getPos());
+		/*IBlockState state = te.getWorld().getBlockState(te.getPos());
 		int meta = te.getBlockType().getMetaFromState(state);
 		GlStateManager.pushMatrix();
 		{
@@ -176,7 +178,7 @@ public class SlopeRenderer extends TileEntitySpecialRenderer<TileEntitySlope>
 			
 			GlStateManager.enableLighting();
 		}
-		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();*/
 	}
 	
 	public void drawCuboid(World world, BlockPos pos, Tessellator tessellator, VertexBuffer buffer, double posX, double posY, double posZ, double width, double height, double depth)

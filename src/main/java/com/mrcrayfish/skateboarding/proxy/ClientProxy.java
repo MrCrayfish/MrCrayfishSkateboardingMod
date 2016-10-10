@@ -2,7 +2,9 @@ package com.mrcrayfish.skateboarding.proxy;
 
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
+import com.mrcrayfish.skateboarding.block.BlockSlope;
 import com.mrcrayfish.skateboarding.client.Keybinds;
+import com.mrcrayfish.skateboarding.client.model.BakedModelLoader;
 import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
@@ -20,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -31,6 +34,8 @@ public class ClientProxy extends CommonProxy
 	public void preInit() 
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderFactory());
+		
+		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 	}
 	
 	@Override
