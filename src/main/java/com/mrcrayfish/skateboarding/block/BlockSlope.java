@@ -186,6 +186,12 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
 	}
+	
+	@Override
+	public boolean isBlockNormalCube(IBlockState blockState) 
+	{
+		return false;
+	}
     
     @Override
     @SideOnly(Side.CLIENT)

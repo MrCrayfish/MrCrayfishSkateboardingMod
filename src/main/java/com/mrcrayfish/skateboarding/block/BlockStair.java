@@ -135,6 +135,12 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 	}
 	
 	@Override
+	public boolean isBlockNormalCube(IBlockState blockState) 
+	{
+		return false;
+	}
+	
+	@Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) 
     {
