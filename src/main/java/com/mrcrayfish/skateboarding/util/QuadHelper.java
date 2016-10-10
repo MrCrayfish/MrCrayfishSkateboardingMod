@@ -31,37 +31,37 @@ public class QuadHelper
 	{
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		
-		float width = (float) (v2.xCoord - v1.xCoord);
-		float height = (float) (v2.yCoord - v1.yCoord);
-		float depth = (float) (v2.zCoord - v1.zCoord);
+		float width = (float) (v2.xCoord - v1.xCoord) * 16F;
+		float height = (float) (v2.yCoord - v1.yCoord) * 16F;
+		float depth = (float) (v2.zCoord - v1.zCoord) * 16F;
 		
 		// Front
-		quads.add(createQuad(new Vertex(v2.xCoord, v2.yCoord, v1.zCoord, 0F, 0F), 
-				             new Vertex(v2.xCoord, v1.yCoord, v1.zCoord, 0F, height), 
-				             new Vertex(v1.xCoord, v1.yCoord, v1.zCoord, width, height), 
-				             new Vertex(v1.xCoord, v2.yCoord, v1.zCoord, width, 0F),
-	             	 		 EnumFacing.NORTH));
-		
-		// Back
-		quads.add(createQuad(new Vertex(v1.xCoord, v2.yCoord, v2.zCoord, 0F, 0F), 
-	             			 new Vertex(v1.xCoord, v1.yCoord, v2.zCoord, 0F, height), 
-	             			 new Vertex(v2.xCoord, v1.yCoord, v2.zCoord, width, height), 
-	             			 new Vertex(v2.xCoord, v2.yCoord, v2.zCoord, width, 0F),
-	             	 		 EnumFacing.SOUTH));
-		
-		// Left
-		quads.add(createQuad(new Vertex(v2.xCoord, v2.yCoord, v2.zCoord, 0F, 0F), 
-	             		 	 new Vertex(v2.xCoord, v1.yCoord, v2.zCoord, 0F, height), 
-	             		 	 new Vertex(v2.xCoord, v1.yCoord, v1.zCoord, depth, height), 
-	             		 	 new Vertex(v2.xCoord, v2.yCoord, v1.zCoord, depth, 0F),
+		quads.add(createQuad(new Vertex(v1.xCoord, v1.yCoord, v2.zCoord, 0F, 0F), 
+				             new Vertex(v1.xCoord, v2.yCoord, v2.zCoord, 0F, height), 
+				             new Vertex(v1.xCoord, v2.yCoord, v1.zCoord, depth, height), 
+				             new Vertex(v1.xCoord, v1.yCoord, v1.zCoord, depth, 0F),
 	             	 		 EnumFacing.WEST));
 		
+		// Back
+		quads.add(createQuad(new Vertex(v2.xCoord, v1.yCoord, v1.zCoord, 0F, 0F), 
+	             			 new Vertex(v2.xCoord, v2.yCoord, v1.zCoord, 0F, height), 
+	             			 new Vertex(v2.xCoord, v2.yCoord, v2.zCoord, depth, height), 
+	             			 new Vertex(v2.xCoord, v1.yCoord, v2.zCoord, depth, 0F),
+	             	 		 EnumFacing.EAST));
+		
+		// Left
+		quads.add(createQuad(new Vertex(v1.xCoord, v1.yCoord, v1.zCoord, 0F, 0F), 
+	             		 	 new Vertex(v1.xCoord, v2.yCoord, v1.zCoord, 0F, height), 
+	             		 	 new Vertex(v2.xCoord, v2.yCoord, v1.zCoord, width, height), 
+	             		 	 new Vertex(v2.xCoord, v1.yCoord, v1.zCoord, width, 0F),
+	             	 		 EnumFacing.NORTH));
+		
 		// Right
-		quads.add(createQuad(new Vertex(v1.xCoord, v2.yCoord, v1.zCoord, 0F, 0F), 
-			    		 	 new Vertex(v1.xCoord, v1.yCoord, v1.zCoord, 0F, height), 
-			    		 	 new Vertex(v1.xCoord, v1.yCoord, v2.zCoord, depth, height), 
-			    		 	 new Vertex(v1.xCoord, v2.yCoord, v2.zCoord, depth, 0F),
-			    	 		 EnumFacing.EAST));
+		quads.add(createQuad(new Vertex(v2.xCoord, v1.yCoord, v2.zCoord, 0F, 0F), 
+			    		 	 new Vertex(v2.xCoord, v2.yCoord, v2.zCoord, 0F, height), 
+			    		 	 new Vertex(v1.xCoord, v2.yCoord, v2.zCoord, width, height), 
+			    		 	 new Vertex(v1.xCoord, v1.yCoord, v2.zCoord, width, 0F),
+			    	 		 EnumFacing.SOUTH));
 		
 		// Bottom
 		quads.add(createQuad(new Vertex(v1.xCoord, v1.yCoord, v2.zCoord, 0F, 0F),
