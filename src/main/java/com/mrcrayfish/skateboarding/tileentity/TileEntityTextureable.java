@@ -28,8 +28,7 @@ public class TileEntityTextureable extends TileEntity
 		{
 			Block block = ((ItemBlock) stack.getItem()).block;
 			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(block.getStateFromMeta(stack.getMetadata()));
-			System.out.println(model.getParticleTexture().getIconName().replace(":", ":textures/"));
-			texture = new ResourceLocation(model.getParticleTexture().getIconName().replace(":", ":textures/") + ".png");
+			texture = new ResourceLocation(model.getParticleTexture().getIconName());
 			return true;
 		}
 		return false;

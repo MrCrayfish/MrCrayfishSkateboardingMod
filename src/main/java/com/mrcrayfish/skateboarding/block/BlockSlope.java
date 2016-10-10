@@ -6,6 +6,7 @@ import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
 import com.mrcrayfish.skateboarding.client.model.block.baked.BakedModelSlope;
+import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedTextureProperty;
 import com.mrcrayfish.skateboarding.item.ItemSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
@@ -16,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.BlockStateContainer.Builder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -34,6 +36,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,6 +45,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockSlope extends BlockObject implements ITileEntityProvider, Grindable, Angled
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
+	
+	public static final UnlistedTextureProperty TEXTURE = new UnlistedTextureProperty();
 
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5625, 1.0);
@@ -225,6 +231,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			{
 				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
 				{
+					worldIn.markBlockRangeForRenderUpdate(pos, pos);
 					heldItem.stackSize--;
 					return true;
 				}
@@ -431,11 +438,29 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	{
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta % 4)).withProperty(STACKED, meta / 4 == 1);
 	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
+	{
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityTextureable)
+		{
+			TileEntityTextureable textureable = (TileEntityTextureable) tileEntity;
+			if(textureable.hasTexture())
+			{
+				return ((IExtendedBlockState) state).withProperty(TEXTURE, textureable.getTexture().toString());
+			}
+		}
+		return super.getExtendedState(state, world, pos);
+	}
 
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[] { FACING, STACKED });
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		builder.add(FACING, STACKED);
+		builder.add(TEXTURE);
+		return builder.build();
 	}
 	
 	public Axis getAxis(IBlockState state) 

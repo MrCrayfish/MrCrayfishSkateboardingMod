@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class BakedModelSlope implements IBakedModel 
 {
@@ -45,25 +46,29 @@ public class BakedModelSlope implements IBakedModel
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		
 		//This is how we get texture dynamically
-		//Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/stone_slab_top");
+		Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/stone_slab_top");
 
 		if(state != null)
 		{
+			IExtendedBlockState extendedState = (IExtendedBlockState) state;
+			
 			QuadHelper helper = new QuadHelper(format, mainTexture);
 			
-			if(state.getBlock() instanceof BlockHorizontal)
+			if(extendedState.getBlock() instanceof BlockHorizontal)
 			{
 				EnumFacing facing = state.getValue(BlockHorizontal.FACING);
 				helper.setFacing(facing);
 			}
 			
-			boolean stacked = false;
+			boolean stacked = extendedState.getValue(BlockSlope.STACKED);
+			String texture = extendedState.getValue(BlockSlope.TEXTURE);
 			
-			if(state.getBlock() instanceof BlockSlope)
+			TextureAtlasSprite main = getTexture(texture);
+			if(main != null)
 			{
-				stacked = state.getValue(BlockSlope.STACKED);
+				helper.setSprite(main);
 			}
-			
+
 			quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(0, 0, 1, 0, 16), new Vertex(0, 0, 0, 16, 16), new Vertex(1, 0, 0, 16, 0), EnumFacing.DOWN));
 			
 			if(stacked)
@@ -104,6 +109,11 @@ public class BakedModelSlope implements IBakedModel
 			}
 		}
 		return quads;
+	}
+	
+	public TextureAtlasSprite getTexture(String texture)
+	{
+		return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(texture);
 	}
 
 	@Override
