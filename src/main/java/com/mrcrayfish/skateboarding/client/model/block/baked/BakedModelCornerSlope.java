@@ -43,7 +43,7 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 	{
 		ImmutableMap.Builder<TransformType, Matrix4f> builder = ImmutableMap.builder();
 		builder.put(TransformType.FIXED, new TransformationBuilder().setScale(0.5F).build().getMatrix());
-		builder.put(TransformType.GUI, new TransformationBuilder().setTranslation(0.1F, 2, 0).setRotation(20, 135, 0).setScale(0.65F).build().getMatrix());
+		builder.put(TransformType.GUI, new TransformationBuilder().setTranslation(0.1F, 2, 0).setRotation(20, 67.5F, 0).setScale(0.7F).build().getMatrix());
 		builder.put(TransformType.GROUND, new TransformationBuilder().setTranslation(0, 1, 0).setScale(0.25F).build().getMatrix());
 		builder.put(TransformType.FIRST_PERSON_LEFT_HAND, new TransformationBuilder().setTranslation(0, 4, 0).setRotation(0, -45, 0).setScale(0.4F).build().getMatrix());
 		builder.put(TransformType.FIRST_PERSON_RIGHT_HAND, new TransformationBuilder().setTranslation(0, 4, 0).setRotation(0, 135, 0).setScale(0.4F).build().getMatrix());
@@ -128,6 +128,16 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 					quads.add(helper.createQuad(new Vertex(1, 0.001, 1, 0, 0), new Vertex(1, 0.126, 0.75, 0, 4), new Vertex(0.25, 0.126, 0.75, 12, 4), new Vertex(0, 0.001, 1, 16, 0), EnumFacing.UP));
 				}
 			}
+		}
+		else
+		{
+			quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 0, 1, 0, 0), new Vertex(1, 0.5, 0, 16, 16), new Vertex(0, 0, 0, 16, 0), EnumFacing.UP));
+			quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 0.5, 0, 0, 16), new Vertex(0, 0, 1, 16, 0), new Vertex(0, 0, 1, 16, 0), EnumFacing.UP));
+			quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 16, 8), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
+			quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 0, 8), new Vertex(1, 0, 1, 16, 0), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
+			helper.setSprite(metalTexture);
+			quads.add(helper.createQuad(new Vertex(0, 0.001, 1, 0, 0), new Vertex(0.25, 0.126, 0.75, 4, 4), new Vertex(0.25, 0.126, 0, 16, 4), new Vertex(0, 0.001, 0, 16, 0), EnumFacing.UP));
+			quads.add(helper.createQuad(new Vertex(1, 0.001, 1, 0, 0), new Vertex(1, 0.126, 0.75, 0, 4), new Vertex(0.25, 0.126, 0.75, 12, 4), new Vertex(0, 0.001, 1, 16, 0), EnumFacing.UP));
 		}
 			
 		return quads;
