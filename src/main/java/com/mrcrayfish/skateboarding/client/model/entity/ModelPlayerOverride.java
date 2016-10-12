@@ -1,4 +1,4 @@
-package com.mrcrayfish.skateboarding.client.model;
+package com.mrcrayfish.skateboarding.client.model.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;
@@ -120,9 +120,9 @@ public class ModelPlayerOverride extends ModelPlayerBase
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
-			if(skateboard.isOnSlope()) 
+			if(skateboard.isOnAngledBlock()) 
 			{
-				GlStateManager.translate(0, 0.125, 0);
+				GlStateManager.translate(0, -skateboard.getAngledBlock().getYOffset(skateboard.isGrinding()), 0);
 			}
 			
 			if (skateboard.isInTrick() && skateboard.getCurrentTrick() != null)

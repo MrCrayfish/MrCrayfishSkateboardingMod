@@ -17,10 +17,16 @@ public class StateHelper
 		return world.getBlockState(target).getBlock();
 	}
 	
+	public static IBlockState getRelativeBlockState(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
+	{
+		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
+		return world.getBlockState(target);
+	}
+	
 	public static RelativeFacing getRelativeFacing(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
 		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
-		IBlockState state = world.getBlockState(pos);
+		IBlockState state = world.getBlockState(target);
 		if(state.getProperties().containsKey(BlockHorizontal.FACING))
 		{
 			EnumFacing otherFacing = (EnumFacing) world.getBlockState(target).getValue(BlockHorizontal.FACING);
@@ -74,15 +80,15 @@ public class StateHelper
 		case -3:
 			return RelativeFacing.LEFT;
 		case -2:
-			return RelativeFacing.SAME;
+			return RelativeFacing.OPPOSITE;
 		case -1:
 			return RelativeFacing.RIGHT;
 		case 0:
-			return RelativeFacing.OPPOSITE;
+			return RelativeFacing.SAME;
 		case 1:
 			return RelativeFacing.LEFT;
 		case 2:
-			return RelativeFacing.SAME;
+			return RelativeFacing.OPPOSITE;
 		case 3:
 			return RelativeFacing.RIGHT;
 		}

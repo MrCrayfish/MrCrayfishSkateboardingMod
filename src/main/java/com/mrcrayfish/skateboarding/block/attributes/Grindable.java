@@ -1,4 +1,4 @@
-package com.mrcrayfish.skateboarding.block.properties;
+package com.mrcrayfish.skateboarding.block.attributes;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

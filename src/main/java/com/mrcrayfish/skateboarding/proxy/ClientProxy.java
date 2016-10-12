@@ -3,24 +3,19 @@ package com.mrcrayfish.skateboarding.proxy;
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
 import com.mrcrayfish.skateboarding.client.Keybinds;
-import com.mrcrayfish.skateboarding.client.model.ModelPlayerOverride;
+import com.mrcrayfish.skateboarding.client.model.block.CustomLoader;
+import com.mrcrayfish.skateboarding.client.model.entity.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
-import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
-import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
-import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
-import com.mrcrayfish.skateboarding.tileentity.renderer.CornerSlopeRenderer;
-import com.mrcrayfish.skateboarding.tileentity.renderer.SlopeRenderer;
-import com.mrcrayfish.skateboarding.tileentity.renderer.StairRenderer;
 
 import api.player.model.ModelPlayerAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -31,6 +26,8 @@ public class ClientProxy extends CommonProxy
 	public void preInit() 
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkateboard.class, new RenderFactory());
+		
+		ModelLoaderRegistry.registerLoader(new CustomLoader());
 	}
 	
 	@Override
@@ -38,10 +35,6 @@ public class ClientProxy extends CommonProxy
 	{
 		SkateboardingItems.registerRenders();
 		SkateboardingBlocks.registerRenders();
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlope.class, new SlopeRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCornerSlope.class, new CornerSlopeRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStair.class, new StairRenderer());
 
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
 
