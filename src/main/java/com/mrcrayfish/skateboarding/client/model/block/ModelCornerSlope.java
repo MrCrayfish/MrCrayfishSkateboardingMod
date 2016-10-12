@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.mrcrayfish.skateboarding.client.model.block.baked.BakedModelCornerSlope;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -26,13 +26,13 @@ public class ModelCornerSlope implements IModel {
 	@Override
 	public Collection<ResourceLocation> getTextures() 
 	{
-		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/stone_slab_top"), new ResourceLocation("minecraft", "blocks/anvil_base"));
+		return ImmutableSet.of(new ResourceLocation("minecraft", "blocks/hardened_clay"), new ResourceLocation("minecraft", "blocks/stone_slab_top"));
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
 	{
-		return null;
+		return new BakedModelCornerSlope(format, bakedTextureGetter);
 	}
 
 	@Override

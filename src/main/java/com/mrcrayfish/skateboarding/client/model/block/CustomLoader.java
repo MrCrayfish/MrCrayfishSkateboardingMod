@@ -16,7 +16,7 @@ public class CustomLoader implements ICustomModelLoader
 	{
 		ImmutableMap.Builder<String, IModel> builder = new Builder<String, IModel>();
 		builder.put("slope", new ModelSlope());
-		builder.put("corner_slope", new ModelSlope()); //TODO 
+		builder.put("corner_slope", new ModelCornerSlope()); //TODO 
 		builder.put("stair", new ModelStair());
 		blockModels = builder.build();
 	}

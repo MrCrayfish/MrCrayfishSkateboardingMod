@@ -4,10 +4,16 @@ import java.util.List;
 
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
+import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedBooleanProperty;
+import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedTextureProperty;
+import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
+import com.mrcrayfish.skateboarding.tileentity.attributes.Railable;
 import com.mrcrayfish.skateboarding.util.RotationHelper;
+import com.mrcrayfish.skateboarding.util.StateHelper;
+import com.mrcrayfish.skateboarding.util.StateHelper.RelativeFacing;
 
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockHorizontal;
@@ -30,10 +36,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCornerSlope extends BlockObject implements ITileEntityProvider, Angled
 {
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
+	
+	public static final UnlistedTextureProperty TEXTURE = new UnlistedTextureProperty();
+	public static final UnlistedBooleanProperty METAL_LEFT = new UnlistedBooleanProperty();
+	public static final UnlistedBooleanProperty METAL_RIGHT = new UnlistedBooleanProperty();
 
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5625, 1.0);
@@ -112,6 +125,19 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
 	}
+	
+	@Override
+	public boolean isBlockNormalCube(IBlockState blockState) 
+	{
+		return false;
+	}
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) 
+    {
+        return false;
+    }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
@@ -245,9 +271,45 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 	}
 
 	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
+	{
+		IExtendedBlockState extendedState = (IExtendedBlockState) state;
+		
+		//extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
+
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityTextureable)
+		{
+			TileEntityTextureable textureable = (TileEntityTextureable) tileEntity;
+			if(textureable.hasTexture())
+			{
+				extendedState = extendedState.withProperty(TEXTURE, textureable.getTexture().toString());
+			}
+		}
+		
+		//TODO finish metal conditions
+		/*if(StateHelper.getRelativeBlock(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME) == SkateboardingBlocks.handrail)
+		{
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME);
+			extendedState = extendedState.withProperty(RAIL_FRONT, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
+		}
+		
+		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
+		{
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
+			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
+		}*/
+		
+		return extendedState;
+	}
+
+	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[] { FACING, STACKED });
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		builder.add(FACING, STACKED);
+		builder.add(TEXTURE, METAL_LEFT, METAL_RIGHT);
+		return builder.build();
 	}
 	
 	public Axis getAxis(IBlockState state) 

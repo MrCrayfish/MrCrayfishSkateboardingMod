@@ -5,7 +5,7 @@ import java.util.List;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.block.attributes.Angled;
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
-import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedRailProperty;
+import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedBooleanProperty;
 import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedTextureProperty;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityStair;
@@ -40,9 +40,9 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 	public static final PropertyBool STACKED = PropertyBool.create("stacked");
 	
 	public static final UnlistedTextureProperty TEXTURE = new UnlistedTextureProperty();
-	public static final UnlistedRailProperty RAIL_ATTACHED = new UnlistedRailProperty();
-	public static final UnlistedRailProperty RAIL_FRONT = new UnlistedRailProperty();
-	public static final UnlistedRailProperty RAIL_BEHIND = new UnlistedRailProperty();
+	public static final UnlistedBooleanProperty RAIL_ATTACHED = new UnlistedBooleanProperty();
+	public static final UnlistedBooleanProperty RAIL_FRONT = new UnlistedBooleanProperty();
+	public static final UnlistedBooleanProperty RAIL_BEHIND = new UnlistedBooleanProperty();
 	
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.25, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.75, 1.0);

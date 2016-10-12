@@ -2,12 +2,12 @@ package com.mrcrayfish.skateboarding.client.model.block.properties;
 
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-public class UnlistedRailProperty implements IUnlistedProperty<Boolean>
+public class UnlistedBooleanProperty implements IUnlistedProperty<Boolean>
 {
 	@Override
 	public String getName() 
 	{
-		return "rail";
+		return "boolean";
 	}
 
 	@Override
