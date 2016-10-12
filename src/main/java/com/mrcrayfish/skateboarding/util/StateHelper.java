@@ -80,15 +80,15 @@ public class StateHelper
 		case -3:
 			return RelativeFacing.LEFT;
 		case -2:
-			return RelativeFacing.SAME;
+			return RelativeFacing.OPPOSITE;
 		case -1:
 			return RelativeFacing.RIGHT;
 		case 0:
-			return RelativeFacing.OPPOSITE;
+			return RelativeFacing.SAME;
 		case 1:
 			return RelativeFacing.LEFT;
 		case 2:
-			return RelativeFacing.SAME;
+			return RelativeFacing.OPPOSITE;
 		case 3:
 			return RelativeFacing.RIGHT;
 		}
