@@ -1,15 +1,5 @@
 package com.mrcrayfish.skateboarding.proxy;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import api.player.model.ModelPlayerAPI;
-
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
 import com.mrcrayfish.skateboarding.client.Keybinds;
@@ -19,8 +9,15 @@ import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
 import com.mrcrayfish.skateboarding.init.SkateboardingItems;
-import com.mrcrayfish.skateboarding.tileentity.TileEntityCornerSlope;
-import com.mrcrayfish.skateboarding.tileentity.renderer.CornerSlopeRenderer;
+
+import api.player.model.ModelPlayerAPI;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy
 {
@@ -38,8 +35,6 @@ public class ClientProxy extends CommonProxy
 	{
 		SkateboardingItems.registerRenders();
 		SkateboardingBlocks.registerRenders();
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCornerSlope.class, new CornerSlopeRenderer());
 
 		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
 
