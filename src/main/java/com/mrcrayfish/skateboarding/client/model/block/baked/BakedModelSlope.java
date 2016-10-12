@@ -93,6 +93,7 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 			boolean railAttached = extendedState.getValue(BlockSlope.RAIL_ATTACHED);
 			boolean railFront = extendedState.getValue(BlockSlope.RAIL_FRONT);
 			boolean railBehind = extendedState.getValue(BlockSlope.RAIL_BEHIND);
+			boolean metal = extendedState.getValue(BlockSlope.METAL);
 			String texture = extendedState.getValue(BlockSlope.TEXTURE);
 
 			TextureAtlasSprite main = getTexture(texture);
@@ -145,7 +146,7 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 				}
 			}
 			
-			if(!stacked)
+			if(!stacked && metal)
 			{
 				helper.setSprite(metalTexture);
 				quads.add(helper.createQuad(new Vertex(0, 0.001, 1, 0, 0), new Vertex(0.25, 0.126, 1, 0, 4), new Vertex(0.25, 0.126, 0, 16, 4), new Vertex(0, 0.001, 0, 16, 0), EnumFacing.UP));

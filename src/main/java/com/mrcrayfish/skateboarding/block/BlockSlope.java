@@ -44,6 +44,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	public static final UnlistedBooleanProperty RAIL_ATTACHED = new UnlistedBooleanProperty();
 	public static final UnlistedBooleanProperty RAIL_FRONT = new UnlistedBooleanProperty();
 	public static final UnlistedBooleanProperty RAIL_BEHIND = new UnlistedBooleanProperty();
+	public static final UnlistedBooleanProperty METAL = new UnlistedBooleanProperty();
 
 	private static final AxisAlignedBB BASE = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0);
 	private static final AxisAlignedBB BASE_STACKED = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.5625, 1.0);
@@ -423,7 +424,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	{
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		
-		extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
+		extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false).withProperty(METAL, true);
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileEntityTextureable)
@@ -453,6 +454,22 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
 		}
 		
+		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
+		{
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
+			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
+		}
+		
+		IBlockState relativeState = StateHelper.getRelativeBlockState(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
+		if(StateHelper.getRelativeBlock(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.slope)
+		{
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
+			if(relativeFacing == RelativeFacing.SAME)
+			{
+				extendedState = extendedState.withProperty(METAL, !relativeState.getValue(STACKED));
+			}
+		}
+		
 		return extendedState;
 	}
 
@@ -461,7 +478,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	{
 		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
 		builder.add(FACING, STACKED);
-		builder.add(TEXTURE, RAIL_ATTACHED, RAIL_FRONT, RAIL_BEHIND);
+		builder.add(TEXTURE, RAIL_ATTACHED, RAIL_FRONT, RAIL_BEHIND, METAL);
 		return builder.build();
 	}
 	
