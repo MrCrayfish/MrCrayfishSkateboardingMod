@@ -1,4 +1,4 @@
-package com.mrcrayfish.skateboarding.block.properties;
+package com.mrcrayfish.skateboarding.block.attributes;
 
 public interface Angled 
 {

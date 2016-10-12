@@ -1,6 +1,8 @@
 package com.mrcrayfish.skateboarding.tileentity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBreakable;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.EnumDyeColor;
@@ -26,11 +28,14 @@ public class TileEntityTextureable extends TileEntity
 		}
 		if(stack != null && stack.getItem() instanceof ItemBlock)
 		{
+			System.out.println("called");
 			Block block = ((ItemBlock) stack.getItem()).block;
-			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(block.getStateFromMeta(stack.getMetadata()));
-			System.out.println(model.getParticleTexture().getIconName().replace(":", ":textures/"));
-			texture = new ResourceLocation(model.getParticleTexture().getIconName().replace(":", ":textures/") + ".png");
-			return true;
+			if(block.isNormalCube(block.getDefaultState()) || block instanceof BlockGlass)
+			{
+				IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(block.getStateFromMeta(stack.getMetadata()));
+				texture = new ResourceLocation(model.getParticleTexture().getIconName());
+				return true;
+			}
 		}
 		return false;
 	}

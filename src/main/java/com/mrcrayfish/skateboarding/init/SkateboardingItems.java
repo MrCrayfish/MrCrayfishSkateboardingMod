@@ -3,6 +3,7 @@ package com.mrcrayfish.skateboarding.init;
 import com.mrcrayfish.skateboarding.MrCrayfishSkateboardingMod;
 import com.mrcrayfish.skateboarding.Reference;
 import com.mrcrayfish.skateboarding.item.ItemSkateboard;
+import com.mrcrayfish.skateboarding.item.ItemSlope;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,6 +22,11 @@ public class SkateboardingItems
 	public static void register()
 	{
 		GameRegistry.registerItem(skateboard);
+	}
+	
+	public static void registerModels()
+	{
+		ItemSlope.initModel();
 	}
 
 	public static void registerRenders()
