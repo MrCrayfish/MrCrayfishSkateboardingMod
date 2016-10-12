@@ -17,6 +17,12 @@ public class StateHelper
 		return world.getBlockState(target).getBlock();
 	}
 	
+	public static IBlockState getRelativeBlockState(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
+	{
+		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);
+		return world.getBlockState(target);
+	}
+	
 	public static RelativeFacing getRelativeFacing(IBlockAccess world, BlockPos pos, EnumFacing facing, RelativeFacing relativeFacing)
 	{
 		BlockPos target = getBlockPosRelativeTo(world, pos, facing, relativeFacing);

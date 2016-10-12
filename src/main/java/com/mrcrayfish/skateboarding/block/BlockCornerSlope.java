@@ -275,7 +275,7 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 	{
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		
-		//extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
+		extendedState = extendedState.withProperty(METAL_LEFT, true).withProperty(METAL_RIGHT, true);
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileEntityTextureable)
@@ -287,19 +287,26 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 			}
 		}
 		
-		//TODO finish metal conditions
-		/*if(StateHelper.getRelativeBlock(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME) == SkateboardingBlocks.handrail)
+		IBlockState relativeState = StateHelper.getRelativeBlockState(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
+		if(relativeState.getBlock() == SkateboardingBlocks.slope)
 		{
-			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME);
-			extendedState = extendedState.withProperty(RAIL_FRONT, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
+			if(relativeFacing == RelativeFacing.SAME)
+			{
+				extendedState = extendedState.withProperty(METAL_LEFT, !relativeState.getValue(STACKED));
+			}
 		}
 		
-		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
+		relativeState = StateHelper.getRelativeBlockState(world, pos.down(), state.getValue(FACING), RelativeFacing.RIGHT);
+		if(relativeState.getBlock() == SkateboardingBlocks.slope)
 		{
-			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
-			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
-		}*/
-		
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.down(), state.getValue(FACING), RelativeFacing.RIGHT);
+			if(relativeFacing == RelativeFacing.LEFT)
+			{
+				extendedState = extendedState.withProperty(METAL_RIGHT, !relativeState.getValue(STACKED));
+			}
+		}
+
 		return extendedState;
 	}
 

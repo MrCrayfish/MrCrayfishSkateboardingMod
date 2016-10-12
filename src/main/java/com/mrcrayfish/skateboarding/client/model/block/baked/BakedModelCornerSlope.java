@@ -85,7 +85,9 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 			}
 			
 			boolean stacked = extendedState.getValue(BlockCornerSlope.STACKED);
-			String texture = extendedState.getValue(BlockSlope.TEXTURE);
+			boolean metalLeft = extendedState.getValue(BlockCornerSlope.METAL_LEFT);
+			boolean metalRight = extendedState.getValue(BlockCornerSlope.METAL_RIGHT);
+			String texture = extendedState.getValue(BlockCornerSlope.TEXTURE);
 			
 			TextureAtlasSprite main = getTexture(texture);
 			if(main != null)
@@ -112,11 +114,19 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 			
 			if(!stacked)
 			{
-				//Render metal
+				helper.setSprite(metalTexture);
+				if(metalLeft)
+				{
+					quads.add(helper.createQuad(new Vertex(0, 0.001, 1, 0, 0), new Vertex(0.25, 0.126, 0.75, 4, 4), new Vertex(0.25, 0.126, 0, 16, 4), new Vertex(0, 0.001, 0, 16, 0), EnumFacing.UP));
+				}
+				if(metalRight)
+				{
+					quads.add(helper.createQuad(new Vertex(1, 0.001, 1, 0, 0), new Vertex(1, 0.126, 0.75, 0, 4), new Vertex(0.25, 0.126, 0.75, 12, 4), new Vertex(0, 0.001, 1, 16, 0), EnumFacing.UP));
+				}
 			}
 		}
 			
-		return null;
+		return quads;
 	}
 	
 	public TextureAtlasSprite getTexture(String texture)
@@ -163,7 +173,7 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) 
 	{
-		return null;
+		return Pair.of(this, cameraTransformations.get(cameraTransformType));
 	}
 
 }
