@@ -139,7 +139,7 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
         return false;
     }
 	
-	@Override
+    @Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
 	{
 		if(heldItem != null)
@@ -149,6 +149,7 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 			{
 				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
 				{
+					worldIn.markBlockRangeForRenderUpdate(pos, pos);
 					heldItem.stackSize--;
 					return true;
 				}

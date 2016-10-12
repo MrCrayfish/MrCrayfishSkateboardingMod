@@ -100,16 +100,20 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 			if(stacked)
 			{
 				//Render stacked
-				quads.add(helper.createQuad(new Vertex(0, 0.5, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 16), new Vertex(1, 1, 0, 16, 16), new Vertex(0, 0.5, 0, 16, 0), EnumFacing.UP));
+				quads.add(helper.createQuad(new Vertex(0, 0.5, 1, 0, 0), new Vertex(0, 0.5, 1, 0, 0), new Vertex(1, 1, 0, 16, 16), new Vertex(0, 0.5, 0, 16, 0), EnumFacing.UP));
+				quads.add(helper.createQuad(new Vertex(1, 0.5, 1, 0, 0), new Vertex(1, 1, 0, 0, 16), new Vertex(0, 0.5, 1, 16, 0), new Vertex(0, 0.5, 1, 16, 0), EnumFacing.UP));
 				quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0.5, 0, 0, 8), new Vertex(1, 1, 0, 16, 16), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
-				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 1, 0, 0, 16), new Vertex(1, 0.5, 1, 16, 8), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
+				quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 1, 0, 0, 16), new Vertex(1, 0.5, 1, 16, 8), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
+				quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 0.5, 1, 0, 8), new Vertex(0, 0.5, 1, 16, 8), new Vertex(0, 0, 1, 16, 0), EnumFacing.SOUTH));
+				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 0.5, 1, 0, 8), new Vertex(0, 0.5, 0, 16, 8), new Vertex(0, 0, 0, 16, 0), EnumFacing.WEST));
 			}
 			else
 			{
 				//Render non-stacked
-				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(1, 0, 1, 0, 16), new Vertex(1, 0.5, 0, 16, 16), new Vertex(0, 0, 0, 16, 0), EnumFacing.UP));
+				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 0, 1, 0, 0), new Vertex(1, 0.5, 0, 16, 16), new Vertex(0, 0, 0, 16, 0), EnumFacing.UP));
+				quads.add(helper.createQuad(new Vertex(1, 0, 1, 0, 0), new Vertex(1, 0.5, 0, 0, 16), new Vertex(0, 0, 1, 16, 0), new Vertex(0, 0, 1, 16, 0), EnumFacing.UP));
 				quads.add(helper.createQuad(new Vertex(0, 0, 0, 0, 0), new Vertex(0, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 16, 8), new Vertex(1, 0, 0, 16, 0), EnumFacing.NORTH));
-				quads.add(helper.createQuad(new Vertex(0, 0, 1, 0, 0), new Vertex(0, 0.5, 0, 0, 8), new Vertex(1, 0, 1, 16, 0), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
+				quads.add(helper.createQuad(new Vertex(1, 0, 0, 0, 0), new Vertex(1, 0.5, 0, 0, 8), new Vertex(1, 0, 1, 16, 0), new Vertex(1, 0, 1, 16, 0), EnumFacing.EAST));
 			}
 			
 			if(!stacked)
@@ -155,7 +159,7 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 	@Override
 	public TextureAtlasSprite getParticleTexture() 
 	{
-		return null;
+		return mainTexture;
 	}
 
 	@Override
