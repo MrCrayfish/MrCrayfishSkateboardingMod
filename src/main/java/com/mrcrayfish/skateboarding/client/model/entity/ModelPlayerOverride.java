@@ -117,7 +117,6 @@ public class ModelPlayerOverride extends ModelPlayerBase
 	@Override
 	public void render(Entity paramEntity, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5, float paramFloat6) {
 		
-		EntityPlayer player = (EntityPlayer) paramEntity;
 		if (paramEntity.getRidingEntity() instanceof EntitySkateboard)
 		{
 			EntitySkateboard skateboard = (EntitySkateboard) paramEntity.getRidingEntity();
