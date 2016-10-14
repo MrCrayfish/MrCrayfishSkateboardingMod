@@ -137,6 +137,7 @@ public class BakedModelStair implements IPerspectiveAwareModel
 	
 	public TextureAtlasSprite getTexture(String texture)
 	{
+		if(texture == null) return null;
 		return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(texture);
 	}
 
