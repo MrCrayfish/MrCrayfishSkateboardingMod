@@ -454,16 +454,10 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
 		}
 		
-		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
-		{
-			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
-			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
-		}
-		
 		IBlockState relativeState = StateHelper.getRelativeBlockState(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
 		if(StateHelper.getRelativeBlock(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.slope)
 		{
-			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
+			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
 			if(relativeFacing == RelativeFacing.SAME)
 			{
 				extendedState = extendedState.withProperty(METAL, !relativeState.getValue(STACKED));
