@@ -424,7 +424,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	{
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		
-		extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false).withProperty(METAL, true);
+		extendedState = extendedState.withProperty(RAIL_ATTACHED, false).withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false).withProperty(METAL, true);
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileEntityTextureable)
