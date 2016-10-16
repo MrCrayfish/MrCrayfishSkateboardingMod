@@ -69,7 +69,7 @@ public class BakedModelStair implements IPerspectiveAwareModel
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		QuadHelper helper = new QuadHelper(format, mainTexture);
 		
-		if(state != null)
+		if(state != null && state instanceof IExtendedBlockState)
 		{
 			IExtendedBlockState extendedState = (IExtendedBlockState) state;
 

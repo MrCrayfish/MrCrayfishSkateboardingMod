@@ -293,13 +293,19 @@ public class BlockStair extends BlockObject implements ITileEntityProvider, Grin
 	{
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta % 4)).withProperty(STACKED, meta / 4 == 1);
 	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) 
+	{
+		return getExtendedState(state, worldIn, pos);
+	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
 	{
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		
-		extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
+		extendedState = extendedState.withProperty(RAIL_ATTACHED, false).withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
 		
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileEntityTextureable)

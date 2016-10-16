@@ -74,7 +74,7 @@ public class BakedModelCornerSlope implements IPerspectiveAwareModel
 		
 		QuadHelper helper = new QuadHelper(format, mainTexture);
 		
-		if(state != null)
+		if(state != null && state instanceof IExtendedBlockState)
 		{
 			IExtendedBlockState extendedState = (IExtendedBlockState) state;
 
