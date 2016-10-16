@@ -20,7 +20,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -421,16 +420,10 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) 
-	{
-		return getExtendedState(state, worldIn, pos);
-	}
-	
-	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
 	{
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
-
+		
 		extendedState = extendedState.withProperty(RAIL_ATTACHED, false).withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false).withProperty(METAL, true);
 
 		TileEntity tileEntity = world.getTileEntity(pos);

@@ -270,12 +270,6 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 	{
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta % 4)).withProperty(STACKED, meta / 4 == 1);
 	}
-	
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) 
-	{
-		return getExtendedState(state, worldIn, pos);
-	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) 
