@@ -185,7 +185,7 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		this.setUnlocalizedName("slope");
 		this.setRegistryName("slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+		this.setDefaultState(createDefaultState());
 	}
 	
 	@Override
@@ -474,6 +474,18 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 		builder.add(FACING, STACKED);
 		builder.add(TEXTURE, RAIL_ATTACHED, RAIL_FRONT, RAIL_BEHIND, METAL);
 		return builder.build();
+	}
+	
+	protected IBlockState createDefaultState()
+	{
+		IBlockState state = this.blockState.getBaseState();
+		state = state.withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false);
+		IExtendedBlockState extendedState = (IExtendedBlockState) state;
+		extendedState = extendedState.withProperty(TEXTURE, null);
+		extendedState = extendedState.withProperty(RAIL_ATTACHED, false);
+		extendedState = extendedState.withProperty(RAIL_FRONT, false).withProperty(RAIL_BEHIND, false);
+		extendedState = extendedState.withProperty(METAL, true);
+		return extendedState;
 	}
 	
 	public Axis getAxis(IBlockState state) 

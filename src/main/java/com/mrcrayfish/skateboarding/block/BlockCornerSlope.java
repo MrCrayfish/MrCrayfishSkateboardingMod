@@ -123,7 +123,7 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		this.setUnlocalizedName("corner_slope");
 		this.setRegistryName("corner_slope");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false));
+		this.setDefaultState(createDefaultState());
 	}
 	
 	@Override
@@ -318,6 +318,16 @@ public class BlockCornerSlope extends BlockObject implements ITileEntityProvider
 		builder.add(FACING, STACKED);
 		builder.add(TEXTURE, METAL_LEFT, METAL_RIGHT);
 		return builder.build();
+	}
+	
+	protected IBlockState createDefaultState()
+	{
+		IBlockState state = this.blockState.getBaseState();
+		state = state.withProperty(FACING, EnumFacing.NORTH).withProperty(STACKED, false);
+		IExtendedBlockState extendedState = (IExtendedBlockState) state;
+		extendedState = extendedState.withProperty(TEXTURE, null);
+		extendedState = extendedState.withProperty(METAL_LEFT, true).withProperty(METAL_RIGHT, true);
+		return extendedState;
 	}
 	
 	public Axis getAxis(IBlockState state) 
