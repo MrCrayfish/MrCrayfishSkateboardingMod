@@ -10,6 +10,11 @@ public class TrickEntry
 {
 	private Trick trick = null;
 	private Map<Key, TrickEntry> trickMap = null;
+	
+	public TrickEntry() 
+	{
+		this.trickMap = new HashMap();
+	}
 
 	public TrickEntry setTrick(Trick trick)
 	{
@@ -24,10 +29,6 @@ public class TrickEntry
 
 	public Map<Key, TrickEntry> getTrickMap()
 	{
-		if (trickMap == null)
-		{
-			trickMap = new HashMap<Key, TrickEntry>();
-		}
 		return trickMap;
 	}
 }

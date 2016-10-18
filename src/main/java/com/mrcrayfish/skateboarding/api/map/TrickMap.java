@@ -1,75 +1,52 @@
 package com.mrcrayfish.skateboarding.api.map;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import com.mrcrayfish.skateboarding.api.map.TrickMap.Key;
 import com.mrcrayfish.skateboarding.api.trick.Trick;
 
 public class TrickMap
 {
-
 	public static Map<Key, TrickEntry> trickMap = new HashMap<Key, TrickEntry>();
 
-	public static void addCombo(Trick trick, Key... combo)
+	public static void addCombo(Trick trick, Key... keys)
 	{
 		Map<Key, TrickEntry> prevMap = trickMap;
-		for (int i = 0; i < combo.length; i++)
+		for (int i = 0; i < keys.length - 1; i++)
 		{
-			if (!prevMap.containsKey(combo[i]))
+			Key key = keys[i];
+			if(!prevMap.containsKey(key)) 
 			{
-				if (i == combo.length - 1)
-				{
-					prevMap.put(combo[i], new TrickEntry().setTrick(trick));
-				}
-				else
-				{
-					Map<Key, TrickEntry> newMap = new HashMap<Key, TrickEntry>();
-					prevMap.put(combo[i], new TrickEntry());
-					prevMap = newMap;
-				}
+				prevMap.put(key, new TrickEntry());
 			}
-			else
-			{
-				if (i == combo.length - 1)
-				{
-					if (prevMap.get(combo[i]).getTrick() == null)
-					{
-						prevMap.get(combo[i]).setTrick(trick);
-					}
-				}
-				else
-				{
-					prevMap = prevMap.get(combo[i]).getTrickMap();
-				}
-			}
+			prevMap = prevMap.get(key).getTrickMap();
 		}
-
+		prevMap.put(keys[keys.length - 1], new TrickEntry().setTrick(trick));
 	}
 
-	public static Trick getTrick(Key... combo)
+	public static Trick getTrick(Iterator<Key> it)
 	{
 		Map<Key, TrickEntry> prevMap = trickMap;
-		for (int i = 0; i < combo.length; i++)
+		Trick trick = null;
+		while (it.hasNext())
 		{
-			if (prevMap.get(combo[i]) != null)
-			{
-				if (i == combo.length - 1)
-				{
-					return prevMap.get(combo[i]).getTrick();
-				}
-				else
-				{
-					prevMap = prevMap.get(combo[i]).getTrickMap();
-				}
-			}
+			if(prevMap == null) break;
+			TrickEntry entry = prevMap.get(it.next());
+			if(entry == null) break;
+			trick = entry.getTrick();
+			prevMap = entry.getTrickMap();
 		}
-		return null;
+		return trick;
 	}
 
 	static int spacing = 0;
 
 	public static void printTrickMap(Map<Key, TrickEntry> map)
 	{
+		if(map == null) return;
 		for (Key key : map.keySet())
 		{
 			System.out.println(getSpacing() + key.name());
