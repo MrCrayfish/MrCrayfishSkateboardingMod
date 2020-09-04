@@ -41,7 +41,7 @@ public class MessageTrick implements IMessage, IMessageHandler<MessageTrick, IMe
 	@Override
 	public IMessage onMessage(MessageTrick message, MessageContext ctx)
 	{
-		World world = ctx.getServerHandler().playerEntity.worldObj;
+		World world = ctx.getServerHandler().player.world;
 		EntitySkateboard skateboard = (EntitySkateboard) world.getEntityByID(message.entityId);
 		skateboard.startTrick(TrickRegistry.getTrick(message.trickId));
 		return null;

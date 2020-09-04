@@ -2,26 +2,22 @@ package com.mrcrayfish.skateboarding.proxy;
 
 import com.mrcrayfish.skateboarding.api.TrickRegistry;
 import com.mrcrayfish.skateboarding.api.map.TrickMap;
+import com.mrcrayfish.skateboarding.client.ClientEvents;
 import com.mrcrayfish.skateboarding.client.Keybinds;
 import com.mrcrayfish.skateboarding.client.model.block.CustomLoader;
-import com.mrcrayfish.skateboarding.client.model.entity.ModelPlayerOverride;
 import com.mrcrayfish.skateboarding.client.render.RenderSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
-import com.mrcrayfish.skateboarding.init.SkateboardingItems;
-
-import api.player.model.ModelPlayerAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy
 {
-	
 	@Override
 	public void preInit() 
 	{
@@ -33,10 +29,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenders()
 	{
-		SkateboardingItems.registerRenders();
-		SkateboardingBlocks.registerRenders();
-
-		ModelPlayerAPI.register("csm", ModelPlayerOverride.class);
+		MinecraftForge.EVENT_BUS.register(new ClientEvents());
 
 		Keybinds.init();
 		Keybinds.register();
@@ -48,7 +41,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public World getClientWorld()
 	{
-		return Minecraft.getMinecraft().theWorld;
+		return Minecraft.getMinecraft().world;
 	}
 	
 	private static class RenderFactory implements IRenderFactory<EntitySkateboard>

@@ -29,7 +29,7 @@ public class TileEntityTextureable extends TileEntity
 		if(stack != null && stack.getItem() instanceof ItemBlock)
 		{
 			System.out.println("called");
-			Block block = ((ItemBlock) stack.getItem()).block;
+			Block block = ((ItemBlock) stack.getItem()).getBlock();
 			if(block.isNormalCube(block.getDefaultState()) || block instanceof BlockGlass)
 			{
 				IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(block.getStateFromMeta(stack.getMetadata()));

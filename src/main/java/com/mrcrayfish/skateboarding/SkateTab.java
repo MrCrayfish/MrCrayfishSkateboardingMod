@@ -3,7 +3,8 @@ package com.mrcrayfish.skateboarding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-import com.mrcrayfish.skateboarding.init.SkateboardingItems;
+import com.mrcrayfish.skateboarding.init.ModItems;
+import net.minecraft.item.ItemStack;
 
 public class SkateTab extends CreativeTabs
 {
@@ -13,8 +14,8 @@ public class SkateTab extends CreativeTabs
 	}
 
 	@Override
-	public Item getTabIconItem()
+	public ItemStack getTabIconItem()
 	{
-		return SkateboardingItems.skateboard;
+		return new ItemStack(ModItems.SKATEBOARD);
 	}
 }

@@ -31,10 +31,10 @@ public class MessageMovement implements IMessage, IMessageHandler<MessageMovemen
 
 	@Override
 	public IMessage onMessage(MessageMovement message, MessageContext ctx) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		Entity riding = player.getRidingEntity();
 		if(riding != null && riding.getEntityId() == message.entityId) return null;
-		Entity target = player.worldObj.getEntityByID(message.entityId);
+		Entity target = player.world.getEntityByID(message.entityId);
 		if(target instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard)target;
 			skateboard.motionX = message.motionX;

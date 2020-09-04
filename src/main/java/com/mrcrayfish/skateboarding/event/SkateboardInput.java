@@ -31,7 +31,7 @@ public class SkateboardInput {
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) 
 	{
-		Entity entity = Minecraft.getMinecraft().thePlayer.getRidingEntity();
+		Entity entity = Minecraft.getMinecraft().player.getRidingEntity();
 		if (entity != null && entity instanceof EntitySkateboard) 
 		{
 			char c = Keyboard.getEventCharacter();
@@ -103,7 +103,7 @@ public class SkateboardInput {
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) 
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(player != null)
 		{
 			Entity entity = player.getRidingEntity();

@@ -1,25 +1,23 @@
 package com.mrcrayfish.skateboarding.client;
 
-import java.awt.Color;
-
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.realmsclient.gui.ChatFormatting;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 import com.mrcrayfish.skateboarding.event.SkateboardInput;
 import com.mrcrayfish.skateboarding.util.ComboBuilder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class ComboOverlay
 {
@@ -44,7 +42,7 @@ public class ComboOverlay
 	{
 		if (Minecraft.getMinecraft().inGameHasFocus)
 		{
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer player = Minecraft.getMinecraft().player;
 			Entity entity = player.getRidingEntity();
 			if (entity instanceof EntitySkateboard)
 			{
@@ -109,13 +107,13 @@ public class ComboOverlay
 								} else {
 									format = ChatFormatting.WHITE;
 								}
-								mc.fontRendererObj.drawStringWithShadow(format + tricks[i], 9, y - 1, 16777215);
+								mc.fontRenderer.drawStringWithShadow(format + tricks[i], 9, y - 1, 16777215);
 							}
 						}
 					}
-					int stringWidth = mc.fontRendererObj.getStringWidth(Integer.toString((int) combo.getPoints()));
+					int stringWidth = mc.fontRenderer.getStringWidth(Integer.toString((int) combo.getPoints()));
 					GL11.glScalef(2.0F, 2.0F, 2.0F);
-					mc.fontRendererObj.drawStringWithShadow(ChatFormatting.YELLOW + Integer.toString((int) combo.getPoints()), 5, 15, 16777215);
+					mc.fontRenderer.drawStringWithShadow(ChatFormatting.YELLOW + Integer.toString((int) combo.getPoints()), 5, 15, 16777215);
 					GL11.glScalef(1.0F, 1.0F, 1.0F);
 				}
 			}
@@ -127,12 +125,12 @@ public class ComboOverlay
 		GlStateManager.disableTexture2D();
 		GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 0.5F);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer worldrenderer = tessellator.getBuffer();	
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos((double)(x + 0), (double)(y + height), (double)0).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + height), (double)0).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + 0), (double)0).endVertex();
-        worldrenderer.pos((double)(x + 0), (double)(y + 0), (double)0).endVertex();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION);
+        buffer.pos((double)(x + 0), (double)(y + height), (double)0).endVertex();
+        buffer.pos((double)(x + width), (double)(y + height), (double)0).endVertex();
+        buffer.pos((double)(x + width), (double)(y + 0), (double)0).endVertex();
+        buffer.pos((double)(x + 0), (double)(y + 0), (double)0).endVertex();
         tessellator.draw();
         GlStateManager.color(1.0F, 1.0F, 1.0F);
         GlStateManager.enableTexture2D();
@@ -144,12 +142,12 @@ public class ComboOverlay
         float f = 0.00390625F;
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer worldrenderer = tessellator.getBuffer();	
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double)(x + 0), (double)(y + height), (double)0).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + height), (double)0).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + 0), (double)0).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
-        worldrenderer.pos((double)(x + 0), (double)(y + 0), (double)0).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
+		BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos((double)(x + 0), (double)(y + height), (double)0).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        buffer.pos((double)(x + width), (double)(y + height), (double)0).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        buffer.pos((double)(x + width), (double)(y + 0), (double)0).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
+        buffer.pos((double)(x + 0), (double)(y + 0), (double)0).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
         tessellator.draw();
     }
 	
@@ -157,12 +155,12 @@ public class ComboOverlay
     {
 		float scale = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer worldrenderer = tessellator.getBuffer();	
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double)x, (double)(y + height), z).tex((double)(u * scale), (double)(v + textureHeight) * scale).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + height), z).tex((double)(u + textureWidth) * scale, (double)(v + textureHeight) * scale).endVertex();
-        worldrenderer.pos((double)(x + width), (double)y, z).tex((double)(u + textureWidth) * scale, (double)(v * scale)).endVertex();
-        worldrenderer.pos((double)x, (double)y, z).tex((double)(u * scale), (double)(v * scale)).endVertex();
+		BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos((double)x, (double)(y + height), z).tex((double)(u * scale), (double)(v + textureHeight) * scale).endVertex();
+        buffer.pos((double)(x + width), (double)(y + height), z).tex((double)(u + textureWidth) * scale, (double)(v + textureHeight) * scale).endVertex();
+        buffer.pos((double)(x + width), (double)y, z).tex((double)(u + textureWidth) * scale, (double)(v * scale)).endVertex();
+        buffer.pos((double)x, (double)y, z).tex((double)(u * scale), (double)(v * scale)).endVertex();
         tessellator.draw();
     }
 }

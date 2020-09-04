@@ -20,13 +20,13 @@ public class ItemSkateboard extends Item
 		this.setRegistryName("skateboard");
 		this.setCreativeTab(MrCrayfishSkateboardingMod.skateTab);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if(!worldIn.isRemote)
 		{
-			worldIn.spawnEntityInWorld(new EntitySkateboard(worldIn, pos.getX(), pos.getY() + 1.0D, pos.getZ()));
+			worldIn.spawnEntity(new EntitySkateboard(worldIn, pos.getX(), pos.getY() + 1.0D, pos.getZ()));
 		}
 		return EnumActionResult.SUCCESS;
 	}

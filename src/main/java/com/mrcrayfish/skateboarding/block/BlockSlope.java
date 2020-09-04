@@ -7,7 +7,7 @@ import com.mrcrayfish.skateboarding.block.attributes.Angled;
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
 import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedBooleanProperty;
 import com.mrcrayfish.skateboarding.client.model.block.properties.UnlistedTextureProperty;
-import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
+import com.mrcrayfish.skateboarding.init.ModBlocks;
 import com.mrcrayfish.skateboarding.tileentity.TileEntitySlope;
 import com.mrcrayfish.skateboarding.tileentity.TileEntityTextureable;
 import com.mrcrayfish.skateboarding.tileentity.attributes.Railable;
@@ -35,6 +35,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class BlockSlope extends BlockObject implements ITileEntityProvider, Grindable, Angled
 {
@@ -200,11 +202,12 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
     {
         return false;
     }
-	
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) 
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(heldItem != null)
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if(!heldItem.isEmpty())
 		{
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if(tileEntity instanceof TileEntityTextureable)
@@ -212,16 +215,16 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 				if(((TileEntityTextureable) tileEntity).setTexture(heldItem))
 				{
 					worldIn.markBlockRangeForRenderUpdate(pos, pos);
-					heldItem.stackSize--;
+					heldItem.shrink(1);
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn) 
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState)
 	{
 		boolean hasRail = false;
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
@@ -230,174 +233,174 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			TileEntitySlope slope = (TileEntitySlope) tileEntity;
 			hasRail = slope.isRailAttached();
 		}
-		if(state.getValue(STACKED)) 
+		if(state.getValue(STACKED))
 		{
-			super.addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_STACKED);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_STACKED);
 			switch(state.getValue(FACING))
 			{
-			case NORTH:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_ONE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_TWO_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_THREE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FOUR_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN_STACKED);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN_STACKED);
-				}
-				break;
-			case EAST:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_TWO_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_THREE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FOUR_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN_STACKED);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN_STACKED);
-				}
-				break;
-			case SOUTH:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_TWO_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_THREE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FOUR_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN_STACKED);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN_STACKED);
-				}
-				break;
-			default:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_TWO_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_THREE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FOUR_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX_STACKED);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN_STACKED);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX_STACKED);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN_STACKED);
-				}
-				break;
+				case NORTH:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_ONE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_TWO_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_THREE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FOUR_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN_STACKED);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN_STACKED);
+					}
+					break;
+				case EAST:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_TWO_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_THREE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FOUR_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN_STACKED);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN_STACKED);
+					}
+					break;
+				case SOUTH:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_TWO_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_THREE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FOUR_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN_STACKED);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN_STACKED);
+					}
+					break;
+				default:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_TWO_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_THREE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FOUR_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX_STACKED);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN_STACKED);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX_STACKED);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN_STACKED);
+					}
+					break;
 			}
-		} 
-		else 
+		}
+		else
 		{
-			super.addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE);
 			switch(state.getValue(FACING))
 			{
-			case NORTH:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_ONE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_TWO);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_THREE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FOUR);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN);
-				}
-				break;
-			case EAST:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_TWO);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_THREE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FOUR);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN);
-				}
-				break;
-			case SOUTH:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_TWO);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_THREE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FOUR);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN);
-				}
-				break;
-			default:
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_TWO);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_THREE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FOUR);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX);
-				super.addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN);
-				if(hasRail) 
-				{
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX);
-					super.addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN);
-				}
-				break;
+				case NORTH:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_ONE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_TWO);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_THREE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FOUR);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_FIVE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SIX);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_SEVEN);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_ONE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_TWO);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_THREE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FOUR);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_FIVE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SIX);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_NORTH_SEVEN);
+					}
+					break;
+				case EAST:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_ONE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_TWO);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_THREE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FOUR);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_FIVE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SIX);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_SEVEN);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_ONE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_TWO);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_THREE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FOUR);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_FIVE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SIX);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_EAST_SEVEN);
+					}
+					break;
+				case SOUTH:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_ONE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_TWO);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_THREE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FOUR);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_FIVE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SIX);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_SEVEN);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_ONE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_TWO);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_THREE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FOUR);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_FIVE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SIX);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_SOUTH_SEVEN);
+					}
+					break;
+				default:
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_ONE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_TWO);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_THREE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FOUR);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_FIVE);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SIX);
+					addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_SEVEN);
+					if(hasRail)
+					{
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_ONE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_TWO);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_THREE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FOUR);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_FIVE);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SIX);
+						addCollisionBoxToList(pos, entityBox, collidingBoxes, RAIL_WEST_SEVEN);
+					}
+					break;
 			}
 		}
 	}
-	
+
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) 
 	{
 		if(!state.getValue(STACKED))
@@ -442,20 +445,20 @@ public class BlockSlope extends BlockObject implements ITileEntityProvider, Grin
 			extendedState = extendedState.withProperty(RAIL_ATTACHED, railable.isRailAttached());
 		}
 		
-		if(StateHelper.getRelativeBlock(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME) == SkateboardingBlocks.handrail)
+		if(StateHelper.getRelativeBlock(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME) == ModBlocks.HANDRAIL)
 		{
 			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.up(), state.getValue(FACING), RelativeFacing.SAME);
 			extendedState = extendedState.withProperty(RAIL_FRONT, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
 		}
 		
-		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.handrail)
+		if(StateHelper.getRelativeBlock(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE) == ModBlocks.HANDRAIL)
 		{
 			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos, state.getValue(FACING), RelativeFacing.OPPOSITE);
 			extendedState = extendedState.withProperty(RAIL_BEHIND, relativeFacing == RelativeFacing.LEFT || relativeFacing == RelativeFacing.RIGHT);
 		}
 		
 		IBlockState relativeState = StateHelper.getRelativeBlockState(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
-		if(StateHelper.getRelativeBlock(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE) == SkateboardingBlocks.slope)
+		if(StateHelper.getRelativeBlock(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE) == ModBlocks.SLOPE)
 		{
 			RelativeFacing relativeFacing = StateHelper.getRelativeFacing(world, pos.down(), state.getValue(FACING), RelativeFacing.OPPOSITE);
 			if(relativeFacing == RelativeFacing.SAME)

@@ -1,41 +1,30 @@
 package com.mrcrayfish.skateboarding.client.model.block.baked;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.vecmath.Matrix4f;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.mrcrayfish.skateboarding.block.BlockSlope;
-import com.mrcrayfish.skateboarding.block.BlockStair;
 import com.mrcrayfish.skateboarding.util.QuadHelper;
 import com.mrcrayfish.skateboarding.util.QuadHelper.Vertex;
 import com.mrcrayfish.skateboarding.util.TransformationBuilder;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import org.apache.commons.lang3.tuple.Pair;
 
-public class BakedModelSlope implements IPerspectiveAwareModel 
+import javax.vecmath.Matrix4f;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+public class BakedModelSlope implements IBakedModel
 {
 	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("csm:slope");
 	
@@ -59,7 +48,7 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 	private TextureAtlasSprite metalTexture;
 	private TextureAtlasSprite railTexture;
 	
-	public BakedModelSlope(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
+	public BakedModelSlope(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
 	{
 		this.format = format;
 		this.mainTexture = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/hardened_clay"));
@@ -206,11 +195,9 @@ public class BakedModelSlope implements IPerspectiveAwareModel
 		return new ItemOverrideList(Lists.<ItemOverride>newArrayList());
 	}
 
-
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) 
 	{
 		return Pair.of(this, cameraTransformations.get(cameraTransformType));
 	}
-
 }

@@ -21,10 +21,11 @@ public class ItemHandrail extends ItemBlock
 	{
 		super(block);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		ItemStack stack = player.getHeldItem(hand);
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if(tileEntity instanceof Railable)
 		{
@@ -33,11 +34,10 @@ public class ItemHandrail extends ItemBlock
 			{
 				railable.setRailAttached();
 				worldIn.markBlockRangeForRenderUpdate(pos, pos);
-				stack.stackSize--;
+				stack.shrink(1);
 				return EnumActionResult.SUCCESS;
 			}
 		}
-		return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
-
 }

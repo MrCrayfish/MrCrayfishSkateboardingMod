@@ -1,8 +1,5 @@
 package com.mrcrayfish.skateboarding.util;
 
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 public class TrickHelper
@@ -10,7 +7,7 @@ public class TrickHelper
 	public static void spinBoard(EntitySkateboard skateboard, float totalSpin, int performTime)
 	{
 		totalSpin = (skateboard.isGoofy() && !skateboard.isSwitch_()) || (!skateboard.isGoofy() && skateboard.isSwitch_()) ? -totalSpin : totalSpin;
-		skateboard.boardYaw = (totalSpin / performTime) * skateboard.getInTrickTimer();
+		skateboard.boardRotation = (totalSpin / performTime) * skateboard.getInTrickTimer();
 	}
 
 	public static void flipBoard(EntitySkateboard skateboard, float totalSpin, int performTime, Axis axis)
@@ -30,7 +27,7 @@ public class TrickHelper
 		}
 	}
 
-	public static enum Axis
+	public enum Axis
 	{
 		X, Y, Z;
 	}

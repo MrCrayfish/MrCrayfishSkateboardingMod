@@ -3,7 +3,6 @@ package com.mrcrayfish.skateboarding.client.model.block;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import com.mrcrayfish.skateboarding.client.model.block.baked.BakedModelCornerSlope;
 
@@ -30,7 +29,7 @@ public class ModelCornerSlope implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) 
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
 	{
 		return new BakedModelCornerSlope(format, bakedTextureGetter);
 	}

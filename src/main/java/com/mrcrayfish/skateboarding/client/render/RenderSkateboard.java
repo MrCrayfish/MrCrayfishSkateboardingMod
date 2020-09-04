@@ -7,6 +7,7 @@ import com.mrcrayfish.skateboarding.client.model.entity.ModelSkateboard;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -28,7 +29,7 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 	}
 	
 	@Override
-	public void doRender(EntitySkateboard skateboard, double x, double y, double z, float p_76986_8_, float partialTicks)
+	public void doRender(EntitySkateboard skateboard, double x, double y, double z, float rotationYaw, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
 		{
@@ -66,8 +67,7 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 				GlStateManager.translate(0, angled.getYOffset(skateboard.isGrinding()), 0);
 			}
 			
-			GlStateManager.rotate(-(skateboard.prevRotationYaw + (skateboard.rotationYaw - skateboard.prevRotationYaw) * partialTicks), 0, 1, 0);
-			GlStateManager.rotate(-90F, 0, 1, 0);
+			GlStateManager.rotate(-rotationYaw, 0, 1, 0);
 			GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 			
 			if (skateboard.getControllingPassenger() != null) 
@@ -75,9 +75,9 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 				if (skateboard.getControllingPassenger() instanceof EntityPlayer) 
 				{
 					EntityPlayer player = (EntityPlayer) skateboard.getControllingPassenger();
-					player.prevRenderYawOffset = skateboard.prevRotationYaw + 90F;
-					player.renderYawOffset = skateboard.rotationYaw + 90F;
-					
+					//player.prevRenderYawOffset = skateboard.prevRotationYaw;
+					player.renderYawOffset = skateboard.rotationYaw;
+
 					if(skateboard.needsCameraUpdate) 
 					{
 						if(skateboard.canCameraIncrement)
@@ -102,7 +102,7 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 			modelSkateboard.setRotationAngles(0F, 0F, 0F, 0F, 0F, 0F, skateboard);
 			
 			// Board Rotation (Global)
-			GlStateManager.rotate((float) (skateboard.prevBoardYaw + (skateboard.boardYaw - skateboard.prevBoardYaw) * partialTicks), 0, 1, 0);
+			GlStateManager.rotate((float) (skateboard.prevBoardRotation + (skateboard.boardRotation - skateboard.prevBoardRotation) * partialTicks), 0, 1, 0);
 			
 			// Board Rotation (Local)
 			modelSkateboard.boardBase.rotateAngleX = (float) Math.toRadians(skateboard.prevBoardRotationX + (skateboard.boardRotationX - skateboard.prevBoardRotationX) * partialTicks);
@@ -110,7 +110,6 @@ public class RenderSkateboard extends Render<EntitySkateboard>
 			if(skateboard.isFlipped()) modelSkateboard.boardBase.rotateAngleY += Math.toRadians(180F);
 			modelSkateboard.boardBase.rotateAngleY += (float) Math.toRadians(skateboard.prevBoardRotationY + (skateboard.boardRotationY - skateboard.prevBoardRotationY) * partialTicks);
 			modelSkateboard.boardBase.rotateAngleZ = (float) Math.toRadians(skateboard.prevBoardRotationZ + (skateboard.boardRotationZ - skateboard.prevBoardRotationZ) * partialTicks);
-			
 			modelSkateboard.render(skateboard, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		}
 		GlStateManager.popMatrix();

@@ -37,7 +37,7 @@ public class MessageJump implements IMessage, IMessageHandler<MessageJump, IMess
 
 	@Override
 	public IMessage onMessage(MessageJump message, MessageContext ctx) {
-		EntityPlayer player = ctx.getServerHandler().playerEntity;
+		EntityPlayer player = ctx.getServerHandler().player;
 		Entity entity = player.getRidingEntity();
 		if(entity instanceof EntitySkateboard) {
 			EntitySkateboard skateboard = (EntitySkateboard) entity;

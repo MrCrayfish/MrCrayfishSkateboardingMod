@@ -2,7 +2,7 @@ package com.mrcrayfish.skateboarding.util;
 
 import com.mrcrayfish.skateboarding.block.attributes.Grindable;
 import com.mrcrayfish.skateboarding.entity.EntitySkateboard;
-import com.mrcrayfish.skateboarding.init.SkateboardingBlocks;
+import com.mrcrayfish.skateboarding.init.ModBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -69,7 +69,7 @@ public class GrindHelper
 		
 		pos = new BlockPos(posX, posY - 0.75, posZ);
 		block = world.getBlockState(pos).getBlock();
-		return block == Blocks.IRON_BARS || block == SkateboardingBlocks.flat_bar;
+		return block == Blocks.IRON_BARS || block == ModBlocks.FLAT_BAR;
 	}
 
 	public static double[] setOffset(EntitySkateboard skateboard, double x, double y, double z)

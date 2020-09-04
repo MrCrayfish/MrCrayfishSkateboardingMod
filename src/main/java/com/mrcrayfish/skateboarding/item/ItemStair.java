@@ -21,15 +21,15 @@ public class ItemStair extends ItemBlock
 	{
 		super(block);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if(facing == EnumFacing.UP)
 		{
 			IBlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
-			if(block instanceof BlockStair) 
+			if(block instanceof BlockStair)
 			{
 				if(!state.getValue(BlockStair.STACKED))
 				{
@@ -38,6 +38,6 @@ public class ItemStair extends ItemBlock
 				}
 			}
 		}
-		return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 }

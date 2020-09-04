@@ -36,7 +36,7 @@ public class MessageStack implements IMessage, IMessageHandler<MessageStack, IMe
 	@Override
 	public IMessage onMessage(MessageStack message, MessageContext ctx)
 	{
-		World world = ctx.getServerHandler().playerEntity.worldObj;
+		World world = ctx.getServerHandler().player.world;
 		EntitySkateboard skateboard = (EntitySkateboard) world.getEntityByID(message.entityId);
 		skateboard.performStack();
 		return null;

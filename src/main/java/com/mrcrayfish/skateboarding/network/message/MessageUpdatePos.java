@@ -48,7 +48,7 @@ public class MessageUpdatePos implements IMessage, IMessageHandler<MessageUpdate
 	@Override
 	public IMessage onMessage(MessageUpdatePos message, MessageContext ctx)
 	{
-		World world = ctx.getServerHandler().playerEntity.worldObj;
+		World world = ctx.getServerHandler().player.world;
 		Entity entity = world.getEntityByID(message.entityId);
 		if (entity instanceof EntitySkateboard)
 		{
